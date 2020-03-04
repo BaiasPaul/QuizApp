@@ -1,0 +1,13 @@
+{
+    "name": "quiz/quiz",
+    "authors": [
+        {
+            "name": "Baias Paul",
+            "email": "paul.baias@evozon.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {"QuizApp\\": "src/"}
+    }
+}
