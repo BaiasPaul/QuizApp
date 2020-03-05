@@ -6,8 +6,29 @@
             "email": "paul.baias@evozon.com"
         }
     ],
-    "require": {},
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/BaiasPaul/mvc-framework-skeleton"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/BaiasPaul/ormSkeleton"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/BaiasPaul/codeHighlightLib"
+        }
+    ],
+    "require": {
+        "mvcframework/mvcframework": "dev-master",
+        "really-orm-skeleton": "dev-master",
+        "codehighlightlib/codehighlightlib": "dev-master"
+    },
     "autoload": {
         "psr-4": {"QuizApp\\": "src/"}
+    },
+    "require-dev": {
+        "ext-pdo": "*"
     }
 }

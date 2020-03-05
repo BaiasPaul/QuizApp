@@ -1,0 +1,9 @@
+<?php
+
+return [
+    'host' => '127.0.0.1',
+    'db' => 'you need to think of a name',
+    'user' => 'learn how to create a user in mysql, give it privileges and configure it (better for security). Use `root` if you are lazy.',
+    'pass' => 'here be dragons',
+    'charset' => 'utf8mb4'
+];
