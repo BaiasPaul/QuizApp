@@ -1,9 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use ReallyOrm\Test\Entity\Quiz;
+use QuizApp\Entities\User;
 use ReallyOrm\Test\Hydrator\Hydrator;
-use ReallyOrm\Test\Entity\User;
 use ReallyOrm\Test\Repository\QuizRepository;
 use ReallyOrm\Test\Repository\RepositoryManager;
 use ReallyOrm\Test\Repository\UserRepository;
@@ -55,9 +54,7 @@ class FunTest extends TestCase
         $this->repoManager = new RepositoryManager();
         $this->hydrator = new Hydrator($this->repoManager);
         $this->userRepo = new UserRepository($this->pdo, User::class, $this->hydrator);
-        $this->quizRepo = new QuizRepository($this->pdo, Quiz::class, $this->hydrator);
         $this->repoManager->addRepository($this->userRepo);
-        $this->repoManager->addRepository($this->quizRepo);
     }
 
 //    public function testCreateUser(): void
@@ -73,8 +70,8 @@ class FunTest extends TestCase
 
 //    public function testUpdateUser(): void
 //    {
-//        $user = $this->userRepo->find(6);
-//        $user->setEmail('paul@email.com');
+//        $user = $this->userRepo->find(4);
+//        $user->setPassword('abc');
 //        $this->repoManager->register($user);
 //        $result = $user->save();
 //
@@ -92,36 +89,37 @@ class FunTest extends TestCase
     /**
      * @throws ReflectionException
      */
-    public function testHydrate(): void
-    {
-        $entitie = new User('jhon', 'jhon@email.com');
-        $data = [
-            'id' => null,
-            'name' => 'jhon',
-            'email' => 'jhon@email.com'
-        ];
-        $result = $this->hydrator->hydrate(User::class, $data);
-        $this->assertEquals($entitie, $result);
-    }
-
-    /**
-     * @throws ReflectionException
-     */
-    public function testExtract(): void
-    {
-        $user = new User('jhon', 'jhon@email.com');
-        $data = [
-            'id' => null,
-            'name' => 'jhon',
-            'email' => 'jhon@email.com'
-        ];
-        $result = $this->hydrator->extract($user);
-        $this->assertEquals($data, $result);
-    }
-
+//    public function testHydrate(): void
+//    {
+//        $entitie = new User('jhon', 'jhon@email.com');
+//        $data = [
+//            'id' => null,
+//            'name' => 'jhon',
+//            'email' => 'jhon@email.com'
+//        ];
+//        $result = $this->hydrator->hydrate(User::class, $data);
+//        $this->assertEquals($entitie, $result);
+//    }
+//
+//    /**
+//     * @throws ReflectionException
+//     */
+//    public function testExtract(): void
+//    {
+//        $user = new User('jhon', 'jhon@email.com');
+//        $data = [
+//            'id' => null,
+//            'name' => 'jhon',
+//            'email' => 'jhon@email.com'
+//        ];
+//        $result = $this->hydrator->extract($user);
+//        $this->assertEquals($data, $result);
+//    }
+//
     /**
      * @test
      * @dataProvider findOneByProvider
+     * @param $filter
      */
     public function testFindOneBy($filter): void
     {
@@ -138,55 +136,55 @@ class FunTest extends TestCase
         return [
             [
                 [
-                    'name' => 'paul'
+                    'email' => 'admin@email.com'
                 ]
             ],
             [
                 [
-                    'name' => 'paul',
-                    'email' => 'paul@email.com'
+                    'password' => 'admin',
+                    'email' => 'admin@email.com'
                 ]
             ]
         ];
     }
-
-    /**
-     * @test
-     * @dataProvider findByProvider
-     */
-    public function testFindBy($filter, $sorts): void
-    {
-        /** @var User $user */
-        $user = $this->userRepo->findBy($filter, $sorts, 0, 1);
-        $this->assertEquals(1, $user[0]->getId());
-    }
-
-    /**
-     * @return array
-     */
-    public function findByProvider()
-    {
-        return [
-            [
-                [
-                    'name' => 'paul'
-                ],
-                [
-                    'name' => 'DESC'
-                ]
-            ],
-            [
-                [
-                    'name' => 'paul',
-                    'email' => 'paul@email.com'
-                ],
-                [
-                    'name' => 'DESC',
-                    'email' => 'ASC'
-                ]
-            ]
-        ];
-    }
+//
+//    /**
+//     * @test
+//     * @dataProvider findByProvider
+//     */
+//    public function testFindBy($filter, $sorts): void
+//    {
+//        /** @var User $user */
+//        $user = $this->userRepo->findBy($filter, $sorts, 0, 1);
+//        $this->assertEquals(1, $user[0]->getId());
+//    }
+//
+//    /**
+//     * @return array
+//     */
+//    public function findByProvider()
+//    {
+//        return [
+//            [
+//                [
+//                    'name' => 'paul'
+//                ],
+//                [
+//                    'name' => 'DESC'
+//                ]
+//            ],
+//            [
+//                [
+//                    'name' => 'paul',
+//                    'email' => 'paul@email.com'
+//                ],
+//                [
+//                    'name' => 'DESC',
+//                    'email' => 'ASC'
+//                ]
+//            ]
+//        ];
+//    }
 
     /**
      * @test
@@ -234,14 +232,14 @@ class FunTest extends TestCase
     /**
      * @test
      */
-    public function testUpdateQuiz(): void
-    {
-        $quiz = $this->quizRepo->find(3);
-        $quiz->setGrade(8);
-        $this->repoManager->register($quiz);
-        $result = $quiz->save();
-
-        $this->assertEquals(true, $result);
-    }
+//    public function testUpdateQuiz(): void
+//    {
+//        $quiz = $this->quizRepo->find(3);
+//        $quiz->setGrade(8);
+//        $this->repoManager->register($quiz);
+//        $result = $quiz->save();
+//
+//        $this->assertEquals(true, $result);
+//    }
 
 }

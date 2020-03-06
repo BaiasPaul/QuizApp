@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c35f917a87fe52748502aab0d76dc5e9",
+    "content-hash": "5dfccf034298b21190827e9efefc7d20",
     "packages": [
         {
             "name": "codehighlightlib/codehighlightlib",
@@ -103,12 +103,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BaiasPaul/mvc-framework-skeleton.git",
-                "reference": "d0deb9d703c7d52ee85e84fe6a1dbb4fb8fdca90"
+                "reference": "7c684274f92f5d56f35947357402e46b376d080b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BaiasPaul/mvc-framework-skeleton/zipball/d0deb9d703c7d52ee85e84fe6a1dbb4fb8fdca90",
-                "reference": "d0deb9d703c7d52ee85e84fe6a1dbb4fb8fdca90",
+                "url": "https://api.github.com/repos/BaiasPaul/mvc-framework-skeleton/zipball/7c684274f92f5d56f35947357402e46b376d080b",
+                "reference": "7c684274f92f5d56f35947357402e46b376d080b",
                 "shasum": ""
             },
             "require": {
@@ -133,7 +133,7 @@
             "support": {
                 "source": "https://github.com/BaiasPaul/mvc-framework-skeleton/tree/master"
             },
-            "time": "2020-02-28T16:05:38+00:00"
+            "time": "2020-03-06T10:14:21+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -438,16 +438,16 @@
         },
         {
             "name": "phpspec/prophecy",
-            "version": "v1.10.2",
+            "version": "v1.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "b4400efc9d206e83138e2bb97ed7f5b14b831cd9"
+                "reference": "451c3cd1418cf640de218914901e51b064abb093"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/b4400efc9d206e83138e2bb97ed7f5b14b831cd9",
-                "reference": "b4400efc9d206e83138e2bb97ed7f5b14b831cd9",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/451c3cd1418cf640de218914901e51b064abb093",
+                "reference": "451c3cd1418cf640de218914901e51b064abb093",
                 "shasum": ""
             },
             "require": {
@@ -497,7 +497,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2020-01-20T15:57:02+00:00"
+            "time": "2020-03-05T15:02:03+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",

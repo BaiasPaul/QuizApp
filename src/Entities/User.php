@@ -3,7 +3,6 @@
 
 namespace QuizApp\Entities;
 
-
 use ReallyOrm\Entity\AbstractEntity;
 
 class User extends AbstractEntity
@@ -23,41 +22,36 @@ class User extends AbstractEntity
 
     /**
      * @var string
-     * @ORM name
+     * @ORM email
      */
     private $email;
 
     /**
      * @var string
-     * @ORM name
+     * @ORM password
      */
     private $password;
 
     /**
      * @var string
-     * @ORM name
+     * @ORM role
      */
     private $role;
 
     /**
      * User constructor.
-     * @param int $id
-     * @param string $name
-     * @param string $email
-     * @param string $password
-     * @param string $role
      */
-    public function __construct($id, $name, $email, $password, $role)
+    public function __construct()
     {
-        $this->id = $id;
-        $this->name = $name;
-        $this->email = $email;
-        $this->password = $password;
-        $this->role = $role;
+        $this->id = null;
+        $this->name = '';
+        $this->email = '';
+        $this->password = '';
+        $this->role = 'Candidate';
     }
 
     /**
-     * @param string $name
+     * @param string
      */
     public function setName($name)
     {
@@ -65,7 +59,7 @@ class User extends AbstractEntity
     }
 
     /**
-     * @param string $email
+     * @param string
      */
     public function setEmail($email)
     {
@@ -73,15 +67,15 @@ class User extends AbstractEntity
     }
 
     /**
-     * @param string $password
+     * @param string
      */
     public function setPassword($password)
     {
-        $this->password = $password;
+        $this->password = md5($password);
     }
 
     /**
-     * @param string $role
+     * @param string
      */
     public function setRole($role)
     {
@@ -94,6 +88,38 @@ class User extends AbstractEntity
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRole(): string
+    {
+        return $this->role;
     }
 
 }

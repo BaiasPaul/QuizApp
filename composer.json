@@ -23,12 +23,11 @@
     "require": {
         "mvcframework/mvcframework": "dev-master",
         "really-orm-skeleton": "dev-master",
-        "codehighlightlib/codehighlightlib": "dev-master"
+        "codehighlightlib/codehighlightlib": "dev-master",
+        "phpunit/phpunit": "^8.5",
+        "ext-pdo": "*"
     },
     "autoload": {
         "psr-4": {"QuizApp\\": "src/"}
-    },
-    "require-dev": {
-        "ext-pdo": "*"
     }
 }
