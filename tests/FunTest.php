@@ -68,15 +68,15 @@ class FunTest extends TestCase
 //        $this->assertEquals(true, $result);
 //    }
 
-//    public function testUpdateUser(): void
-//    {
-//        $user = $this->userRepo->find(4);
-//        $user->setPassword('abc');
-//        $this->repoManager->register($user);
-//        $result = $user->save();
-//
-//        $this->assertEquals(true, $result);
-//    }
+    public function testUpdateUser(): void
+    {
+        $user = $this->userRepo->find(9);
+        $user->setrole('Admin');
+        $this->repoManager->register($user);
+        $result = $user->save();
+
+        $this->assertEquals(true, $result);
+    }
 
 
     public function testFind(): void
@@ -116,17 +116,17 @@ class FunTest extends TestCase
 //        $this->assertEquals($data, $result);
 //    }
 //
-    /**
-     * @test
-     * @dataProvider findOneByProvider
-     * @param $filter
-     */
-    public function testFindOneBy($filter): void
-    {
-        /** @var User $user */
-        $user = $this->userRepo->findOneBy($filter);
-        $this->assertEquals(1, $user->getId());
-    }
+//    /**
+//     * @test
+//     * @dataProvider findOneByProvider
+//     * @param $filter
+//     */
+//    public function testFindOneBy($filter): void
+//    {
+//        /** @var User $user */
+//        $user = $this->userRepo->findOneBy($filter);
+//        $this->assertEquals(1, $user->getId());
+//    }
 
     /**
      * @return array

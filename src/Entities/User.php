@@ -117,7 +117,7 @@ class User extends AbstractEntity
     /**
      * @return string
      */
-    public function getRole(): string
+    public function getRole(): ?string
     {
         return $this->role;
     }

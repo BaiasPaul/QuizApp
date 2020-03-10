@@ -32,13 +32,13 @@
         <nav class="my-2 my-md-0 mr-md-3">
             <span class="p-2 text-dark">Hello, Admin name!</span>
         </nav>
-        <a class="btn btn-danger" href="#">Logout</a>
+        <a class="btn btn-danger" href="/">Logout</a>
     </div>
 
     <!--Breadcrumbs-->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb px-3 py-0 mb-3">
-            <li class="breadcrumb-item" ><a href="#">Dashboard</a></li>
+            <li class="breadcrumb-item" ><a href="/admin">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">User details</li>
         </ol>
     </nav>
@@ -50,27 +50,24 @@
         </div>
 
         <!--User details form-->
-        <form>
+        <form method="POST" action="/admin-user-details/<?php echo $path?>">
             <div class="form-group">
                 <label for="userName">Name</label>
-                <input type="text" class="form-control" id="userName" placeholder="User name">
+                <input name="name" type="text" class="form-control" id="userName" placeholder="User name" value="<?php echo $name ?>">
             </div>
             <div class="form-group">
                 <label for="userEmail">Email</label>
-                <input type="email" class="form-control" id="userEmail" placeholder="User email">
+                <input name="email" type="email" class="form-control" id="userEmail" placeholder="User email" value="<?php echo $email ?>">
             </div>
             <div class="form-group">
                 <label for="userPassword">Password</label>
-                <input type="password" class="form-control" id="userPassword" placeholder="User password">
+                <input name="password" type="password" class="form-control" id="userPassword" placeholder="User password" value="<?php echo base64_decode($password) ?>">
             </div>
             <div class="form-group">
                 <label for="userRole">Role</label>
-                <select class="form-control" id="userRole">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
+                <select name="role" class="form-control" id="userRole" content="<?php echo $role ?>">>
+                    <option value="Candidate">Candidate</option>
+                    <option value="Admin">Admin</option>
                 </select>
             </div>
             <div class="text-center">

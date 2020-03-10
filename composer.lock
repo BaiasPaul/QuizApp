@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5dfccf034298b21190827e9efefc7d20",
+    "content-hash": "46c69d93c35526132f512d81aa5139c5",
     "packages": [
         {
             "name": "codehighlightlib/codehighlightlib",
@@ -939,12 +939,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BaiasPaul/ormSkeleton.git",
-                "reference": "e21acb0934043ce9154d05a0b4ffba73f6396143"
+                "reference": "732746567cdbd93061725b03a31629d4fe97660e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BaiasPaul/ormSkeleton/zipball/e21acb0934043ce9154d05a0b4ffba73f6396143",
-                "reference": "e21acb0934043ce9154d05a0b4ffba73f6396143",
+                "url": "https://api.github.com/repos/BaiasPaul/ormSkeleton/zipball/732746567cdbd93061725b03a31629d4fe97660e",
+                "reference": "732746567cdbd93061725b03a31629d4fe97660e",
                 "shasum": ""
             },
             "require": {
@@ -971,7 +971,7 @@
                 "source": "https://github.com/BaiasPaul/ormSkeleton/tree/master",
                 "issues": "https://github.com/BaiasPaul/ormSkeleton/issues"
             },
-            "time": "2020-03-05T08:20:02+00:00"
+            "time": "2020-03-09T08:14:39+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -1876,8 +1876,8 @@
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": {
+    "platform": {
         "ext-pdo": "*"
-    }
+    },
+    "platform-dev": []
 }

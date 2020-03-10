@@ -1,12 +1,12 @@
 <?php
 
-
 namespace QuizApp\Controllers;
-
 
 use Framework\Contracts\RendererInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
+use Framework\Http\Response;
+use Framework\Http\Stream;
 use QuizApp\Services\SecurityServices;
 
 class SecurityController extends AbstractController
@@ -15,7 +15,8 @@ class SecurityController extends AbstractController
 
     /**
      * UserController constructor.
-     * @param $securityServices
+     * @param RendererInterface $renderer
+     * @param SecurityServices $securityServices
      */
     public function __construct(RendererInterface $renderer, SecurityServices $securityServices)
     {
@@ -23,22 +24,36 @@ class SecurityController extends AbstractController
         $this->securityServices = $securityServices;
     }
 
-    public function showLogin(Request $request, array $requestAttributes)
+    public function logout()
     {
-        return $this->renderer->renderView("login.html", $requestAttributes);
+        $this->securityServices->logout();
+        $location = 'Location: http://quizApp.com/';
+        $body = Stream::createFromString("");
+
+        return new Response($body, '1.1', '301', $location);
     }
 
-    public function login(Request $request, array $requestAttributes)
+    public function showLogin()
+    {
+        return $this->renderer->renderView("login.html", []);
+    }
+
+    public function login(Request $request)
     {
         $email = $request->getParameter('email');
-        $password = $request->getParameter('password');
-        $user = $this->securityServices->searchUser($email, $password);
-        if (!$user) {
-            return $this->renderer->renderView("exceptions-page.html", $requestAttributes);
-        }
-        if ($user->getRole() === "Admin") {
-            return $this->renderer->renderView("admin-dashboard.html", $requestAttributes);
-        }
-        return $this->renderer->renderView("candidate-quiz-listing.html", $requestAttributes);
+        $password = md5($request->getParameter('password'));
+        $userRole = $this->securityServices->searchUser($email, $password);
+        $location =  'Location: http://quizApp.com/'.$userRole;
+        $body = Stream::createFromString("");
+
+        return new Response($body, '1.1', '301', $location);
     }
+
+    public function showAdminDashboard()
+    {
+        $name = ['name'=> $this->securityServices->getName()];
+
+        return $this->renderer->renderView("admin-dashboard.phtml", $name);
+    }
+
 }

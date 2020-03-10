@@ -3,26 +3,36 @@
 
 namespace QuizApp\Services;
 
-
 use QuizApp\Entities\User;
-use ReallyOrm\Entity\EntityInterface;
-use ReallyOrm\Repository\RepositoryManagerInterface;
-use ReallyOrm\Test\Repository\RepositoryManager;
 
-class SecurityServices
+class SecurityServices extends AbstractServices
 {
-    private $repoManager;
 
-    public function __construct(RepositoryManagerInterface $repoManager)
-    {
-        $this->repoManager = $repoManager;
-    }
-
-    public function searchUser(string $email, string $password): EntityInterface
+    public function searchUser(string $email, string $password)
     {
         $filters = ['email' => $email, 'password' => $password];
+        $user = $this->repoManager->getRepository(User::class)->findOneBy($filters);
+        if (!$user){
+            return "";
+        }
+        $this->session->set('id', $user->getId());
+        $this->session->set('name', $user->getName());
+        $this->session->set('email', $user->getEmail());
+        $this->session->set('role', $user->getRole());
+        $this->session->get('name');
 
-        return $this->repoManager->getRepository(User::class)->findOneBy($filters);
+        return strtolower($user->getRole());
     }
+
+    public function logout()
+    {
+        $this->session->destroy();
+    }
+
+    public function getName(){
+        return $this->session->get('name');
+    }
+
+
 
 }

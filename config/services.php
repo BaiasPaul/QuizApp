@@ -1,5 +1,7 @@
 <?php
 
+use Framework\Contracts\SessionInterface;
+use Framework\Session\Session;
 use QuizApp\Controllers\SecurityController;
 use QuizApp\Controllers\UserController;
 use Framework\Contracts\DispatcherInterface;
@@ -33,12 +35,6 @@ $options = [
     PDO::ATTR_EMULATE_PREPARES => false,
 ];
 
-//$this->pdo = new PDO($dsn, $configDB['user'], $configDB['pass'], $options);
-//$this->repoManager = new RepositoryManager();
-//$this->hydrator = new Hydrator($this->repoManager);
-//$this->userRepo = new UserRepository($this->pdo, User::class, $this->hydrator);
-//$this->repoManager->addRepository($this->userRepo);
-
 $container->setParameter('dsn', $dsn);
 $container->setParameter('user', $configDB['user']);
 $container->setParameter('pass', $configDB['pass']);
@@ -51,6 +47,7 @@ $container->register(PDO::class, PDO::class)
 
 
 $container->register(RepositoryManagerInterface::class, RepositoryManager::class);
+$container->register(SessionInterface::class, Session::class);
 
 $container->register(HydratorInterface::class, Hydrator::class)
     ->addArgument(new Reference(RepositoryManagerInterface::class));
@@ -77,9 +74,12 @@ foreach ($container->findTaggedServiceIds('repository') as $id => $value) {
 }
 
 $container->register(SecurityServices::class,SecurityServices::class)
+    ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
+
 $container->register(UserServices::class,UserServices::class)
+    ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
 $config = require dirname(__DIR__) . '/config/config.php';

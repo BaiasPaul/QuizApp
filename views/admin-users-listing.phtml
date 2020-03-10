@@ -32,13 +32,13 @@
         <nav class="my-2 my-md-0 mr-md-3">
             <span class="p-2 text-dark">Hello, Admin name!</span>
         </nav>
-        <a class="btn btn-secondary" href="#">Logout</a>
+        <a class="btn btn-secondary" href="/">Logout</a>
     </div>
 
     <!--Breadcrumbs-->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb px-3 py-0 mb-3">
-            <li class="breadcrumb-item" ><a href="#">Dashboard</a></li>
+            <li class="breadcrumb-item" ><a href="/admin">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">Users listing</li>
         </ol>
     </nav>
@@ -55,18 +55,15 @@
                 <form action="">
                     <div class="form-group">
                         <label for="roleSearch">User role select</label>
-                        <select class="form-control" id="roleSearch">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                        <select name="role" class="form-control" id="roleSearch" action="/admin-user-listing">
+                            <option>Candidate</option>
+                            <option>Admin</option>
                         </select>
                     </div>
                 </form>
             </div>
             <div class="col-12 col-md-6 d-flex align-items-end justify-content-end">
-                <a class="btn btn-primary py-1 mb-3" href="#">Add new user</a>
+                <a class="btn btn-primary py-1 mb-3" href="/admin-user-details/create">Add new user</a>
             </div>
         </div>
 
@@ -84,36 +81,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>asd asad asdadadsad</td>
-                    <td>azxczxc cxzc</td>
-                    <td>1</td>
-                    <td class="text-center">
-                        <a class="btn btn-primary py-1" href="#">Edit</a>
-                        <a class="btn btn-danger py-1" href="#">Delete</a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>asd asad asdadadsad</td>
-                    <td>azxczxc cxzc</td>
-                    <td>2</td>
-                    <td class="text-center">
-                        <a class="btn btn-primary py-1" href="#">Edit</a>
-                        <a class="btn btn-danger py-1" href="#">Delete</a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>asd asad asdadadsad</td>
-                    <td>azxczxc cxzc</td>
-                    <td>3</td>
-                    <td class="text-center">
-                        <a class="btn btn-primary py-1" href="#">Edit</a>
-                        <a class="btn btn-danger py-1" href="#">Delete</a>
-                    </td>
-                </tr>
+                    <?php foreach ($arguments as $user): ?>
+                        <tr>
+                            <td><?php echo $user->getId(); ?></td>
+                            <td><?php echo $user->getEmail(); ?></td>
+                            <td><?php echo $user->getName(); ?></td>
+                            <td><?php echo $user->getRole(); ?></td>
+                            <td class="text-center">
+                                <a class="btn btn-primary py-1" href="/admin-user-details/edit/<?php echo $user->getId(); ?>">Edit</a>
+                                <a class="btn btn-danger py-1" href="/admin-user-details/delete/<?php echo $user->getId(); ?>">Delete</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
