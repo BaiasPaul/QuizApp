@@ -22,7 +22,7 @@
     <!--Custom css-->
     <link rel="stylesheet" href="assets/css/custom-css.css">
 
-    <title>Admin - Results listing</title>
+    <title>Admin - Questions listing</title>
 </head>
 
 <body>
@@ -30,7 +30,7 @@
     <div class="d-flex flex-column flex-md-row align-items-center p-3 mb-3 bg-light border-bottom shadow-sm">
         <h5 class="my-0 mr-md-auto font-weight-normal">Project name</h5>
         <nav class="my-2 my-md-0 mr-md-3">
-            <span class="p-2 text-dark">Hello, Admin name!</span>
+            <span class="p-2 text-dark">Hello, Admin <?php echo $username ?>!</span>
         </nav>
         <a class="btn btn-danger" href="/">Logout</a>
     </div>
@@ -39,23 +39,23 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb px-3 py-0 mb-3">
             <li class="breadcrumb-item" ><a href="/admin">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Results listing</li>
+            <li class="breadcrumb-item active" aria-current="page">Questions listing</li>
         </ol>
     </nav>
 
     <div class="container">
         <!--Page title block-->
         <div class="text-center">
-            <h1>Results listing</h1>
+            <h1>Questions listing</h1>
         </div>
 
         <!--Table actions block-->
         <div class="row">
             <div class="col-12 col-md-6">
                 <form action="">
-                    <label for="userSearch">User search</label>
+                    <label for="textSearch">Text search</label>
                     <div class="input-group">
-                        <input type="text" id="userSearch" class="form-control" placeholder="">
+                        <input type="text" id="textSearch" class="form-control" placeholder="">
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="submit">
                                 <i class="fa fa-search"></i>
@@ -64,20 +64,11 @@
                     </div>
                 </form>
             </div>
-            <div class="col-12 col-md-6">
-                <form action="">
-                    <label for="quizSearch">Quiz search</label>
-                    <div class="input-group">
-                        <input type="text" id="quizSearch" class="form-control" placeholder="">
-                        <div class="input-group-append">
-                            <button class="btn btn-secondary" type="submit">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
+            <div class="col-12 col-md-6 d-flex align-items-end justify-content-end">
+                <a class="btn btn-primary py-1" href="/admin-question-details/create">Add new question</a>
             </div>
         </div>
+
         <!--Quiz listing table-->
         <div class="table-responsive my-4">
             <table class="table table-bordered">
@@ -85,41 +76,23 @@
                 <tr>
                     <!--Sorting arrow are displayed using the 'asc','dsc' classes-->
                     <th scope="col" class="sorting-header asc dsc">ID</th>
-                    <th scope="col">User</th>
-                    <th scope="col">Quiz</th>
-                    <!--Sorting arrow are displayed using the 'asc','dsc' classes-->
-                    <th scope="col" class="sorting-header asc dsc">Score</th>
+                    <th scope="col">Text</th>
+                    <th scope="col">Type</th>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>asd asad asdadadsad</td>
-                    <td>11</td>
-                    <td>111</td>
-                    <td class="text-center">
-                        <a class="btn btn-primary py-1" href="#">View</a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>asd asad asdadadsad</td>
-                    <td>22</td>
-                    <td>222</td>
-                    <td class="text-center">
-                        <a class="btn btn-primary py-1" href="#">View</a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>asd asad asdadadsad</td>
-                    <td>33</td>
-                    <td>333</td>
-                    <td class="text-center">
-                        <a class="btn btn-primary py-1" href="#">View</a>
-                    </td>
-                </tr>
+                <?php foreach ($arguments['questions'] as $question): ?>
+                    <tr>
+                        <td scope="row"><?php echo $question->getId(); ?></td>
+                        <td><?php echo $question->getText(); ?></td>
+                        <td><?php echo $question->getType(); ?></td>
+                        <td class="text-center">
+                            <a class="btn btn-primary py-1" href="/admin-question-details/edit/<?php echo $question->getId(); ?>">Edit</a>
+                            <a class="btn btn-danger py-1" href="/admin-question-details/delete/<?php echo $question->getId(); ?>">Delete</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
@@ -130,10 +103,16 @@
                 <li class="page-item disabled">
                     <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
                 </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
+                <?php
+                $pages = $arguments['pages']['entitiesNumber'] / 5;
+                if ($arguments['pages']['entitiesNumber'] % 5 > 0){
+                    $pages += 1;
+                }
+                for ($pageNumber = 1; $pageNumber <= $pages; $pageNumber++): ?>
+                    <li class="page-item <?php if ($arguments['currentPage'] === $pageNumber) echo 'active'; ?>">
+                        <a class="page-link" href="?page=<?php echo $pageNumber; ?>"><?php echo $pageNumber; ?></a>
+                    </li>
+                <?php endfor; ?>
                     <a class="page-link" href="#">Next</a>
                 </li>
             </ul>

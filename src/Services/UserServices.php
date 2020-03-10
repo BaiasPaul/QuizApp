@@ -30,23 +30,24 @@ class UserServices extends AbstractServices
         return $result;
     }
 
-    public function getUsers()
+    public function getUsers(array $filters, int $currentPage)
     {
-        $result = $this->repoManager->getRepository(User::class)->findBy([],[],0,5);
-
-        return $result;
+        return $this->repoManager->getRepository(User::class)->findBy($filters, [], ($currentPage - 1) * 5, 5);
     }
 
-    public function getName()
+    public function getUserNumber(array $filters)
     {
-        return $this->session->get('name');
+        return $this->repoManager->getRepository(User::class)->getNumberOfEntities($filters);
     }
 
-    public function editUser( $id, $name, $email, $password, $role){
+    public function editUser($id, $name, $email, $password, $role)
+    {
         $user = $this->repoManager->getRepository(User::class)->find($id);
         $user->setName($name);
         $user->setEmail($email);
-        $user->setPassword($password);
+        if ($password !== "") {
+            $user->setPassword($password);
+        }
         $user->setRole($role);
 
         $this->repoManager->register($user);
@@ -56,9 +57,20 @@ class UserServices extends AbstractServices
     public function getParams(int $id)
     {
         $user = $this->repoManager->getRepository(User::class)->find($id);
-        $params = ['id'=>$user->getId(),'name'=>$user->getName(),'email'=>$user->getEmail(),'password'=>$user->getPassword(),'role'=>$user->getRole()];
 
-        return $params;
+        return ['id' => $user->getId(), 'name' => $user->getName(), 'email' => $user->getEmail(), 'password' => $user->getPassword(), 'role' => $user->getRole()];
+    }
+
+    public function deleteUser($id)
+    {
+        $user = $this->repoManager->getRepository(User::class)->find($id);
+
+        return $this->repoManager->getRepository(User::class)->delete($user);
+    }
+
+    public function getEmptyParams()
+    {
+       return  ['id' => '', 'name' => '', 'email' => '', 'password' => '', 'role' => ''];
     }
 
 }

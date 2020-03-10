@@ -1,7 +1,9 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use QuizApp\Entities\QuestionTemplate;
 use QuizApp\Entities\User;
+use QuizApp\Repository\QuestionTemplateRepository;
 use ReallyOrm\Test\Hydrator\Hydrator;
 use ReallyOrm\Test\Repository\QuizRepository;
 use ReallyOrm\Test\Repository\RepositoryManager;
@@ -54,6 +56,7 @@ class FunTest extends TestCase
         $this->repoManager = new RepositoryManager();
         $this->hydrator = new Hydrator($this->repoManager);
         $this->userRepo = new UserRepository($this->pdo, User::class, $this->hydrator);
+        $this->userRepo = new QuestionTemplateRepository($this->pdo, QuestionTemplate::class, $this->hydrator);
         $this->repoManager->addRepository($this->userRepo);
     }
 
@@ -68,10 +71,21 @@ class FunTest extends TestCase
 //        $this->assertEquals(true, $result);
 //    }
 
+//    public function testCreateQuestion(): void
+//    {
+//        $questionTemplate = new QuestionTemplate();
+//        $questionTemplate->setText('test question');
+//        $questionTemplate->setType('text');
+//        $this->repoManager->register($questionTemplate);
+//        $result = $questionTemplate->save();
+//
+//        $this->assertEquals(true, $result);
+//    }
+
     public function testUpdateUser(): void
     {
-        $user = $this->userRepo->find(9);
-        $user->setrole('Admin');
+        $user = $this->userRepo->find(1);
+        $user->setPassword('admin');
         $this->repoManager->register($user);
         $result = $user->save();
 

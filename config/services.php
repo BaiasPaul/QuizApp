@@ -2,6 +2,8 @@
 
 use Framework\Contracts\SessionInterface;
 use Framework\Session\Session;
+use QuizApp\Controllers\QuestionTemplateController;
+use QuizApp\Controllers\QuizTemplateController;
 use QuizApp\Controllers\SecurityController;
 use QuizApp\Controllers\UserController;
 use Framework\Contracts\DispatcherInterface;
@@ -11,9 +13,15 @@ use Framework\DependencyInjection\SymfonyContainer;
 use Framework\Dispatcher\Dispatcher;
 use Framework\Renderer\Renderer;
 use Framework\Routing\Router;
+use QuizApp\Entities\QuestionTemplate;
+use QuizApp\Entities\QuizTemplate;
 use QuizApp\Entities\User;
+use QuizApp\Repository\QuestionTemplateRepository;
+use QuizApp\Repository\QuizTemplateRepository;
 use QuizApp\Repository\SecurityRepository;
 use QuizApp\Repository\UserRepository;
+use QuizApp\Services\QuestionTemplateServices;
+use QuizApp\Services\QuizTemplateServices;
 use QuizApp\Services\SecurityServices;
 use QuizApp\Services\UserServices;
 use ReallyOrm\Hydrator\HydratorInterface;
@@ -52,17 +60,30 @@ $container->register(SessionInterface::class, Session::class);
 $container->register(HydratorInterface::class, Hydrator::class)
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
-$container->setParameter('className',User::class);
-
+$container->setParameter('userClass',User::class);
 $container->register(SecurityRepository::class, SecurityRepository::class)
     ->addArgument(new Reference(PDO::class))
-    ->addArgument('%className%')
+    ->addArgument('%userClass%')
     ->addArgument(new Reference(HydratorInterface::class))
     ->addTag('repository');
 
 $container->register(UserRepository::class, UserRepository::class)
     ->addArgument(new Reference(PDO::class))
-    ->addArgument('%className%')
+    ->addArgument('%userClass%')
+    ->addArgument(new Reference(HydratorInterface::class))
+    ->addTag('repository');
+
+$container->setParameter('questionTemplateClass',QuestionTemplate::class);
+$container->register(QuestionTemplateRepository::class, QuestionTemplateRepository::class)
+    ->addArgument(new Reference(PDO::class))
+    ->addArgument('%questionTemplateClass%')
+    ->addArgument(new Reference(HydratorInterface::class))
+    ->addTag('repository');
+
+$container->setParameter('quizTemplateClass',QuizTemplate::class);
+$container->register(QuizTemplateRepository::class, QuizTemplateRepository::class)
+    ->addArgument(new Reference(PDO::class))
+    ->addArgument('%quizTemplateClass%')
     ->addArgument(new Reference(HydratorInterface::class))
     ->addTag('repository');
 
@@ -73,10 +94,17 @@ foreach ($container->findTaggedServiceIds('repository') as $id => $value) {
     $repoManager->addMethodCall('addRepository', [$repository]);
 }
 
+$container->register(QuestionTemplateServices::class,QuestionTemplateServices::class)
+    ->addArgument(new Reference(SessionInterface::class))
+    ->addArgument(new Reference(RepositoryManagerInterface::class));
+
 $container->register(SecurityServices::class,SecurityServices::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
+$container->register(QuizTemplateServices::class,QuizTemplateServices::class)
+    ->addArgument(new Reference(SessionInterface::class))
+    ->addArgument(new Reference(RepositoryManagerInterface::class));
 
 $container->register(UserServices::class,UserServices::class)
     ->addArgument(new Reference(SessionInterface::class))
@@ -91,6 +119,16 @@ $baseViewPath = $config['renderer'][Renderer::CONFIG_KEY_BASE_VIEW_PATH];
 $container->setParameter('baseViewPath', $baseViewPath);
 $container->register(RendererInterface::class, Renderer::class)
     ->addArgument('%baseViewPath%');
+
+$container->register(QuizTemplateController::class, QuizTemplateController::class)
+    ->addArgument(new Reference(RendererInterface::class))
+    ->addArgument(new Reference(QuizTemplateServices::class))
+    ->addTag('controller');
+
+$container->register(QuestionTemplateController::class, QuestionTemplateController::class)
+    ->addArgument(new Reference(RendererInterface::class))
+    ->addArgument(new Reference(QuestionTemplateServices::class))
+    ->addTag('controller');
 
 $container->register(SecurityController::class, SecurityController::class)
     ->addArgument(new Reference(RendererInterface::class))

@@ -30,7 +30,7 @@
     <div class="d-flex flex-column flex-md-row align-items-center p-3 mb-3 bg-light border-bottom shadow-sm">
         <h5 class="my-0 mr-md-auto font-weight-normal">Project name</h5>
         <nav class="my-2 my-md-0 mr-md-3">
-            <span class="p-2 text-dark">Hello, Admin name!</span>
+            <span class="p-2 text-dark">Hello, Admin <?php echo $username?>!</span>
         </nav>
         <a class="btn btn-danger" href="/">Logout</a>
     </div>
@@ -61,13 +61,13 @@
             </div>
             <div class="form-group">
                 <label for="userPassword">Password</label>
-                <input name="password" type="password" class="form-control" id="userPassword" placeholder="User password" value="<?php echo base64_decode($password) ?>">
+                <input name="password" type="password" class="form-control" id="userPassword" placeholder="User password">
             </div>
             <div class="form-group">
                 <label for="userRole">Role</label>
-                <select name="role" class="form-control" id="userRole" content="<?php echo $role ?>">>
-                    <option value="Candidate">Candidate</option>
-                    <option value="Admin">Admin</option>
+                <select name="role" class="form-control" id="userRole">
+                    <option <?php if ($role === 'Candidate') echo 'selected'; ?> value="Candidate" >Candidate</option>
+                    <option <?php if ($role === 'Admin') echo 'selected'; ?> value="Admin">Admin</option>
                 </select>
             </div>
             <div class="text-center">

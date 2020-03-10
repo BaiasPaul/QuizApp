@@ -51,7 +51,7 @@ class SecurityController extends AbstractController
 
     public function showAdminDashboard()
     {
-        $name = ['name'=> $this->securityServices->getName()];
+        $name = ['username'=> $this->securityServices->getName()];
 
         return $this->renderer->renderView("admin-dashboard.phtml", $name);
     }

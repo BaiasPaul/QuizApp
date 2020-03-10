@@ -34,4 +34,9 @@ class AbstractServices
         $this->session = $session;
         $this->repoManager=$repoManager;
     }
+
+    public function getName()
+    {
+        return $this->session->get('name');
+    }
 }

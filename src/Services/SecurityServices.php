@@ -12,7 +12,7 @@ class SecurityServices extends AbstractServices
     {
         $filters = ['email' => $email, 'password' => $password];
         $user = $this->repoManager->getRepository(User::class)->findOneBy($filters);
-        if (!$user){
+            if (!$user){
             return "";
         }
         $this->session->set('id', $user->getId());
@@ -28,11 +28,6 @@ class SecurityServices extends AbstractServices
     {
         $this->session->destroy();
     }
-
-    public function getName(){
-        return $this->session->get('name');
-    }
-
 
 
 }

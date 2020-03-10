@@ -22,64 +22,66 @@ class UserController extends AbstractController
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
-     * @param UserServices $userServices
+     * @param UserServices $quizTemplateServices
      */
-    public function __construct(RendererInterface $renderer, UserServices $userServices)
+    public function __construct(RendererInterface $renderer, UserServices $quizTemplateServices)
     {
         parent::__construct($renderer);
-        $this->userServices = $userServices;
+        $this->userServices = $quizTemplateServices;
     }
 
-    public function createUser(Request $request, array $requestAttributes)
+    public function createUser(Request $request)
     {
         $name = $request->getParameter('name');
         $email = $request->getParameter('email');
         $password = md5($request->getParameter('password'));
         $role = $request->getParameter('role');
         $this->userServices->saveUser($name, $email, $password, $role);
-
-        $location = 'Location: http://quizApp.com/admin-users-listing';
+        $location = 'Location: http://quizApp.com/admin-users-listing?page=1';
         $body = Stream::createFromString("");
 
         return new Response($body, '1.1', '301', $location);
     }
 
-    public function showUsers(Request $request)
+    public function showUsers(Request $request, array $requestAttributes)
     {
-//        $role = $request->getParameter('role');
-        $arguments = $this->userServices->getUsers();
+        $arguments['currentPage'] = (int)$request->getParameter('page');
+        $arguments['pages'] = $this->userServices->getUserNumber($requestAttributes);
+        $arguments['username'] = $this->userServices->getName();
+        $arguments['dropdown'] = $requestAttributes;
+        if (empty($requestAttributes)) {
+            $arguments['dropdown'] = '';
+        }
+        $arguments['users'] = $this->userServices->getUsers($requestAttributes, $request->getParameter('page'));
 
         return $this->renderer->renderView("admin-users-listing.phtml", $arguments);
     }
 
-    /**
-     * @param Request $request
-     * @param array $requestAttributes
-     * @return Response
-     */
     public function showLogin()
     {
         return $this->renderer->renderView("login.html", []);
     }
 
-
-    public function showCandidateQuizzes(Request $request, array $requestAttributes)
-    {
-        $name = ['name' => $this->userServices->getName()];
-
-        return $this->renderer->renderView("candidate-quiz-listing.phtml", $name);
-    }
+//    public function showCandidateQuizzes()
+//    {
+//        $name['username'] = $this->userServices->getName();
+//
+//        return $this->renderer->renderView("candidate-quiz-listing.phtml", $name);
+//    }
 
     public function showUserDetails()
     {
-        $params = ['path'=>'create'];
+        $params = $this->userServices->getEmptyParams();
+        $params['username'] = $this->userServices->getName();
+        $params['path'] = 'create';
         return $this->renderer->renderView("admin-user-details.phtml", $params);
     }
 
     public function showUserDetailsEdit(Request $request, array $requestAttributes)
     {
         $params = $this->userServices->getParams($requestAttributes['id']);
-        $params['path'] = 'edit/'.$params['id'];
+        $params['username'] = $this->userServices->getName();
+        $params['path'] = 'edit/' . $params['id'];
 
         return $this->renderer->renderView("admin-user-details.phtml", $params);
     }
@@ -88,147 +90,25 @@ class UserController extends AbstractController
     {
         $name = $request->getParameter('name');
         $email = $request->getParameter('email');
-        $password = md5($request->getParameter('password'));
+        $password = $request->getParameter('password');
         $role = $request->getParameter('role');
 
-        $this->userServices->editUser($requestAttributes['id'],$name, $email, $password, $role);
+        $this->userServices->editUser($requestAttributes['id'], $name, $email, $password, $role);
 
-        $location = 'Location: http://quizApp.com/admin-users-listing';
+        $location = 'Location: http://quizApp.com/admin-users-listing?page=1';
         $body = Stream::createFromString("");
 
         return new Response($body, '1.1', '301', $location);
     }
-//
-//    /**
-//     * @param Request $request
-//     * @param array $requestAttributes
-//     * @return Response
-//     */
-//    public function showAdminQuestionDetails(Request $request, array $requestAttributes)
-//    {
-//
-//        return $this->renderer->renderView("admin-question-details.html", $requestAttributes);
-//    }
-//
-//    /**
-//     * @param Request $request
-//     * @param array $requestAttributes
-//     * @return Response
-//     */
-//    public function showAdminQuestionListing(Request $request, array $requestAttributes)
-//    {
-//
-//        return $this->renderer->renderView("admin-questions-listing.html", $requestAttributes);
-//    }
-//
-//    /**
-//     * @param Request $request
-//     * @param array $requestAttributes
-//     * @return Response
-//     */
-//    public function showAdminQuizDetails(Request $request, array $requestAttributes)
-//    {
-//
-//        return $this->renderer->renderView("admin-quiz-details.html", $requestAttributes);
-//    }
-//
-//    /**
-//     * @param Request $request
-//     * @param array $requestAttributes
-//     * @return Response
-//     */
-//    public function showAdminQuizzesListing(Request $request, array $requestAttributes)
-//    {
-//
-//        return $this->renderer->renderView("admin-quizzes-listing.html", $requestAttributes);
-//    }
-//
-//    /**
-//     * @param Request $request
-//     * @param array $requestAttributes
-//     * @return Response
-//     */
-//    public function showAdminResults(Request $request, array $requestAttributes)
-//    {
-//
-//        return $this->renderer->renderView("admin-results.html", $requestAttributes);
-//    }
-//
-//    /**
-//     * @param Request $request
-//     * @param array $requestAttributes
-//     * @return Response
-//     */
-//    public function showAdminResultsListing(Request $request, array $requestAttributes)
-//    {
-//
-//        return $this->renderer->renderView("admin-results-listing.html", $requestAttributes);
-//    }
-//
-//    /**
-//     * @param Request $request
-//     * @param array $requestAttributes
-//     * @return Response
-//     */
-//    public function showAdminUserDetails(Request $request, array $requestAttributes)
-//    {
-//
-//        return $this->renderer->renderView("admin-user-details.phtml", $requestAttributes);
-//    }
-//
-//    /**
-//     * @param Request $request
-//     * @param array $requestAttributes
-//     * @return Response
-//     */
-////    public function showAdminUserListing(Request $request, array $requestAttributes)
-////    {
-////
-////        return $this->renderer->renderView("admin-users-listing.phtml", $requestAttributes);
-////    }
-//
-//    /**
-//     * @param Request $request
-//     * @param array $requestAttributes
-//     * @return Response
-//     */
-//    public function showCandidateQuizListing(Request $request, array $requestAttributes)
-//    {
-//
-//        return $this->renderer->renderView("candidate-quiz-listing.phtml", $requestAttributes);
-//    }
-//
-//    /**
-//     * @param Request $request
-//     * @param array $requestAttributes
-//     * @return Response
-//     */
-//    public function showCandidateQuizPage(Request $request, array $requestAttributes)
-//    {
-//
-//        return $this->renderer->renderView("candidate-quiz-page.html", $requestAttributes);
-//    }
-//
-//    /**
-//     * @param Request $request
-//     * @param array $requestAttributes
-//     * @return Response
-//     */
-//    public function showExceptionsPage(Request $request, array $requestAttributes)
-//    {
-//
-//        return $this->renderer->renderView("exceptions-page.html", $requestAttributes);
-//    }
-//
-//    /**
-//     * @param Request $request
-//     * @param array $requestAttributes
-//     * @return Response
-//     */
-//    public function showQuizSuccessPage(Request $request, array $requestAttributes)
-//    {
-//
-//        return $this->renderer->renderView("quiz-success-page.html", $requestAttributes);
-//    }
+
+    public function deleteUser(Request $request, array $requestAttributes)
+    {
+        $this->userServices->deleteUser($requestAttributes['id']);
+
+        $location = 'Location: http://quizApp.com/admin-users-listing?page=1';
+        $body = Stream::createFromString("");
+
+        return new Response($body, '1.1', '301', $location);
+    }
 
 }
