@@ -3,6 +3,7 @@
 use Framework\Contracts\SessionInterface;
 use Framework\Session\Session;
 use QuizApp\Controllers\QuestionTemplateController;
+use QuizApp\Controllers\QuizInstanceController;
 use QuizApp\Controllers\QuizTemplateController;
 use QuizApp\Controllers\SecurityController;
 use QuizApp\Controllers\UserController;
@@ -14,13 +15,16 @@ use Framework\Dispatcher\Dispatcher;
 use Framework\Renderer\Renderer;
 use Framework\Routing\Router;
 use QuizApp\Entities\QuestionTemplate;
+use QuizApp\Entities\QuizInstance;
 use QuizApp\Entities\QuizTemplate;
 use QuizApp\Entities\User;
 use QuizApp\Repository\QuestionTemplateRepository;
+use QuizApp\Repository\QuizInstanceRepository;
 use QuizApp\Repository\QuizTemplateRepository;
 use QuizApp\Repository\SecurityRepository;
 use QuizApp\Repository\UserRepository;
 use QuizApp\Services\QuestionTemplateServices;
+use QuizApp\Services\QuizInstanceServices;
 use QuizApp\Services\QuizTemplateServices;
 use QuizApp\Services\SecurityServices;
 use QuizApp\Services\UserServices;
@@ -52,7 +56,6 @@ $container->register(PDO::class, PDO::class)
     ->addArgument('%user%')
     ->addArgument('%pass%')
     ->addArgument('%options%');
-
 
 $container->register(RepositoryManagerInterface::class, RepositoryManager::class);
 $container->register(SessionInterface::class, Session::class);
@@ -87,6 +90,13 @@ $container->register(QuizTemplateRepository::class, QuizTemplateRepository::clas
     ->addArgument(new Reference(HydratorInterface::class))
     ->addTag('repository');
 
+$container->setParameter('quizInstanceClass',QuizInstance::class);
+$container->register(QuizInstanceRepository::class, QuizInstanceRepository::class)
+    ->addArgument(new Reference(PDO::class))
+    ->addArgument('%quizInstanceClass%')
+    ->addArgument(new Reference(HydratorInterface::class))
+    ->addTag('repository');
+
 $repoManager = $container->getDefinition(RepositoryManagerInterface::class);
 
 foreach ($container->findTaggedServiceIds('repository') as $id => $value) {
@@ -94,7 +104,11 @@ foreach ($container->findTaggedServiceIds('repository') as $id => $value) {
     $repoManager->addMethodCall('addRepository', [$repository]);
 }
 
-$container->register(QuestionTemplateServices::class,QuestionTemplateServices::class)
+$container->register(QuizTemplateServices::class,QuizTemplateServices::class)
+    ->addArgument(new Reference(SessionInterface::class))
+    ->addArgument(new Reference(RepositoryManagerInterface::class));
+
+$container->register(QuizInstanceServices::class,QuizInstanceServices::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
@@ -102,7 +116,7 @@ $container->register(SecurityServices::class,SecurityServices::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
-$container->register(QuizTemplateServices::class,QuizTemplateServices::class)
+$container->register(QuestionTemplateServices::class,QuestionTemplateServices::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
@@ -123,6 +137,11 @@ $container->register(RendererInterface::class, Renderer::class)
 $container->register(QuizTemplateController::class, QuizTemplateController::class)
     ->addArgument(new Reference(RendererInterface::class))
     ->addArgument(new Reference(QuizTemplateServices::class))
+    ->addTag('controller');
+
+$container->register(QuizInstanceController::class, QuizInstanceController::class)
+    ->addArgument(new Reference(RendererInterface::class))
+    ->addArgument(new Reference(QuizInstanceServices::class))
     ->addTag('controller');
 
 $container->register(QuestionTemplateController::class, QuestionTemplateController::class)

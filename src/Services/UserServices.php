@@ -16,18 +16,12 @@ class UserServices extends AbstractServices
         $user->setEmail($email);
         $user->setPassword($password);
         $user->setRole($role);
-        $filters = ['name' => $name, 'email' => $email, 'password' => $password, 'role' => $role];
+        $filters = ['email' => $email];
         $result = $this->repoManager->getRepository(User::class)->findOneBy($filters);
         if (!$result) {
             $this->repoManager->register($user);
             $user->save();
-
-            return $result;
         }
-        $this->repoManager->register($result);
-        $result->save();
-
-        return $result;
     }
 
     public function getUsers(array $filters, int $currentPage)
@@ -49,9 +43,12 @@ class UserServices extends AbstractServices
             $user->setPassword($password);
         }
         $user->setRole($role);
-
-        $this->repoManager->register($user);
-        $user->save();
+        $filters = ['email' => $email];
+        $result = $this->repoManager->getRepository(User::class)->findOneBy($filters);
+        if ($result){
+            $this->repoManager->register($user);
+            $user->save();
+        }
     }
 
     public function getParams(int $id)

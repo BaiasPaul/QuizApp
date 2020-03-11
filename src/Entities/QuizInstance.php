@@ -10,7 +10,7 @@ namespace QuizApp\Entities;
  */
 class QuizInstance extends QuizTemplate
 {
-    private $score;
+    private $score;id,text,nume,issaved
 
     /**
      * QuizInstance constructor.

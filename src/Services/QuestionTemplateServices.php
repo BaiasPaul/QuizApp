@@ -18,18 +18,12 @@ class QuestionTemplateServices extends AbstractServices
         if (!$result) {
             $this->repoManager->register($question);
             $question->save();
-
-            return $result;
         }
-        $this->repoManager->register($result);
-        $result->save();
-
-        return $result;
     }
 
     public function getEmptyParams()
     {
-        return  ['text' => '', 'type' => ''];
+        return ['text' => '', 'type' => ''];
     }
 
     public function getQuestionNumber(array $filters)
@@ -47,9 +41,12 @@ class QuestionTemplateServices extends AbstractServices
         $question = $this->repoManager->getRepository(QuestionTemplate::class)->find($id);
         $question->setText($text);
         $question->setType($type);
-
-        $this->repoManager->register($question);
-        $question->save();
+        $filters = ['text' => $text, 'type' => $type];
+        $result = $this->repoManager->getRepository(QuestionTemplate::class)->findOneBy($filters);
+        if (!$result) {
+            $this->repoManager->register($question);
+            $question->save();
+        }
     }
 
     public function getParams($id)
@@ -64,5 +61,10 @@ class QuestionTemplateServices extends AbstractServices
         $question = $this->repoManager->getRepository(QuestionTemplate::class)->find($id);
 
         return $this->repoManager->getRepository(QuestionTemplate::class)->delete($question);
+    }
+
+    public function searchByText($text)
+    {
+        return $this->repoManager->getRepository(QuestionTemplate::class)->searchByField('text', $text);
     }
 }

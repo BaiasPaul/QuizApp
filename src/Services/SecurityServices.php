@@ -7,7 +7,6 @@ use QuizApp\Entities\User;
 
 class SecurityServices extends AbstractServices
 {
-
     public function searchUser(string $email, string $password)
     {
         $filters = ['email' => $email, 'password' => $password];
@@ -28,6 +27,5 @@ class SecurityServices extends AbstractServices
     {
         $this->session->destroy();
     }
-
 
 }

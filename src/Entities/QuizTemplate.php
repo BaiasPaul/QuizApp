@@ -2,30 +2,41 @@
 
 namespace QuizApp\Entities;
 
+use ReallyOrm\Entity\AbstractEntity;
+
 /**
  * Class QuizTemplate
  * @package QuizApp\Entities
  */
-class QuizTemplate
+class QuizTemplate extends AbstractEntity
 {
     /**
      * @var int
+     * @ID
+     * @ORM id
      */
     private $id;
+
     /**
      * @var string
+     * @ORM name
      */
     private $name;
 
     /**
-     * QuizTemplate constructor.
-     * @param $id
-     * @param $name
+     * @var string
+     * @ORM description
      */
-    public function __construct($id, $name)
+    private $description;
+
+    /**
+     * QuizTemplate constructor.
+     */
+    public function __construct()
     {
-        $this->id = $id;
-        $this->name = $name;
+        $this->id = null;
+        $this->name = '';
+        $this->description = '';
     }
 
     /**
@@ -37,11 +48,45 @@ class QuizTemplate
     }
 
     /**
+     * @param string $description
+     */
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
      * @return mixed
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getNumberOfQuestions()
+    {
+       return $this->getRepository()->getNumberOfQuestions($this->getId())['entitiesNumber'];
+    }
+
+    public function getUserId()
+    {
+        return $this->getRepository()->getUserId($this->getId())['user_id'];
     }
 
 }

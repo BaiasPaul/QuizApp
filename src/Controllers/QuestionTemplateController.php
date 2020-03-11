@@ -10,6 +10,7 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
 use QuizApp\Services\QuestionTemplateServices;
+use QuizApp\Services\QuizTemplateServices;
 
 class QuestionTemplateController extends AbstractController
 {
@@ -92,4 +93,15 @@ class QuestionTemplateController extends AbstractController
 
         return $this->renderer->renderView("admin-question-details.phtml", $params);
     }
+
+//    public function searchByText(Request $request, array $requestAttributes)
+//    {
+//        $text = $request->getParameter('text');
+//        $arguments['text'] = $text;
+//        $arguments['currentPage'] = (int)$request->getParameter('page');
+//        $arguments['pages'] = $this->questionTemplateServices->getQuestionNumber($requestAttributes);
+//        $arguments['questions'] = $this->questionTemplateServices->searchByText($text);
+//
+//        return $this->renderer->renderView("admin-questions-listing.phtml", $arguments);
+//    }
 }

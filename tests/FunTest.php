@@ -2,8 +2,10 @@
 
 use PHPUnit\Framework\TestCase;
 use QuizApp\Entities\QuestionTemplate;
+use QuizApp\Entities\QuizTemplate;
 use QuizApp\Entities\User;
 use QuizApp\Repository\QuestionTemplateRepository;
+use QuizApp\Repository\QuizTemplateRepository;
 use ReallyOrm\Test\Hydrator\Hydrator;
 use ReallyOrm\Test\Repository\QuizRepository;
 use ReallyOrm\Test\Repository\RepositoryManager;
@@ -29,7 +31,12 @@ class FunTest extends TestCase
     private $userRepo;
 
     /**
-     * @var QuizRepository
+    * @var QuestionTemplateRepository
+     */
+    private $questionRepo;
+
+    /**
+     * @var QuizTemplateRepository
      */
     private $quizRepo;
 
@@ -56,8 +63,11 @@ class FunTest extends TestCase
         $this->repoManager = new RepositoryManager();
         $this->hydrator = new Hydrator($this->repoManager);
         $this->userRepo = new UserRepository($this->pdo, User::class, $this->hydrator);
-        $this->userRepo = new QuestionTemplateRepository($this->pdo, QuestionTemplate::class, $this->hydrator);
+        $this->questionRepo = new QuestionTemplateRepository($this->pdo, QuestionTemplate::class, $this->hydrator);
+        $this->quizRepo = new QuizTemplateRepository($this->pdo, QuizTemplate::class, $this->hydrator);
         $this->repoManager->addRepository($this->userRepo);
+        $this->repoManager->addRepository($this->questionRepo);
+        $this->repoManager->addRepository($this->quizRepo);
     }
 
 //    public function testCreateUser(): void
@@ -81,6 +91,21 @@ class FunTest extends TestCase
 //
 //        $this->assertEquals(true, $result);
 //    }
+
+    public function testCreateQuiz(): void
+    {
+        $quizTemplate = new QuizTemplate();
+        $quizTemplate->setName('test quiz');
+        $quizTemplate->setDescription('testare');
+
+        $quiz = $this->quizRepo->($filter);
+//        $this->assertEquals(1, $user->getId());
+
+        $this->repoManager->register($quizTemplate);
+        $result = $quizTemplate->save();
+
+        $this->assertEquals(true, $result);
+    }
 
     public function testUpdateUser(): void
     {
@@ -142,25 +167,25 @@ class FunTest extends TestCase
 //        $this->assertEquals(1, $user->getId());
 //    }
 
-    /**
-     * @return array
-     */
-    public function findOneByProvider()
-    {
-        return [
-            [
-                [
-                    'email' => 'admin@email.com'
-                ]
-            ],
-            [
-                [
-                    'password' => 'admin',
-                    'email' => 'admin@email.com'
-                ]
-            ]
-        ];
-    }
+//    /**
+//     * @return array
+//     */
+//    public function findOneByProvider()
+//    {
+//        return [
+//            [
+//                [
+//                    'email' => 'admin@email.com'
+//                ]
+//            ],
+//            [
+//                [
+//                    'password' => 'admin',
+//                    'email' => 'admin@email.com'
+//                ]
+//            ]
+//        ];
+//    }
 //
 //    /**
 //     * @test

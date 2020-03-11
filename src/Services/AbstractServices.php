@@ -39,4 +39,9 @@ class AbstractServices
     {
         return $this->session->get('name');
     }
+
+    public function getId()
+    {
+        return $this->session->get('id');
+    }
 }

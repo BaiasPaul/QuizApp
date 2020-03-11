@@ -62,13 +62,6 @@ class UserController extends AbstractController
         return $this->renderer->renderView("login.html", []);
     }
 
-//    public function showCandidateQuizzes()
-//    {
-//        $name['username'] = $this->userServices->getName();
-//
-//        return $this->renderer->renderView("candidate-quiz-listing.phtml", $name);
-//    }
-
     public function showUserDetails()
     {
         $params = $this->userServices->getEmptyParams();
@@ -109,6 +102,20 @@ class UserController extends AbstractController
         $body = Stream::createFromString("");
 
         return new Response($body, '1.1', '301', $location);
+    }
+
+    public function showResults(Request $request, array $requestAttributes)
+    {
+//        $arguments['currentPage'] = (int)$request->getParameter('page');
+//        $arguments['pages'] = $this->userServices->getUserNumber($requestAttributes);
+        $arguments['username'] = $this->userServices->getName();
+//        $arguments['dropdown'] = $requestAttributes;
+//        if (empty($requestAttributes)) {
+//            $arguments['dropdown'] = '';
+//        }
+//        $arguments['users'] = $this->userServices->getUsers($requestAttributes, $request->getParameter('page'));
+
+        return $this->renderer->renderView("admin-results-listing.phtml", $arguments);
     }
 
 }

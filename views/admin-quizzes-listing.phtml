@@ -65,7 +65,7 @@
                 </form>
             </div>
             <div class="col-12 col-md-6 d-flex align-items-end justify-content-end">
-                <a class="btn btn-primary py-1" href="/admin-quiz-details">Add new quiz</a>
+                <a class="btn btn-primary py-1" href="/admin-quiz-details/create">Add new quiz</a>
             </div>
         </div>
 
@@ -79,40 +79,26 @@
                     <th scope="col">Quiz</th>
                     <th scope="col">Description</th>
                     <th scope="col">Questions number</th>
+                    <th scope="col">Created by User</th>
                     <th scope="col">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>asd asad asdadadsad</td>
-                    <td>azxczxc cxzc</td>
-                    <td>1</td>
-                    <td class="text-center">
-                        <a class="btn btn-primary py-1" href="#">Edit</a>
-                        <a class="btn btn-danger py-1" href="#">Delete</a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>asd asad asdadadsad</td>
-                    <td>azxczxc cxzc</td>
-                    <td>2</td>
-                    <td class="text-center">
-                        <a class="btn btn-primary py-1" href="#">Edit</a>
-                        <a class="btn btn-danger py-1" href="#">Delete</a>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>asd asad asdadadsad</td>
-                    <td>azxczxc cxzc</td>
-                    <td>3</td>
-                    <td class="text-center">
-                        <a class="btn btn-primary py-1" href="#">Edit</a>
-                        <a class="btn btn-danger py-1" href="#">Delete</a>
-                    </td>
-                </tr>
+                <?php foreach ($arguments['quizzes'] as $quiz): ?>
+                    <tr>
+                        <td scope="row" name="id"><?php echo $quiz->getId(); ?></td>
+                        <td><?php echo $quiz->getName(); ?></td>
+                        <td><?php echo $quiz->getDescription(); ?></td>
+                        <td><?php echo $quiz->getNumberOfQuestions(); ?></td>
+                        <td><?php echo (int)$quiz->getUserId(); ?></td>
+                        <td class="text-center">
+                            <a class="btn btn-primary py-1"
+                               href="/admin-quiz-details/edit/<?php echo $quiz->getId(); ?>">Edit</a>
+                            <a class="btn btn-danger py-1"
+                               href="/admin-quiz-details/delete/<?php echo $quiz->getId(); ?>">Delete</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
@@ -120,14 +106,21 @@
         <!--Pagination block-->
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                <li class="page-item <?php if ($arguments['currentPage'] === 1) echo 'disabled'; ?>">
+                    <a class="page-link" href="?page=<?php echo $arguments['currentPage']-1;?>" >Previous</a>
                 </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
+                <?php
+                $pages = $arguments['pages']['entitiesNumber'] / 5;
+                if ($arguments['pages']['entitiesNumber'] % 5 > 0){
+                    $pages += 1;
+                }
+                for ($pageNumber = 1; $pageNumber <= $pages; $pageNumber++): ?>
+                    <li class="page-item <?php if ($arguments['currentPage'] === $pageNumber) echo 'active'; ?>">
+                        <a class="page-link" href="?page=<?php echo $pageNumber; ?>"><?php echo $pageNumber; ?></a>
+                    </li>
+                <?php endfor; ?>
+                <li class="page-item <?php if ($arguments['currentPage'] === (int)$pages) echo 'disabled'; ?>">
+                    <a class="page-link" href="?page=<?php echo $arguments['currentPage']+1;?>">Next</a>
                 </li>
             </ul>
         </nav>

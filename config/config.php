@@ -44,14 +44,6 @@ return array(
                 Router::CONFIG_KEY_ATTRIBUTES => []
             ],
 
-            'candidate_homepage' => [
-                Router::CONFIG_KEY_METHOD => 'GET',
-                Router::CONFIG_KEY_PATH => '/candidate',
-                Router::CONFIG_KEY_ACTION => 'showCandidateQuizzes',
-                Router::CONFIG_KEY_CONTROLLER => 'user',
-                Router::CONFIG_KEY_ATTRIBUTES => []
-            ],
-
             'show_user_details_create' => [
                 Router::CONFIG_KEY_METHOD => 'GET',
                 Router::CONFIG_KEY_PATH => '/admin-user-details/create',
@@ -68,7 +60,7 @@ return array(
                 Router::CONFIG_KEY_ATTRIBUTES => []
             ],
 
-            'admin_question_details_create' => [
+            'show_question_details_create' => [
                 Router::CONFIG_KEY_METHOD => 'GET',
                 Router::CONFIG_KEY_PATH => '/admin-question-details/create',
                 Router::CONFIG_KEY_ACTION => 'showQuestionDetails',
@@ -81,6 +73,46 @@ return array(
                 Router::CONFIG_KEY_PATH => '/admin-question-details/create',
                 Router::CONFIG_KEY_ACTION => 'createQuestion',
                 Router::CONFIG_KEY_CONTROLLER => 'questionTemplate',
+                Router::CONFIG_KEY_ATTRIBUTES => []
+            ],
+
+            'show_quiz_details_create' => [
+                Router::CONFIG_KEY_METHOD => 'GET',
+                Router::CONFIG_KEY_PATH => '/admin-quiz-details/create',
+                Router::CONFIG_KEY_ACTION => 'showQuizDetails',
+                Router::CONFIG_KEY_CONTROLLER => 'quizTemplate',
+                Router::CONFIG_KEY_ATTRIBUTES => []
+            ],
+
+            'save_quiz' => [
+                Router::CONFIG_KEY_METHOD => 'POST',
+                Router::CONFIG_KEY_PATH => '/admin-quiz-details/create',
+                Router::CONFIG_KEY_ACTION => 'createQuiz',
+                Router::CONFIG_KEY_CONTROLLER => 'quizTemplate',
+                Router::CONFIG_KEY_ATTRIBUTES => []
+            ],
+
+            'candidate_homepage' => [
+                Router::CONFIG_KEY_METHOD => 'GET',
+                Router::CONFIG_KEY_PATH => '/candidate',
+                Router::CONFIG_KEY_ACTION => 'showCandidateQuizzes',
+                Router::CONFIG_KEY_CONTROLLER => 'quizInstance',
+                Router::CONFIG_KEY_ATTRIBUTES => []
+            ],
+
+            'show_results_details_create' => [
+                Router::CONFIG_KEY_METHOD => 'GET',
+                Router::CONFIG_KEY_PATH => '/admin-results-details/create',
+                Router::CONFIG_KEY_ACTION => 'showResultDetails',
+                Router::CONFIG_KEY_CONTROLLER => 'resultTemplate',
+                Router::CONFIG_KEY_ATTRIBUTES => []
+            ],
+
+            'save_results' => [
+                Router::CONFIG_KEY_METHOD => 'POST',
+                Router::CONFIG_KEY_PATH => '/admin-results-details/create',
+                Router::CONFIG_KEY_ACTION => 'createResults',
+                Router::CONFIG_KEY_CONTROLLER => 'resultTemplate',
                 Router::CONFIG_KEY_ATTRIBUTES => []
             ],
 
@@ -124,6 +156,26 @@ return array(
                 ]
             ],
 
+            'show_quiz_details_edit' => [
+                Router::CONFIG_KEY_METHOD => 'GET',
+                Router::CONFIG_KEY_PATH => '/admin-quiz-details/edit/{id}',
+                Router::CONFIG_KEY_ACTION => 'showQuizDetailsEdit',
+                Router::CONFIG_KEY_CONTROLLER => 'quizTemplate',
+                Router::CONFIG_KEY_ATTRIBUTES => [
+                    'id' => '\d+'
+                ]
+            ],
+
+            'edit_quiz' => [
+                Router::CONFIG_KEY_METHOD => 'POST',
+                Router::CONFIG_KEY_PATH => '/admin-quiz-details/edit/{id}',
+                Router::CONFIG_KEY_ACTION => 'editQuiz',
+                Router::CONFIG_KEY_CONTROLLER => 'quizTemplate',
+                Router::CONFIG_KEY_ATTRIBUTES => [
+                    'id' => '\d+'
+                ]
+            ],
+
             'delete_user' => [
                 Router::CONFIG_KEY_METHOD => 'GET',
                 Router::CONFIG_KEY_PATH => '/admin-user-details/delete/{id}',
@@ -139,6 +191,16 @@ return array(
                 Router::CONFIG_KEY_PATH => '/admin-question-details/delete/{id}',
                 Router::CONFIG_KEY_ACTION => 'deleteQuestion',
                 Router::CONFIG_KEY_CONTROLLER => 'questionTemplate',
+                Router::CONFIG_KEY_ATTRIBUTES => [
+                    'id'=> '\d+'
+                ]
+            ],
+
+            'delete_quiz' => [
+                Router::CONFIG_KEY_METHOD => 'GET',
+                Router::CONFIG_KEY_PATH => '/admin-quiz-details/delete/{id}',
+                Router::CONFIG_KEY_ACTION => 'deleteQuiz',
+                Router::CONFIG_KEY_CONTROLLER => 'quizTemplate',
                 Router::CONFIG_KEY_ATTRIBUTES => [
                     'id'=> '\d+'
                 ]
@@ -160,6 +222,22 @@ return array(
                 Router::CONFIG_KEY_ATTRIBUTES => []
             ],
 
+            'show_quizzes' => [
+                Router::CONFIG_KEY_METHOD => 'GET',
+                Router::CONFIG_KEY_PATH => '/admin-quizzes-listing',
+                Router::CONFIG_KEY_ACTION => 'showQuizzes',
+                Router::CONFIG_KEY_CONTROLLER => 'quizTemplate',
+                Router::CONFIG_KEY_ATTRIBUTES => []
+            ],
+
+            'show_results' => [
+                Router::CONFIG_KEY_METHOD => 'GET',
+                Router::CONFIG_KEY_PATH => '/admin-results-listing',
+                Router::CONFIG_KEY_ACTION => 'showResults',
+                Router::CONFIG_KEY_CONTROLLER => 'user',
+                Router::CONFIG_KEY_ATTRIBUTES => []
+            ],
+
             'admin_user_listing_candidate' => [
                 Router::CONFIG_KEY_METHOD => 'GET',
                 Router::CONFIG_KEY_PATH => '/admin-users-listing/{role}',
@@ -170,35 +248,11 @@ return array(
                 ]
             ],
 
-            'admin_quiz_details' => [
-                Router::CONFIG_KEY_METHOD => 'GET',
-                Router::CONFIG_KEY_PATH => '/admin-quiz-details',
-                Router::CONFIG_KEY_ACTION => 'showAdminQuizDetails',
-                Router::CONFIG_KEY_CONTROLLER => 'quizTemplate',
-                Router::CONFIG_KEY_ATTRIBUTES => []
-            ],
-
-            'admin_quizzes_listing' => [
-                Router::CONFIG_KEY_METHOD => 'GET',
-                Router::CONFIG_KEY_PATH => '/admin-quizzes-listing',
-                Router::CONFIG_KEY_ACTION => 'showAdminQuizzesListing',
-                Router::CONFIG_KEY_CONTROLLER => 'quizTemplate',
-                Router::CONFIG_KEY_ATTRIBUTES => []
-            ],
-
-            'candidate_quiz_listing' => [
-                Router::CONFIG_KEY_METHOD => 'GET',
-                Router::CONFIG_KEY_PATH => '/candidate-quiz-listing',
-                Router::CONFIG_KEY_ACTION => 'CandidateQuizListing',
-                Router::CONFIG_KEY_CONTROLLER => 'user',
-                Router::CONFIG_KEY_ATTRIBUTES => []
-            ],
-
-            'candidate_quiz_page' => [
-                Router::CONFIG_KEY_METHOD => 'GET',
-                Router::CONFIG_KEY_PATH => '/candidate-quiz-page',
-                Router::CONFIG_KEY_ACTION => 'CandidateQuizPage',
-                Router::CONFIG_KEY_CONTROLLER => 'user',
+            'filter_by_text' => [
+                Router::CONFIG_KEY_METHOD => 'POST',
+                Router::CONFIG_KEY_PATH => '/admin-questions-listing',
+                Router::CONFIG_KEY_ACTION => 'searchByText',
+                Router::CONFIG_KEY_CONTROLLER => 'questionsTemplate',
                 Router::CONFIG_KEY_ATTRIBUTES => []
             ],
 
