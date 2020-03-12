@@ -31,10 +31,36 @@ class QuestionInstanceController extends AbstractController
     {
         $answer = $request->getParameter('answer');
         $this->questionInstanceServices->saveAnswer($answer,$requestAttributes['id']);
-
-        $location = 'Location: http://quizApp.com/candidate-quiz-page?question='.$requestAttributes['question'];
+        $questionNumber = $request->getParameter('question');
+        $location = 'Location: http://quizApp.com/candidate-quiz-page?question='.($questionNumber+1);
         $body = Stream::createFromString("");
 
         return new Response($body, '1.1', '301', $location);
+    }
+
+    public function back(Request $request, array $requestAttributes)
+    {
+        $questionNumber = $request->getParameter('question');
+        $location = 'Location: http://quizApp.com/candidate-quiz-page?question='.($questionNumber-1);
+        $body = Stream::createFromString("");
+
+        return new Response($body, '1.1', '301', $location);
+    }
+
+    public function save(Request $request, array $requestAttributes)
+    {
+        $answer = $request->getParameter('answer');
+        $this->questionInstanceServices->saveAnswer($answer,$requestAttributes['id']);
+        $location = 'Location: http://quizApp.com/candidate-results';
+        $body = Stream::createFromString("");
+
+        return new Response($body, '1.1', '301', $location);
+    }
+
+    public function showResults(){
+        $arguments['username'] = $this->questionInstanceServices->getName();
+        $arguments['questions'] = $this->questionInstanceServices->getQuestionsAnswered();
+
+        return $this->renderer->renderView("candidate-results.phtml", $arguments);
     }
 }

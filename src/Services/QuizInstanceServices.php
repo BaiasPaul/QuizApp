@@ -2,6 +2,7 @@
 
 namespace QuizApp\Services;
 
+use QuizApp\Entities\AnswerInstance;
 use QuizApp\Entities\QuestionInstance;
 use QuizApp\Entities\QuestionTemplate;
 use QuizApp\Entities\QuizInstance;
@@ -78,6 +79,16 @@ class QuizInstanceServices extends AbstractServices
         $question = $this->repoManager->getRepository(QuestionInstance::class)->findOneBy(['text'=>$question]);
 
         return $question->getId();
+    }
+
+    public function deleteOldAnswers()
+    {
+        $this->repoManager->getRepository(AnswerInstance::class)->deleteOldAnswers();
+    }
+
+    public function getMaxQuestions()
+    {
+        return $this->repoManager->getRepository(QuestionInstance::class)->getNumberOfQuestions($this->session->get('quizInstanceId'));
     }
 
 }

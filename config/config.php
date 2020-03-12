@@ -121,6 +121,34 @@ return array(
                 ]
             ],
 
+            'back_answer' => [
+                Router::CONFIG_KEY_METHOD => 'POST',
+                Router::CONFIG_KEY_PATH => '/candidate-quiz-page/back/{id}',
+                Router::CONFIG_KEY_ACTION => 'back',
+                Router::CONFIG_KEY_CONTROLLER => 'questionInstance',
+                Router::CONFIG_KEY_ATTRIBUTES => [
+                    'id' => '\d+'
+                ]
+            ],
+
+            'save_answers' => [
+                Router::CONFIG_KEY_METHOD => 'POST',
+                Router::CONFIG_KEY_PATH => '/candidate-quiz-page/save/{id}',
+                Router::CONFIG_KEY_ACTION => 'save',
+                Router::CONFIG_KEY_CONTROLLER => 'questionInstance',
+                Router::CONFIG_KEY_ATTRIBUTES => [
+                    'id' => '\d+'
+                ]
+            ],
+
+            'candidate_results' => [
+                Router::CONFIG_KEY_METHOD => 'GET',
+                Router::CONFIG_KEY_PATH => '/candidate-results',
+                Router::CONFIG_KEY_ACTION => 'showResults',
+                Router::CONFIG_KEY_CONTROLLER => 'questionInstance',
+                Router::CONFIG_KEY_ATTRIBUTES => []
+            ],
+
             'show_results_details_create' => [
                 Router::CONFIG_KEY_METHOD => 'GET',
                 Router::CONFIG_KEY_PATH => '/admin-results-details/create',

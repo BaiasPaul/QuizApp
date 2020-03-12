@@ -18,6 +18,17 @@ class QuestionInstanceRepository extends AbstractRepository
         }
     }
 
+    public function getNumberOfQuestions(int $id)
+    {
+        $query = "SELECT count(*) as questionNumber FROM questioninstance WHERE quizinstance_id=:id";
+        $dbStmt = $this->pdo->prepare($query);
+        $dbStmt->bindParam(':id', $id);
+
+        $dbStmt->execute();
+
+        return $dbStmt->fetch()['questionNumber'];
+    }
+
     public function getQuestion($id)
     {
         $query = "SELECT text FROM questioninstance LIMIT 1 OFFSET :offset; ";

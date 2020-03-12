@@ -20,4 +20,9 @@ class QuestionInstanceServices extends AbstractServices
         $this->repoManager->register($questionInstance);
         $this->repoManager->getRepository(AnswerInstance::class)->saveAnswer($answer,$questionInstance);
     }
+
+    public function getQuestionsAnswered()
+    {
+        return $this->repoManager->getRepository(QuestionInstance::class)->getQuestionsAnsqered();
+    }
 }

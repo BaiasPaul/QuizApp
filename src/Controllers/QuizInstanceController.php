@@ -41,6 +41,7 @@ class QuizInstanceController extends AbstractController
     public function showCandidateQuizListing(Request $request, array $requestAttributes)
     {
         $this->quizInstanceServices->setQuizId($requestAttributes['id']);
+        $this->quizInstanceServices->deleteOldAnswers();
         $this->quizInstanceServices->createQuizInstance();
         $location = 'Location: http://quizApp.com/candidate-quiz-page?question=1';
         $body = Stream::createFromString("");
@@ -53,8 +54,11 @@ class QuizInstanceController extends AbstractController
         $question = $this->quizInstanceServices->getQuestion($questionNumber-1);
         $arguments['question'] = $question;
         $arguments['username'] = $this->quizInstanceServices->getName();
+        $arguments['currentQuestion'] = $questionNumber;
         $questionInstanceNumber = $this->quizInstanceServices->getQuestionInstanceNumber($question);
         $arguments['questionNumber'] = $questionInstanceNumber;
+        $maxQuestions = $this->quizInstanceServices->getMaxQuestions();
+        $arguments['maxQuestions'] = $maxQuestions;
 
         return $this->renderer->renderView("candidate-quiz-page.phtml", $arguments);
     }
