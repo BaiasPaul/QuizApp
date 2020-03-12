@@ -51,7 +51,7 @@ class QuestionInstanceController extends AbstractController
     {
         $answer = $request->getParameter('answer');
         $this->questionInstanceServices->saveAnswer($answer,$requestAttributes['id']);
-        $location = 'Location: http://quizApp.com/quiz-success-page';
+        $location = 'Location: http://quizApp.com/candidate-results';
         $body = Stream::createFromString("");
 
         return new Response($body, '1.1', '301', $location);

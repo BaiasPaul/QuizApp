@@ -23,6 +23,7 @@ class QuestionInstanceServices extends AbstractServices
 
     public function getQuestionsAnswered()
     {
-        return $this->repoManager->getRepository(QuestionInstance::class)->getAllQuestionsAnswered();
+        $id = $this->session->get('quizInstanceId');
+        return $this->repoManager->getRepository(QuestionInstance::class)->getAllQuestionsAnswered($id);
     }
 }

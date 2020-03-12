@@ -3,6 +3,7 @@
 namespace QuizApp\Services;
 
 use Framework\Contracts\SessionInterface;
+use QuizApp\Entities\QuestionInstance;
 use QuizApp\Entities\QuizInstance;
 use QuizApp\Entities\User;
 use ReallyOrm\Test\Repository\RepositoryManager;
@@ -84,6 +85,11 @@ class UserServices extends AbstractServices
     public function getQuestionsInfo(int $currentPage)
     {
         return $this->repoManager->getRepository(User::class)->getQuestions(($currentPage - 1) * 5, 5);
+    }
+
+    public function getQuestionsAnswered($id)
+    {
+        return $this->repoManager->getRepository(QuestionInstance::class)->getAllQuestionsAnswered($id);
     }
 
 }

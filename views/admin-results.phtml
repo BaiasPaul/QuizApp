@@ -56,44 +56,47 @@
         </div>
 
         <!--Quiz block-->
+        <?php foreach ($questions as $question): ?>
         <div class="card border-secondary mb-3">
             <div class="card-header">
                 <p class="mb-1">Question: </p>
                 <span>
-                    Some quick example text to build on the card title and make up the bulk of the card's content. Some quick example text to build on the card title and make up the bulk of the card's content.
+                    <?php echo $question['question'];?>
                 </span>
             </div>
             <div class="card-body">
                 <p class="mb-1">Answer: </p>
-                <span>Some quick example text to build on the card title and make up the bulk of the card's content.</span>
-            </div>
-        </div>
-
-        <div class="card border-secondary mb-3">
-            <div class="card-header">
-                <p class="mb-1">Question: </p>
                 <span>
-                    Some quick example text to build on the card title and make up the bulk of the card's content. Some quick example text to build on the card title and make up the bulk of the card's content.
+                    <?php echo $question['answer'];?>
                 </span>
             </div>
-            <div class="card-body">
-                <p class="mb-1">Answer: </p>
-                <span>Some quick example text to build on the card title and make up the bulk of the card's content.</span>
-            </div>
         </div>
-
-        <div class="card border-secondary mb-3">
-            <div class="card-header">
-                <p class="mb-1">Question: </p>
-                <span>
-                    Some quick example text to build on the card title and make up the bulk of the card's content. Some quick example text to build on the card title and make up the bulk of the card's content.
-                </span>
-            </div>
-            <div class="card-body">
-                <p class="mb-1">Answer: </p>
-                <span>Some quick example text to build on the card title and make up the bulk of the card's content.</span>
-            </div>
-        </div>
+        <?php endforeach; ?>
+<!--        <div class="card border-secondary mb-3">-->
+<!--            <div class="card-header">-->
+<!--                <p class="mb-1">Question: </p>-->
+<!--                <span>-->
+<!--                    Some quick example text to build on the card title and make up the bulk of the card's content. Some quick example text to build on the card title and make up the bulk of the card's content.-->
+<!--                </span>-->
+<!--            </div>-->
+<!--            <div class="card-body">-->
+<!--                <p class="mb-1">Answer: </p>-->
+<!--                <span>Some quick example text to build on the card title and make up the bulk of the card's content.</span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!---->
+<!--        <div class="card border-secondary mb-3">-->
+<!--            <div class="card-header">-->
+<!--                <p class="mb-1">Question: </p>-->
+<!--                <span>-->
+<!--                    Some quick example text to build on the card title and make up the bulk of the card's content. Some quick example text to build on the card title and make up the bulk of the card's content.-->
+<!--                </span>-->
+<!--            </div>-->
+<!--            <div class="card-body">-->
+<!--                <p class="mb-1">Answer: </p>-->
+<!--                <span>Some quick example text to build on the card title and make up the bulk of the card's content.</span>-->
+<!--            </div>-->
+<!--        </div>-->
 
         <!--Results form-->
         <form>
