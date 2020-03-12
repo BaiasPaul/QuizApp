@@ -3,6 +3,7 @@
 namespace QuizApp\Services;
 
 use Framework\Contracts\SessionInterface;
+use QuizApp\Entities\QuizInstance;
 use QuizApp\Entities\User;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
@@ -29,9 +30,19 @@ class UserServices extends AbstractServices
         return $this->repoManager->getRepository(User::class)->findBy($filters, [], ($currentPage - 1) * 5, 5);
     }
 
+//    public function getQuizInstances(array $filters, int $currentPage)
+//    {
+//        return $this->repoManager->getRepository(QuizInstance::class)->findBy($filters, [], ($currentPage - 1) * 5, 5);
+//    }
+
     public function getUserNumber(array $filters)
     {
         return $this->repoManager->getRepository(User::class)->getNumberOfEntities($filters);
+    }
+
+    public function getQuizzesNumber(array $filters)
+    {
+        return $this->repoManager->getRepository(QuizInstance::class)->getNumberOfEntities($filters);
     }
 
     public function editUser($id, $name, $email, $password, $role)
@@ -68,6 +79,11 @@ class UserServices extends AbstractServices
     public function getEmptyParams()
     {
        return  ['id' => '', 'name' => '', 'email' => '', 'password' => '', 'role' => ''];
+    }
+
+    public function getQuestionsInfo(int $currentPage)
+    {
+        return $this->repoManager->getRepository(User::class)->getQuestions(($currentPage - 1) * 5, 5);
     }
 
 }

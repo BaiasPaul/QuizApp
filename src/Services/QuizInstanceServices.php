@@ -47,7 +47,6 @@ class QuizInstanceServices extends AbstractServices
         $quizInstance = new QuizInstance();
         $quizInstance->setName($quizTemplate->getName());
 
-        $filters = ['name' => $quizTemplate->getName()];
         $user = $this->repoManager->getRepository(User::class)->find($userId);
         $questions = $this->repoManager->getRepository(QuizTemplate::class)->getSelectedQuestions($quizId);
         $questionsFound = $this->createQuestionList($questions);

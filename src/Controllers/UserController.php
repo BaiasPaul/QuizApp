@@ -106,7 +106,10 @@ class UserController extends AbstractController
 
     public function showResults(Request $request, array $requestAttributes)
     {
+        $arguments['currentPage'] = (int)$request->getParameter('page');
+        $arguments['pages'] = $this->userServices->getUserNumber($requestAttributes);
         $arguments['username'] = $this->userServices->getName();
+        $arguments['quizzes'] = $this->userServices->getQuestionsInfo($request->getParameter('page'));
 
         return $this->renderer->renderView("admin-results-listing.phtml", $arguments);
     }
