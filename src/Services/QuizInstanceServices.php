@@ -70,7 +70,7 @@ class QuizInstanceServices extends AbstractServices
 
     public function getQuestion($questionNumber)
     {
-        return $this->repoManager->getRepository(QuestionInstance::class)->getQuestion($questionNumber);
+        return $this->repoManager->getRepository(QuestionInstance::class)->getQuestion($questionNumber,  $this->session->get('quizInstanceId'));
     }
 
     public function getQuestionInstanceNumber($question)

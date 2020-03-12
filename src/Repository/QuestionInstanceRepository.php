@@ -11,7 +11,7 @@ class QuestionInstanceRepository extends AbstractRepository
 {
     public function insertQuestions(array $questions, $quizInstance)
     {
-        $this->deleteOldQuestions();
+//        $this->deleteOldQuestions();
         foreach ($questions as $question) {
             $this->insertOnDuplicateKeyUpdate($question);
             $this->setForeignKeyId($quizInstance, $question);
@@ -29,15 +29,18 @@ class QuestionInstanceRepository extends AbstractRepository
         return $dbStmt->fetch()['questionNumber'];
     }
 
-    public function getQuestion($id)
+    public function getQuestion($offset, int $quizInstanceId)
     {
-        $query = "SELECT text FROM questioninstance LIMIT 1 OFFSET :offset; ";
+        $query = "SELECT * FROM questioninstance WHERE quizinstance_id = :qId LIMIT 1 OFFSET :offset; ";
         $dbStmt = $this->pdo->prepare($query);
-        $dbStmt->bindParam(':offset', $id);
+        $dbStmt->bindParam(':offset', $offset);
+        $dbStmt->bindParam(':qId', $quizInstanceId);
 
         $dbStmt->execute();
 
-        return $dbStmt->fetch()['text'];
+        $row =  $dbStmt->fetch();
+
+        return $this->hydrator->hydrate(QuestionInstance::class,$row);
     }
 
     public function deleteOldQuestions()
@@ -49,7 +52,7 @@ class QuestionInstanceRepository extends AbstractRepository
     }
 
     public function getAllQuestionsAnswered($id){
-        $query = "SELECT  questioninstance.text as question,answerinstance.text as answer FROM quizinstance 
+        $query = "SELECT  questioninstance.text as question, answerinstance.text as answer FROM quizinstance 
                 INNER JOIN  questioninstance ON quizinstance.id = questioninstance.quizinstance_id 
                 INNER JOIN answerinstance ON answerinstance.questioninstance_id = questioninstance.id where quizinstance.id=:id;
                 ";

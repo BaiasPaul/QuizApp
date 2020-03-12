@@ -10,7 +10,6 @@ class AnswerInstanceRepository extends AbstractRepository
 {
     public function saveAnswer($answer,$quizInstance)
     {
-
         $this->insertOnDuplicateKeyUpdate($answer);
         $this->setForeignKeyId($quizInstance, $answer);
     }
