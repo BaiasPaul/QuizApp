@@ -59,7 +59,8 @@ class QuestionInstanceController extends AbstractController
 
     public function showResults(){
         $arguments['username'] = $this->questionInstanceServices->getName();
-        $arguments['questions'] = $this->questionInstanceServices->getQuestionsAnswered();
+        $questions = $this->questionInstanceServices->getQuestionsAnswered();
+        $arguments['questions'] = $questions;
 
         return $this->renderer->renderView("candidate-results.phtml", $arguments);
     }

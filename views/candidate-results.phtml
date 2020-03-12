@@ -61,7 +61,7 @@
             <div class="card-header">
                 <p class="mb-1">Question: </p>
                 <span>
-                    <?php echo $question['text']; ?>
+                    <?php echo $question['question']; ?>
                 </span>
             </div>
             <div class="card-body">
@@ -72,38 +72,9 @@
             </div>
         </div>
         <?php endforeach; ?>
-        <div class="card border-secondary mb-3">
-            <div class="card-header">
-                <p class="mb-1">Question: </p>
-                <span>
-                    Some quick example text to build on the card title and make up the bulk of the card's content. Some quick example text to build on the card title and make up the bulk of the card's content.
-                </span>
-            </div>
-            <div class="card-body">
-                <p class="mb-1">Answer: </p>
-                <span>Some quick example text to build on the card title and make up the bulk of the card's content.</span>
-            </div>
-        </div>
-
-        <div class="card border-secondary mb-3">
-            <div class="card-header">
-                <p class="mb-1">Question: </p>
-                <span>
-                    Some quick example text to build on the card title and make up the bulk of the card's content. Some quick example text to build on the card title and make up the bulk of the card's content.
-                </span>
-            </div>
-            <div class="card-body">
-                <p class="mb-1">Answer: </p>
-                <span>Some quick example text to build on the card title and make up the bulk of the card's content.</span>
-            </div>
-        </div>
 
         <!--Results form-->
         <form>
-            <div class="form-group">
-                <label for="quizScore">Score</label>
-                <input type="number" class="form-control" id="quizScore" placeholder="Quiz score">
-            </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">Save</button>
             </div>

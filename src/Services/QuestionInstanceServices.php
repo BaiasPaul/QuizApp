@@ -23,6 +23,6 @@ class QuestionInstanceServices extends AbstractServices
 
     public function getQuestionsAnswered()
     {
-        return $this->repoManager->getRepository(QuestionInstance::class)->getQuestionsAnsqered();
+        return $this->repoManager->getRepository(QuestionInstance::class)->getAllQuestionsAnswered();
     }
 }

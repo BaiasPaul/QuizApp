@@ -47,4 +47,18 @@ class QuestionInstanceRepository extends AbstractRepository
 
         $dbStmt->execute();
     }
+
+    public function getAllQuestionsAnswered(){
+        $query = "SELECT  questioninstance.text as question,answerinstance.text as answer FROM quizinstance 
+                INNER JOIN  questioninstance ON quizinstance.id = questioninstance.quizinstance_id 
+                INNER JOIN answerinstance ON answerinstance.questioninstance_id = questioninstance.id;
+                ";
+        $dbStmt = $this->pdo->prepare($query);
+        $dbStmt->bindParam(':offset', $id);
+
+        $dbStmt->execute();
+
+        return $dbStmt->fetchAll();
+    }
+
 }
