@@ -51,7 +51,7 @@ class QuestionInstanceController extends AbstractController
     {
         $answer = $request->getParameter('answer');
         $this->questionInstanceServices->saveAnswer($answer,$requestAttributes['id']);
-        $location = 'Location: http://quizApp.com/candidate-results';
+        $location = 'Location: http://quizApp.com/quiz-success-page';
         $body = Stream::createFromString("");
 
         return new Response($body, '1.1', '301', $location);
@@ -63,5 +63,11 @@ class QuestionInstanceController extends AbstractController
         $arguments['questions'] = $questions;
 
         return $this->renderer->renderView("candidate-results.phtml", $arguments);
+    }
+
+    public function showSuccessPage(){
+        $arguments['username'] = $this->questionInstanceServices->getName();
+
+        return $this->renderer->renderView("quiz-success-page.phtml", $arguments);
     }
 }

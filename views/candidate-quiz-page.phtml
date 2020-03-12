@@ -58,11 +58,13 @@
                 <textarea name="answer" class="form-control" id="questionResponse" placeholder="Question response"></textarea>
             </div>
             <div class="text-center">
-                <?php if ((int)$currentQuestion === 1): ?>
+                <?php if ((int)$currentQuestion === $maxQuestions): ?>
+                    <?php if ((int)$currentQuestion != 1): ?>
+                        <button type="submit" class="btn btn-primary" formmethod="POST" formaction="/candidate-quiz-page/back/<?php echo $questionNumber;?>?question=<?php echo $currentQuestion;?>">Previous</button>/
+                    <?php endif; ?>
+                <button type="submit" class="btn btn-primary" formmethod="POST" formaction="/candidate-quiz-page/save/<?php echo $questionNumber;?>?question=<?php echo $currentQuestion;?>">Save</button>
+                <?php elseif ((int)$currentQuestion === 1): ?>
                     <button type="submit" class="btn btn-primary" formmethod="POST" formaction="/candidate-quiz-page/saveAnswer/<?php echo $questionNumber;?>?question=<?php echo $currentQuestion;?>">Next</button>
-                <?php elseif ((int)$currentQuestion === $maxQuestions): ?>
-                    <button type="submit" class="btn btn-primary" formmethod="POST" formaction="/candidate-quiz-page/back/<?php echo $questionNumber;?>?question=<?php echo $currentQuestion;?>">Previous</button>/
-                    <button type="submit" class="btn btn-primary" formmethod="POST" formaction="/candidate-quiz-page/save/<?php echo $questionNumber;?>?question=<?php echo $currentQuestion;?>">Save</button>
                 <?php else: ?>
 
                     <button type="submit" class="btn btn-primary" formmethod="POST" formaction="/candidate-quiz-page/back/<?php echo $questionNumber;?>?question=<?php echo $currentQuestion;?>">Previous</button>/

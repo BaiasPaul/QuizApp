@@ -149,6 +149,14 @@ return array(
                 Router::CONFIG_KEY_ATTRIBUTES => []
             ],
 
+            'sucess_page' => [
+                Router::CONFIG_KEY_METHOD => 'GET',
+                Router::CONFIG_KEY_PATH => '/quiz-success-page',
+                Router::CONFIG_KEY_ACTION => 'showSuccessPage',
+                Router::CONFIG_KEY_CONTROLLER => 'questionInstance',
+                Router::CONFIG_KEY_ATTRIBUTES => []
+            ],
+
             'show_results_details_create' => [
                 Router::CONFIG_KEY_METHOD => 'GET',
                 Router::CONFIG_KEY_PATH => '/admin-results-details/create',
