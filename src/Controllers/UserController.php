@@ -123,4 +123,15 @@ class UserController extends AbstractController
         return $this->renderer->renderView("admin-results.phtml", $arguments);
     }
 
+    public function saveScore(Request $request, array $requestAttributes)
+    {
+        $arguments['currentPage'] = (int)$request->getParameter('page');
+        $arguments['pages'] = $this->userServices->getQuizzesNumber($requestAttributes);
+        $arguments['username'] = $this->userServices->getName();
+        $arguments['quizzes'] = $this->userServices->getQuestionsInfo($request->getParameter('page'));
+        $score = $request->getParameter('score');
+        $this->userServices->setScore($score);
+
+        return $this->renderer->renderView("admin-results-listing.phtml", $arguments);
+    }
 }

@@ -3,6 +3,7 @@
 namespace QuizApp\Services;
 
 use Framework\Contracts\SessionInterface;
+use phpDocumentor\Reflection\Types\This;
 use QuizApp\Entities\QuestionInstance;
 use QuizApp\Entities\QuizInstance;
 use QuizApp\Entities\User;
@@ -30,11 +31,6 @@ class UserServices extends AbstractServices
     {
         return $this->repoManager->getRepository(User::class)->findBy($filters, [], ($currentPage - 1) * 5, 5);
     }
-
-//    public function getQuizInstances(array $filters, int $currentPage)
-//    {
-//        return $this->repoManager->getRepository(QuizInstance::class)->findBy($filters, [], ($currentPage - 1) * 5, 5);
-//    }
 
     public function getUserNumber(array $filters)
     {
@@ -90,6 +86,14 @@ class UserServices extends AbstractServices
     public function getQuestionsAnswered($id)
     {
         return $this->repoManager->getRepository(QuestionInstance::class)->getAllQuestionsAnswered($id);
+    }
+
+    public function setScore($score)
+    {
+        $quizInstance = $this->repoManager->getRepository(QuizInstance::class)->find($this->session->get('quizInstanceId'));
+        $quizInstance->setScore($score);
+        $quizInstance->setRepositoryManager($this->repoManager);
+        $quizInstance->save();
     }
 
 }

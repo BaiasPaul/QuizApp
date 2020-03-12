@@ -305,6 +305,14 @@ return array(
                 Router::CONFIG_KEY_ATTRIBUTES => []
             ],
 
+            'save_score' => [
+                Router::CONFIG_KEY_METHOD => 'POST',
+                Router::CONFIG_KEY_PATH => '/admin-results-listing',
+                Router::CONFIG_KEY_ACTION => 'saveScore',
+                Router::CONFIG_KEY_CONTROLLER => 'user',
+                Router::CONFIG_KEY_ATTRIBUTES => []
+            ],
+
             'admin_user_listing_candidate' => [
                 Router::CONFIG_KEY_METHOD => 'GET',
                 Router::CONFIG_KEY_PATH => '/admin-users-listing/{role}',
