@@ -22,12 +22,12 @@ class UserController extends AbstractController
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
-     * @param UserServices $quizTemplateServices
+     * @param UserServices $questionInstanceServices
      */
-    public function __construct(RendererInterface $renderer, UserServices $quizTemplateServices)
+    public function __construct(RendererInterface $renderer, UserServices $questionInstanceServices)
     {
         parent::__construct($renderer);
-        $this->userServices = $quizTemplateServices;
+        $this->userServices = $questionInstanceServices;
     }
 
     public function createUser(Request $request)
@@ -106,14 +106,7 @@ class UserController extends AbstractController
 
     public function showResults(Request $request, array $requestAttributes)
     {
-//        $arguments['currentPage'] = (int)$request->getParameter('page');
-//        $arguments['pages'] = $this->userServices->getUserNumber($requestAttributes);
         $arguments['username'] = $this->userServices->getName();
-//        $arguments['dropdown'] = $requestAttributes;
-//        if (empty($requestAttributes)) {
-//            $arguments['dropdown'] = '';
-//        }
-//        $arguments['users'] = $this->userServices->getUsers($requestAttributes, $request->getParameter('page'));
 
         return $this->renderer->renderView("admin-results-listing.phtml", $arguments);
     }

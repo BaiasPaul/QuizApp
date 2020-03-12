@@ -38,7 +38,7 @@
     <!--Breadcrumbs-->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb px-3 py-0 mb-3">
-            <li class="breadcrumb-item active" aria-current="page"><a href="/candidate">Dashboard</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="/candidate?page=1">Dashboard</a></li>
         </ol>
     </nav>
 
@@ -57,28 +57,12 @@
             </tr>
             </thead>
             <tbody>
-<!--            <tr>-->
-<!--                <th scope="row">ASd dsadsada asdadads</th>-->
-<!--                <td class="text-center">-->
-<!--                    <a class="btn btn-primary py-1" href="#">Start quiz</a>-->
-<!--                </td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--                <th scope="row">asdasddas asdaddasd</th>-->
-<!--                <td class="text-center">-->
-<!--                    <a class="btn btn-primary py-1" href="#">Start quiz</a>-->
-<!--                </td>            </tr>-->
-<!--            <tr>-->
-<!--                <th scope="row">ZXC sadasd asdasdadas</th>-->
-<!--                <td class="text-center">-->
-<!--                    <a class="btn btn-primary py-1" href="#">Start quiz</a>-->
-<!--                </td>            </tr>-->
                 <?php foreach ($arguments['quizzes'] as $quiz): ?>
                     <tr>
                         <td scope="row"><?php echo $quiz->getName(); ?></td>
-                        <td class="text-center">-->
-                            <a class="btn btn-primary py-1" href="#">Start quiz</a>
-                        </td>-
+                        <td class="text-center">
+                            <a name="quizId" class="btn btn-primary py-1" href="/candidate-quiz-page/<?php echo $quiz->getId();?>?question=1">Start quiz</a>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -92,14 +76,14 @@
                 <a class="page-link" href="?page=<?php echo $arguments['currentPage']-1;?>" >Previous</a>
             </li>
             <?php
-            $pages = $arguments['pages']['entitiesNumber'] / 5;
-            if ($arguments['pages']['entitiesNumber'] % 5 > 0){
-                $pages += 1;
-            }
-            for ($pageNumber = 1; $pageNumber <= $pages; $pageNumber++): ?>
-                <li class="page-item <?php if ($arguments['currentPage'] === $pageNumber) echo 'active'; ?>">
-                    <a class="page-link" href="?page=<?php echo $pageNumber; ?>"><?php echo $pageNumber; ?></a>
-                </li>
+                $pages = $arguments['pages']['entitiesNumber'] / 5;
+                if ($arguments['pages']['entitiesNumber'] % 5 > 0){
+                    $pages += 1;
+                }
+                for ($pageNumber = 1; $pageNumber <= $pages; $pageNumber++): ?>
+                    <li class="page-item <?php if ($arguments['currentPage'] === $pageNumber) echo 'active'; ?>">
+                        <a class="page-link" href="?page=<?php echo $pageNumber; ?>"><?php echo $pageNumber; ?></a>
+                    </li>
             <?php endfor; ?>
             <li class="page-item <?php if ($arguments['currentPage'] === (int)$pages) echo 'disabled'; ?>">
                 <a class="page-link" href="?page=<?php echo $arguments['currentPage']+1;?>">Next</a>

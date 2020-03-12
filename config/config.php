@@ -28,13 +28,6 @@ return array(
                 Router::CONFIG_KEY_CONTROLLER => 'security',
                 Router::CONFIG_KEY_ATTRIBUTES => []
             ],
-            'admin_dashboard' => [
-                Router::CONFIG_KEY_METHOD => 'GET',
-                Router::CONFIG_KEY_PATH => '/admin-dashboard',
-                Router::CONFIG_KEY_ACTION => 'showAdminDashboard',
-                Router::CONFIG_KEY_CONTROLLER => 'user',
-                Router::CONFIG_KEY_ATTRIBUTES => []
-            ],
 
             'admin_homepage' => [
                 Router::CONFIG_KEY_METHOD => 'GET',
@@ -98,6 +91,34 @@ return array(
                 Router::CONFIG_KEY_ACTION => 'showCandidateQuizzes',
                 Router::CONFIG_KEY_CONTROLLER => 'quizInstance',
                 Router::CONFIG_KEY_ATTRIBUTES => []
+            ],
+
+            'candidate_quiz_listing' => [
+                Router::CONFIG_KEY_METHOD => 'GET',
+                Router::CONFIG_KEY_PATH => '/candidate-quiz-page/{id}',
+                Router::CONFIG_KEY_ACTION => 'showCandidateQuizListing',
+                Router::CONFIG_KEY_CONTROLLER => 'quizInstance',
+                Router::CONFIG_KEY_ATTRIBUTES => [
+                    'id' => '\d+'
+                ]
+            ],
+
+            'candidate_quizzes' => [
+                Router::CONFIG_KEY_METHOD => 'GET',
+                Router::CONFIG_KEY_PATH => '/candidate-quiz-page',
+                Router::CONFIG_KEY_ACTION => 'showQuestions',
+                Router::CONFIG_KEY_CONTROLLER => 'quizInstance',
+                Router::CONFIG_KEY_ATTRIBUTES => []
+            ],
+
+            'save_answer' => [
+                Router::CONFIG_KEY_METHOD => 'POST',
+                Router::CONFIG_KEY_PATH => '/candidate-quiz-page/saveAnswer/{id}',
+                Router::CONFIG_KEY_ACTION => 'saveAnswer',
+                Router::CONFIG_KEY_CONTROLLER => 'questionInstance',
+                Router::CONFIG_KEY_ATTRIBUTES => [
+                    'id' => '\d+'
+                ]
             ],
 
             'show_results_details_create' => [

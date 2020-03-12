@@ -16,12 +16,12 @@ class QuizTemplateController extends AbstractController
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
-     * @param QuizTemplateServices $quizTemplateServices
+     * @param QuizTemplateServices $questionInstanceServices
      */
-    public function __construct(RendererInterface $renderer, QuizTemplateServices $quizTemplateServices)
+    public function __construct(RendererInterface $renderer, QuizTemplateServices $questionInstanceServices)
     {
         parent::__construct($renderer);
-        $this->quizTemplateServices = $quizTemplateServices;
+        $this->quizTemplateServices = $questionInstanceServices;
     }
 
     public function createQuiz(Request $request)
@@ -54,8 +54,7 @@ class QuizTemplateController extends AbstractController
         $name = $request->getParameter('name');
         $description = $request->getParameter('description');
         $questions = $request->getParameter('questions');
-        $currentUserId = $this->quizTemplateServices->getId();
-        $this->quizTemplateServices->editQuiz($requestAttributes['id'], $name, $description,$questions,$currentUserId);
+        $this->quizTemplateServices->editQuiz($requestAttributes['id'], $name, $description,$questions);
         $location = 'Location: http://quizApp.com/admin-quizzes-listing?page=1';
         $body = Stream::createFromString("");
 

@@ -43,6 +43,10 @@ class SecurityController extends AbstractController
         $email = $request->getParameter('email');
         $password = md5($request->getParameter('password'));
         $userRole = $this->securityServices->searchUser($email, $password);
+        if ($userRole === 'candidate')
+        {
+            $userRole .= "?page=1";
+        }
         $location =  'Location: http://quizApp.com/'.$userRole;
         $body = Stream::createFromString("");
 

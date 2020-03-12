@@ -20,19 +20,20 @@ class QuestionTemplateController extends AbstractController
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
-     * @param QuestionTemplateServices $quizTemplateServices
+     * @param QuestionTemplateServices $questionInstanceServices
      */
-    public function __construct(RendererInterface $renderer, QuestionTemplateServices $quizTemplateServices)
+    public function __construct(RendererInterface $renderer, QuestionTemplateServices $questionInstanceServices)
     {
         parent::__construct($renderer);
-        $this->questionTemplateServices = $quizTemplateServices;
+        $this->questionTemplateServices = $questionInstanceServices;
     }
 
     public function createQuestion(Request $request)
     {
         $text = $request->getParameter('text');
         $type = $request->getParameter('type');
-        $this->questionTemplateServices->saveQuestion($text, $type);
+        $answer = $request->getParameter('answer');
+        $this->questionTemplateServices->saveQuestion($text, $type,$answer);
         $location = 'Location: http://quizApp.com/admin-questions-listing?page=1';
         $body = Stream::createFromString("");
 
@@ -44,10 +45,6 @@ class QuestionTemplateController extends AbstractController
         $arguments['currentPage'] = (int)$request->getParameter('page');
         $arguments['pages'] = $this->questionTemplateServices->getQuestionNumber($requestAttributes);
         $arguments['username'] = $this->questionTemplateServices->getName();
-//        $arguments['dropdown'] = $requestAttributes;
-//        if (empty($requestAttributes)) {
-//            $arguments['dropdown'] = '';
-//        }
         $arguments['questions'] = $this->questionTemplateServices->getQuestions($requestAttributes, $request->getParameter('page'));
 
         return $this->renderer->renderView("admin-questions-listing.phtml", $arguments);
@@ -57,8 +54,8 @@ class QuestionTemplateController extends AbstractController
     {
         $text = $request->getParameter('text');
         $type = $request->getParameter('type');
-
-        $this->questionTemplateServices->editQuestion($requestAttributes['id'], $text, $type);
+        $answer = $request->getParameter('answer');
+        $this->questionTemplateServices->editQuestion($requestAttributes['id'], $text, $type,$answer);
 
         $location = 'Location: http://quizApp.com/admin-questions-listing?page=1';
         $body = Stream::createFromString("");
@@ -94,14 +91,4 @@ class QuestionTemplateController extends AbstractController
         return $this->renderer->renderView("admin-question-details.phtml", $params);
     }
 
-//    public function searchByText(Request $request, array $requestAttributes)
-//    {
-//        $text = $request->getParameter('text');
-//        $arguments['text'] = $text;
-//        $arguments['currentPage'] = (int)$request->getParameter('page');
-//        $arguments['pages'] = $this->questionTemplateServices->getQuestionNumber($requestAttributes);
-//        $arguments['questions'] = $this->questionTemplateServices->searchByText($text);
-//
-//        return $this->renderer->renderView("admin-questions-listing.phtml", $arguments);
-//    }
 }

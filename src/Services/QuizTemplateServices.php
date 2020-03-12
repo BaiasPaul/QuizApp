@@ -57,21 +57,17 @@ class QuizTemplateServices extends AbstractServices
         return $quizzes;
     }
 
-    public function editQuiz($quizId, $name, $description, $questions, $userId)
+    public function editQuiz($quizId, $name, $description, $questions)
     {
         $quiz = $this->repoManager->getRepository(QuizTemplate::class)->find($quizId);
         $quiz->setName($name);
         $quiz->setDescription($description);
-        $filters = ['name' => $name, 'description' => $description];
-        $result = $this->repoManager->getRepository(QuizTemplate::class)->findOneBy($filters);
         $questionsFound = $this->createQuestionList($questions);
-//        if (!$result) {
-            $this->repoManager->register($quiz);
-            $this->repoManager->register($questionsFound[0]);
-            $quiz->save();
-            $this->repoManager->getRepository(QuizTemplate::class)->deleteQuestions($quiz->getId());
-            $this->repoManager->getRepository(QuizTemplate::class)->setEntitiesToTarget($quiz, $questionsFound);
-//        }
+        $this->repoManager->register($quiz);
+        $this->repoManager->register($questionsFound[0]);
+        $quiz->save();
+        $this->repoManager->getRepository(QuizTemplate::class)->deleteQuestions($quiz->getId());
+        $this->repoManager->getRepository(QuizTemplate::class)->setEntitiesToTarget($quiz, $questionsFound);
     }
 
     public function getParams($id)
