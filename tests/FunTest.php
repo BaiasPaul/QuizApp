@@ -98,7 +98,7 @@ class FunTest extends TestCase
         $quizTemplate->setName('test quiz');
         $quizTemplate->setDescription('testare');
 
-        $quiz = $this->quizRepo->($filter);
+//        $quiz = $this->quizRepo->($filter);
 //        $this->assertEquals(1, $user->getId());
 
         $this->repoManager->register($quizTemplate);

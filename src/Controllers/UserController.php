@@ -57,11 +57,6 @@ class UserController extends AbstractController
         return $this->renderer->renderView("admin-users-listing.phtml", $arguments);
     }
 
-    public function showLogin()
-    {
-        return $this->renderer->renderView("login.html", []);
-    }
-
     public function showUserDetails()
     {
         $params = $this->userServices->getEmptyParams();

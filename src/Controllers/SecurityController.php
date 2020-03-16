@@ -24,6 +24,28 @@ class SecurityController extends AbstractController
         $this->securityServices = $securityServices;
     }
 
+    public function showLogin()
+    {
+        return $this->renderer->renderView("login.phtml", ['login' => true]);
+    }
+
+    public function login(Request $request)
+    {
+        $email = $request->getParameter('email');
+        $password = md5($request->getParameter('password'));
+        $userRole = $this->securityServices->searchUser($email, $password);
+        if (!$userRole) {
+            return $this->renderer->renderView("login.phtml", ['login' => false]);
+        }
+        if ($userRole === 'candidate') {
+            $userRole .= "?page=1";
+        }
+        $location = 'Location: http://quizApp.com/' . $userRole;
+        $body = Stream::createFromString("");
+
+        return new Response($body, '1.1', '301', $location);
+    }
+
     public function logout()
     {
         $this->securityServices->logout();
@@ -33,29 +55,9 @@ class SecurityController extends AbstractController
         return new Response($body, '1.1', '301', $location);
     }
 
-    public function showLogin()
-    {
-        return $this->renderer->renderView("login.html", []);
-    }
-
-    public function login(Request $request)
-    {
-        $email = $request->getParameter('email');
-        $password = md5($request->getParameter('password'));
-        $userRole = $this->securityServices->searchUser($email, $password);
-        if ($userRole === 'candidate')
-        {
-            $userRole .= "?page=1";
-        }
-        $location =  'Location: http://quizApp.com/'.$userRole;
-        $body = Stream::createFromString("");
-
-        return new Response($body, '1.1', '301', $location);
-    }
-
     public function showAdminDashboard()
     {
-        $name = ['username'=> $this->securityServices->getName()];
+        $name = ['username' => $this->securityServices->getName()];
 
         return $this->renderer->renderView("admin-dashboard.phtml", $name);
     }
