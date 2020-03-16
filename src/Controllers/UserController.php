@@ -30,17 +30,9 @@ class UserController extends AbstractController
         $this->userServices = $questionInstanceServices;
     }
 
-    public function createUser(Request $request)
+    public function showLogin()
     {
-        $name = $request->getParameter('name');
-        $email = $request->getParameter('email');
-        $password = md5($request->getParameter('password'));
-        $role = $request->getParameter('role');
-        $this->userServices->saveUser($name, $email, $password, $role);
-        $location = 'Location: http://quizApp.com/admin-users-listing?page=1';
-        $body = Stream::createFromString("");
-
-        return new Response($body, '1.1', '301', $location);
+        return $this->renderer->renderView("login.html", []);
     }
 
     public function showUsers(Request $request, array $requestAttributes)
@@ -57,17 +49,25 @@ class UserController extends AbstractController
         return $this->renderer->renderView("admin-users-listing.phtml", $arguments);
     }
 
-    public function showLogin()
-    {
-        return $this->renderer->renderView("login.html", []);
-    }
-
     public function showUserDetails()
     {
         $params = $this->userServices->getEmptyParams();
         $params['username'] = $this->userServices->getName();
         $params['path'] = 'create';
         return $this->renderer->renderView("admin-user-details.phtml", $params);
+    }
+
+    public function createUser(Request $request)
+    {
+        $name = $request->getParameter('name');
+        $email = $request->getParameter('email');
+        $password = $request->getParameter('password');
+        $role = $request->getParameter('role');
+        $this->userServices->saveUser($name, $email, $password, $role);
+        $location = 'Location: http://quizApp.com/admin-users-listing?page=1';
+        $body = Stream::createFromString("");
+
+        return new Response($body, '1.1', '301', $location);
     }
 
     public function showUserDetailsEdit(Request $request, array $requestAttributes)
@@ -85,7 +85,6 @@ class UserController extends AbstractController
         $email = $request->getParameter('email');
         $password = $request->getParameter('password');
         $role = $request->getParameter('role');
-
         $this->userServices->editUser($requestAttributes['id'], $name, $email, $password, $role);
 
         $location = 'Location: http://quizApp.com/admin-users-listing?page=1';
