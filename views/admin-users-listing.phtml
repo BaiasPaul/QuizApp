@@ -30,6 +30,9 @@
     <!--Custom css-->
     <link rel="stylesheet" href="assets/css/custom-css.css">
 
+    <!--Custom js-->
+    <script src="assets/js/jquery-functions.js"></script>
+
     <title>Admin - Users listing</title>
 </head>
 
@@ -81,6 +84,27 @@
         </div>
     </div>
 
+
+    <!-- Modal -->
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteLabel">Delete User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this user ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger btn-ok">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <!--Quiz listing table-->
     <div class="table-responsive my-4">
         <table class="table table-bordered">
@@ -103,7 +127,7 @@
                     <td><?php echo $user->getRole(); ?></td>
                     <td class="text-center">
                         <a class="btn btn-primary py-1" href="/admin-user-details/edit/<?php echo $user->getId(); ?>">Edit</a>
-                        <a class="btn btn-danger py-1" href="/admin-user-details/delete/<?php echo $user->getId(); ?>">Delete</a>
+                        <a data-toggle="modal" data-target="#confirm-delete" class="btn btn-danger py-1" data-href="/admin-user-details/delete/<?php echo $user->getId(); ?>">Delete</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -118,14 +142,14 @@
                 <a class="page-link" href="?page=<?php echo $arguments['currentPage']-1;?>" >Previous</a>
             </li>
             <?php
-                $pages = $arguments['pages']['entitiesNumber'] / 5;
-                if ($arguments['pages']['entitiesNumber'] % 5 > 0){
-                    $pages += 1;
-                }
-                for ($pageNumber = 1; $pageNumber <= $pages; $pageNumber++): ?>
-                    <li class="page-item <?php if ($arguments['currentPage'] === $pageNumber) echo 'active'; ?>">
-                        <a class="page-link" href="?page=<?php echo $pageNumber; ?>"><?php echo $pageNumber; ?></a>
-                    </li>
+            $pages = $arguments['pages']['entitiesNumber'] / 5;
+            if ($arguments['pages']['entitiesNumber'] % 5 > 0){
+                $pages += 1;
+            }
+            for ($pageNumber = 1; $pageNumber <= $pages; $pageNumber++): ?>
+                <li class="page-item <?php if ($arguments['currentPage'] === $pageNumber) echo 'active'; ?>">
+                    <a class="page-link" href="?page=<?php echo $pageNumber; ?>"><?php echo $pageNumber; ?></a>
+                </li>
             <?php endfor; ?>
             <li class="page-item <?php if ($arguments['currentPage'] === (int)$pages) echo 'disabled'; ?>">
                 <a class="page-link" href="?page=<?php echo $arguments['currentPage']+1;?>">Next</a>
