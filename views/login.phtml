@@ -45,9 +45,9 @@
             <label for="inputPassword" class="sr-only">Password</label>
             <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password">
         </div>
-        <?php if (!$login): ?>
+        <?php if ($errorMessage): ?>
         <div class="alert alert-danger" role="alert">
-            Email or Password incorrect !
+            <?php echo $errorMessage;?>
         </div>
         <?php endif; ?>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>

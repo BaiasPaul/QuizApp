@@ -17,7 +17,7 @@ return array(
                 Router::CONFIG_KEY_METHOD => 'GET',
                 Router::CONFIG_KEY_PATH => '/',
                 Router::CONFIG_KEY_ACTION => 'showLogin',
-                Router::CONFIG_KEY_CONTROLLER => 'security',
+                Router::CONFIG_KEY_CONTROLLER => 'auth',
                 Router::CONFIG_KEY_ATTRIBUTES => []
             ],
 
@@ -25,7 +25,7 @@ return array(
                 Router::CONFIG_KEY_METHOD => 'POST',
                 Router::CONFIG_KEY_PATH => '/login',
                 Router::CONFIG_KEY_ACTION => 'login',
-                Router::CONFIG_KEY_CONTROLLER => 'security',
+                Router::CONFIG_KEY_CONTROLLER => 'auth',
                 Router::CONFIG_KEY_ATTRIBUTES => []
             ],
 
@@ -33,7 +33,7 @@ return array(
                 Router::CONFIG_KEY_METHOD => 'GET',
                 Router::CONFIG_KEY_PATH => '/admin',
                 Router::CONFIG_KEY_ACTION => 'showAdminDashboard',
-                Router::CONFIG_KEY_CONTROLLER => 'security',
+                Router::CONFIG_KEY_CONTROLLER => 'auth',
                 Router::CONFIG_KEY_ATTRIBUTES => []
             ],
 
