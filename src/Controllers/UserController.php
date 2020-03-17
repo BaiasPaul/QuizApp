@@ -9,6 +9,7 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
 use QuizApp\Entities\User;
+use QuizApp\Exceptions\DeleteCurrentAdminException;
 use QuizApp\Services\UserServices;
 
 /**
@@ -96,7 +97,10 @@ class UserController extends AbstractController
 
     public function deleteUser(Request $request, array $requestAttributes)
     {
-        $this->userServices->deleteUser($requestAttributes['id']);
+        try {
+            $this->userServices->deleteUser($requestAttributes['id']);
+        } catch (DeleteCurrentAdminException $e) {
+        }
 
         $location = 'Location: http://quizApp.com/admin-users-listing?page=1';
         $body = Stream::createFromString("");

@@ -7,6 +7,7 @@ use phpDocumentor\Reflection\Types\This;
 use QuizApp\Entities\QuestionInstance;
 use QuizApp\Entities\QuizInstance;
 use QuizApp\Entities\User;
+use QuizApp\Exceptions\DeleteCurrentAdminException;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
 class UserServices extends AbstractServices
@@ -66,10 +67,14 @@ class UserServices extends AbstractServices
         return ['id' => $user->getId(), 'name' => $user->getName(), 'email' => $user->getEmail(), 'password' => $user->getPassword(), 'role' => $user->getRole()];
     }
 
-    public function deleteUser($id)
+    public function deleteUser($userId)
     {
-        $user = $this->repoManager->getRepository(User::class)->find($id);
-
+        $user = $this->repoManager->getRepository(User::class)->find($userId);
+        if ($user->getId() == $this->getCurrentUserId()){
+            $this->session->set('errorMessage', 'Admins can\'t delete themselves !');
+            throw new DeleteCurrentAdminException();
+        }
+        $this->session->set('errorMessage', '');
         return $this->repoManager->getRepository(User::class)->delete($user);
     }
 
@@ -94,6 +99,11 @@ class UserServices extends AbstractServices
         $quizInstance->setScore($score);
         $quizInstance->setRepositoryManager($this->repoManager);
         $quizInstance->save();
+    }
+
+    public function getCurrentUserId()
+    {
+        return $this->session->get('id');
     }
 
 }

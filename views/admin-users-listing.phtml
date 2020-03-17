@@ -80,7 +80,11 @@
             <a class="btn btn-primary py-1 mb-3" href="/admin-user-details/create">Add new user</a>
         </div>
     </div>
-
+    <?php if ($errorMessage): ?>
+        <div class="alert alert-danger" role="alert">
+            <?php echo $errorMessage;?>
+        </div>
+    <?php endif; ?>
     <!--Quiz listing table-->
     <div class="table-responsive my-4">
         <table class="table table-bordered">
