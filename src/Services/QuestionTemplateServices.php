@@ -23,18 +23,22 @@ class QuestionTemplateServices extends AbstractServices
             $this->repoManager->register($answer);
             $question->save();
             $answer->save();
-            $this->repoManager->getRepository(AnswerTemplate::class)->setForeignKeyId($question,$answer);
+            $this->repoManager->getRepository(AnswerTemplate::class)->setForeignKeyId($question, $answer);
         }
     }
 
     public function getEmptyParams()
     {
-        return ['text' => '', 'type' => '', 'answer'=>''];
+        return ['text' => '', 'type' => '', 'answer' => ''];
     }
 
-    public function getQuestionNumber(array $filters)
+    public function getQuestionNumberOfPages(array $filters)
     {
-        return $this->repoManager->getRepository(QuestionTemplate::class)->getNumberOfEntities($filters);
+        $pages =  $this->repoManager->getRepository(QuestionTemplate::class)->getNumberOfEntities($filters)['entitiesNumber']/5;
+        if ($pages % 5 > 0){
+            $pages += 1;
+        }
+        return $pages;
     }
 
     public function getQuestions(array $filters, $currentPage)
@@ -42,13 +46,18 @@ class QuestionTemplateServices extends AbstractServices
         return $this->repoManager->getRepository(QuestionTemplate::class)->findBy($filters, [], ($currentPage - 1) * 5, 5);
     }
 
+    public function getQuestionsBtText($text, $currentPage)
+    {
+        return $this->repoManager->getRepository(QuestionTemplate::class)->getQuestionsByText($text, ($currentPage - 1) * 5, 5);
+    }
+
     public function editQuestion($id, $text, $type, $answerText)
     {
         $question = $this->repoManager->getRepository(QuestionTemplate::class)->find($id);
         $question->setText($text);
         $question->setType($type);
-        $answer = $this->repoManager->getRepository(AnswerTemplate::class)->findOneBy(['questiontemplate_id'=>$id]);
-        if (!$answer){
+        $answer = $this->repoManager->getRepository(AnswerTemplate::class)->findOneBy(['questiontemplate_id' => $id]);
+        if (!$answer) {
             $answer = new AnswerTemplate();
         }
         $answer->setText($answerText);
@@ -56,14 +65,14 @@ class QuestionTemplateServices extends AbstractServices
         $this->repoManager->register($answer);
         $question->save();
         $answer->save();
-        $this->repoManager->getRepository(AnswerTemplate::class)->setForeignKeyId($question,$answer);
+        $this->repoManager->getRepository(AnswerTemplate::class)->setForeignKeyId($question, $answer);
     }
 
     public function getParams($id)
     {
         $question = $this->repoManager->getRepository(QuestionTemplate::class)->find($id);
-        $answer = $this->repoManager->getRepository(AnswerTemplate::class)->findOneBy(['questiontemplate_id'=>$id]);
-        return ['id' => $question->getId(), 'text' => $question->getText(), 'type' => $question->getType(), 'answer' => $answer->getText()  ];
+        $answer = $this->repoManager->getRepository(AnswerTemplate::class)->findOneBy(['questiontemplate_id' => $id]);
+        return ['id' => $question->getId(), 'text' => $question->getText(), 'type' => $question->getType(), 'answer' => $answer->getText()];
     }
 
     public function deleteQuestion($id)
@@ -73,8 +82,13 @@ class QuestionTemplateServices extends AbstractServices
         return $this->repoManager->getRepository(QuestionTemplate::class)->delete($question);
     }
 
-    public function searchByText($text)
+    public function getQuestionNumberOfPagesByText($text)
     {
-        return $this->repoManager->getRepository(QuestionTemplate::class)->searchByField('text', $text);
+        $pages = $this->repoManager->getRepository(QuestionTemplate::class)->getQuestionNumberByText($text)['entitiesNumber']/5;
+        if ($pages % 5 > 0){
+            $pages += 1;
+        }
+        return $pages;
     }
+
 }

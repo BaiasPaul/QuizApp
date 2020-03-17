@@ -11,6 +11,7 @@ use Framework\Http\Response;
 use Framework\Http\Stream;
 use QuizApp\Services\QuestionTemplateServices;
 use QuizApp\Services\QuizTemplateServices;
+use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 
 class QuestionTemplateController extends AbstractController
 {
@@ -33,7 +34,7 @@ class QuestionTemplateController extends AbstractController
         $text = $request->getParameter('text');
         $type = $request->getParameter('type');
         $answer = $request->getParameter('answer');
-        $this->questionTemplateServices->saveQuestion($text, $type,$answer);
+        $this->questionTemplateServices->saveQuestion($text, $type, $answer);
         $location = 'Location: http://quizApp.com/admin-questions-listing?page=1';
         $body = Stream::createFromString("");
 
@@ -42,10 +43,19 @@ class QuestionTemplateController extends AbstractController
 
     public function showQuestions(Request $request, array $requestAttributes)
     {
+        $text = $request->getParameter('text');
+
         $arguments['currentPage'] = (int)$request->getParameter('page');
-        $arguments['pages'] = $this->questionTemplateServices->getQuestionNumber($requestAttributes);
         $arguments['username'] = $this->questionTemplateServices->getName();
+        $arguments['text'] = $text;
+        if ($text){
+            $arguments['questions'] = $this->questionTemplateServices->getQuestionsBtText($text, $request->getParameter('page'));
+            $arguments['pages'] = $this->questionTemplateServices->getQuestionNumberOfPagesByText($text);
+
+            return $this->renderer->renderView("admin-questions-listing.phtml", $arguments);
+        }
         $arguments['questions'] = $this->questionTemplateServices->getQuestions($requestAttributes, $request->getParameter('page'));
+        $arguments['pages'] = $this->questionTemplateServices->getQuestionNumberOfPages($requestAttributes);
 
         return $this->renderer->renderView("admin-questions-listing.phtml", $arguments);
     }
@@ -55,7 +65,7 @@ class QuestionTemplateController extends AbstractController
         $text = $request->getParameter('text');
         $type = $request->getParameter('type');
         $answer = $request->getParameter('answer');
-        $this->questionTemplateServices->editQuestion($requestAttributes['id'], $text, $type,$answer);
+        $this->questionTemplateServices->editQuestion($requestAttributes['id'], $text, $type, $answer);
 
         $location = 'Location: http://quizApp.com/admin-questions-listing?page=1';
         $body = Stream::createFromString("");
@@ -89,6 +99,16 @@ class QuestionTemplateController extends AbstractController
         $params['path'] = 'create';
 
         return $this->renderer->renderView("admin-question-details.phtml", $params);
+    }
+
+    public function searchByText(Request $request, array $requestAttributes)
+    {
+        $text = $request->getParameter('text');
+
+        $location = "Location: http://quizApp.com/admin-questions-listing?page=1&text=$text";
+        $body = Stream::createFromString("");
+
+        return new Response($body, '1.1', '301', $location);
     }
 
 }
