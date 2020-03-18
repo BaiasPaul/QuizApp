@@ -18,7 +18,6 @@ class SecurityServices extends AbstractServices
         $this->session->set('name', $user->getName());
         $this->session->set('email', $user->getEmail());
         $this->session->set('role', $user->getRole());
-        $this->session->get('name');
 
         return strtolower($user->getRole());
     }
