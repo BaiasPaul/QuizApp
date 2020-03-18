@@ -33,6 +33,7 @@ class AppMessageManager
      */
     public function addErrorMessage(string $message): void
     {
+        $messages = $this->session->get('errorMessages');
         $messages[] = $message;
         $this->session->set('errorMessages',$messages);
     }
@@ -67,6 +68,7 @@ class AppMessageManager
      */
     public function addSuccessMessage(string $message): void
     {
+        $messages = $this->session->get('successMessages');
         $messages[] = $message;
         $this->session->set('successMessages',$messages);
     }

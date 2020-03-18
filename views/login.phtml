@@ -47,7 +47,7 @@
         </div>
         <?php if ($messageManager->getErrorMessagesCount()): ?>
         <div class="alert alert-danger" role="alert">
-            <?php echo implode('\n',$messageManager->getErrorMessages());?>
+            <?php echo implode('<br>',$messageManager->getErrorMessages());?>
         </div>
         <?php endif; ?>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
