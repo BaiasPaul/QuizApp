@@ -110,16 +110,16 @@
                     <a class="page-link" href="?page=<?php echo $arguments['currentPage']-1;?>" >Previous</a>
                 </li>
                 <?php
-                $pages = $arguments['pages']['entitiesNumber'] / 5;
+                $totalPages = $arguments['pages']['entitiesNumber'] / 5;
                 if ($arguments['pages']['entitiesNumber'] % 5 > 0){
-                    $pages += 1;
+                    $totalPages += 1;
                 }
-                for ($pageNumber = 1; $pageNumber <= $pages; $pageNumber++): ?>
+                for ($pageNumber = 1; $pageNumber <= $totalPages; $pageNumber++): ?>
                     <li class="page-item <?php if ($arguments['currentPage'] === $pageNumber) echo 'active'; ?>">
                         <a class="page-link" href="?page=<?php echo $pageNumber; ?>"><?php echo $pageNumber; ?></a>
                     </li>
                 <?php endfor; ?>
-                <li class="page-item <?php if ($arguments['currentPage'] === (int)$pages) echo 'disabled'; ?>">
+                <li class="page-item <?php if ($arguments['currentPage'] === (int)$totalPages) echo 'disabled'; ?>">
                     <a class="page-link" href="?page=<?php echo $arguments['currentPage']+1;?>">Next</a>
                 </li>
             </ul>

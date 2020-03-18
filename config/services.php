@@ -30,6 +30,7 @@ use QuizApp\Repository\QuizInstanceRepository;
 use QuizApp\Repository\QuizTemplateRepository;
 use QuizApp\Repository\SecurityRepository;
 use QuizApp\Repository\UserRepository;
+use QuizApp\Services\Paginator;
 use QuizApp\Services\QuestionInstanceServices;
 use QuizApp\Services\QuestionTemplateServices;
 use QuizApp\Services\QuizInstanceServices;
@@ -145,6 +146,8 @@ $container->register(SecurityServices::class,SecurityServices::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
+$container->register(Paginator::class,Paginator::class);
+
 $container->register(QuestionTemplateServices::class,QuestionTemplateServices::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
@@ -180,6 +183,7 @@ $container->register(QuizInstanceController::class, QuizInstanceController::clas
 $container->register(QuestionTemplateController::class, QuestionTemplateController::class)
     ->addArgument(new Reference(RendererInterface::class))
     ->addArgument(new Reference(QuestionTemplateServices::class))
+    ->addArgument(new Reference(Paginator::class))
     ->addTag('controller');
 
 $container->register(QuestionInstanceController::class, QuestionInstanceController::class)

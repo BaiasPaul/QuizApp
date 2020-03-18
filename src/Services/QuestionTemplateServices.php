@@ -5,18 +5,35 @@ namespace QuizApp\Services;
 use QuizApp\Entities\AnswerTemplate;
 use QuizApp\Entities\QuestionTemplate;
 use QuizApp\Entities\User;
+use ReallyOrm\Entity\EntityInterface;
 
+/**
+ * Class QuestionTemplateServices
+ * @package QuizApp\Services
+ */
 class QuestionTemplateServices extends AbstractServices
 {
 
+    /**
+     * This method creates a question template and an answer template with the specified parameters
+     *
+     * @param $text
+     * @param $type
+     * @param $answerText
+     */
     public function saveQuestion($text, $type, $answerText)
     {
+        //create a new QuestionTemplate with the specified attributes
         $question = new QuestionTemplate();
         $question->setText($text);
         $question->setType($type);
+
+        //creates a AnswerTemplate with the specified text
         $answer = new AnswerTemplate();
         $answer->setText($answerText);
         $filters = ['text' => $text, 'type' => $type];
+
+        //search for the question in the Database and saves it if not found
         $questionFound = $this->repoManager->getRepository(QuestionTemplate::class)->findOneBy($filters);
         if (!$questionFound) {
             $this->repoManager->register($question);
@@ -27,30 +44,37 @@ class QuestionTemplateServices extends AbstractServices
         }
     }
 
+    /**
+     * This method creates an array with empty string parameters to fill the create question form with
+     *
+     * @return array
+     */
     public function getEmptyParams()
     {
         return ['text' => '', 'type' => '', 'answer' => ''];
     }
 
-    public function getQuestionNumberOfPages(array $filters)
-    {
-        $pages =  $this->repoManager->getRepository(QuestionTemplate::class)->getNumberOfEntities($filters)['entitiesNumber']/5;
-        if ($pages % 5 > 0){
-            $pages += 1;
-        }
-        return $pages;
-    }
-
-    public function getQuestions(array $filters, $currentPage)
-    {
-        return $this->repoManager->getRepository(QuestionTemplate::class)->findBy($filters, [], ($currentPage - 1) * 5, 5);
-    }
-
-    public function getQuestionsBtText($text, $currentPage)
+    /**
+     * This method returns a list of questions that have the text LIKE the searched one
+     *
+     * @param $text
+     * @param $currentPage
+     * @return mixed
+     */
+    public function getQuestionsByText($text, $currentPage)
     {
         return $this->repoManager->getRepository(QuestionTemplate::class)->getQuestionsByText($text, ($currentPage - 1) * 5, 5);
     }
 
+    /**
+     * This method searches for a question to update it and adds it a new answer if it does not have one
+     * than saves it in the database
+     *
+     * @param $id
+     * @param $text
+     * @param $type
+     * @param $answerText
+     */
     public function editQuestion($id, $text, $type, $answerText)
     {
         $question = $this->repoManager->getRepository(QuestionTemplate::class)->find($id);
@@ -65,9 +89,16 @@ class QuestionTemplateServices extends AbstractServices
         $this->repoManager->register($answer);
         $question->save();
         $answer->save();
+        //sets the foreign key of the answer with the question id
         $this->repoManager->getRepository(AnswerTemplate::class)->setForeignKeyId($question, $answer);
     }
 
+    /**
+     * This method returns an array with the attributes of a question for autocomplete in the edit question form
+     *
+     * @param $id
+     * @return array
+     */
     public function getParams($id)
     {
         $question = $this->repoManager->getRepository(QuestionTemplate::class)->find($id);
@@ -75,6 +106,12 @@ class QuestionTemplateServices extends AbstractServices
         return ['id' => $question->getId(), 'text' => $question->getText(), 'type' => $question->getType(), 'answer' => $answer->getText()];
     }
 
+    /**
+     * This method removes a user with the specified id from the database
+     *
+     * @param $id
+     * @return bool
+     */
     public function deleteQuestion($id)
     {
         $question = $this->repoManager->getRepository(QuestionTemplate::class)->find($id);
@@ -82,13 +119,15 @@ class QuestionTemplateServices extends AbstractServices
         return $this->repoManager->getRepository(QuestionTemplate::class)->delete($question);
     }
 
+    /**
+     * This method return the number of questions with the searched text
+     *
+     * @param $text
+     * @return int
+     */
     public function getQuestionNumberOfPagesByText($text)
     {
-        $pages = $this->repoManager->getRepository(QuestionTemplate::class)->getQuestionNumberByText($text)['entitiesNumber']/5;
-        if ($pages % 5 > 0){
-            $pages += 1;
-        }
-        return $pages;
+        return $this->repoManager->getRepository(QuestionTemplate::class)->getQuestionNumberByText($text);
     }
 
 }
