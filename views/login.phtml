@@ -45,9 +45,9 @@
             <label for="inputPassword" class="sr-only">Password</label>
             <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password">
         </div>
-        <?php if ($errorMessage): ?>
+        <?php if ($messageManager->getErrorMessagesCount()): ?>
         <div class="alert alert-danger" role="alert">
-            <?php echo $errorMessage;?>
+            <?php echo implode('\n',$messageManager->getErrorMessages());?>
         </div>
         <?php endif; ?>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>

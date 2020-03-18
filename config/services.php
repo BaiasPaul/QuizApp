@@ -28,8 +28,8 @@ use QuizApp\Repository\QuestionInstanceRepository;
 use QuizApp\Repository\QuestionTemplateRepository;
 use QuizApp\Repository\QuizInstanceRepository;
 use QuizApp\Repository\QuizTemplateRepository;
-use QuizApp\Repository\AuthRepository;
 use QuizApp\Repository\UserRepository;
+use QuizApp\Services\AppMessageManager;
 use QuizApp\Services\QuestionInstanceServices;
 use QuizApp\Services\QuestionTemplateServices;
 use QuizApp\Services\QuizInstanceServices;
@@ -72,12 +72,6 @@ $container->register(HydratorInterface::class, Hydrator::class)
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
 $container->setParameter('userClass',User::class);
-$container->register(AuthRepository::class, AuthRepository::class)
-    ->addArgument(new Reference(PDO::class))
-    ->addArgument('%userClass%')
-    ->addArgument(new Reference(HydratorInterface::class))
-    ->addTag('repository');
-
 $container->register(UserRepository::class, UserRepository::class)
     ->addArgument(new Reference(PDO::class))
     ->addArgument('%userClass%')
@@ -132,6 +126,9 @@ foreach ($container->findTaggedServiceIds('repository') as $id => $value) {
     $repository = $container->getDefinition($id);
     $repoManager->addMethodCall('addRepository', [$repository]);
 }
+
+$container->register(AppMessageManager::class,AppMessageManager::class)
+    ->addArgument(new Reference(SessionInterface::class));
 
 $container->register(QuizTemplateServices::class,QuizTemplateServices::class)
     ->addArgument(new Reference(SessionInterface::class))
@@ -190,6 +187,7 @@ $container->register(QuestionInstanceController::class, QuestionInstanceControll
 $container->register(AuthController::class, AuthController::class)
     ->addArgument(new Reference(RendererInterface::class))
     ->addArgument(new Reference(AuthServices::class))
+    ->addArgument(new Reference(AppMessageManager::class))
     ->addTag('controller');
 
 $container->register(UserController::class, UserController::class)
