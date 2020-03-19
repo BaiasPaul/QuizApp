@@ -10,6 +10,7 @@ use Framework\Http\Response;
 use Framework\Http\Stream;
 use QuizApp\Entity\User;
 use QuizApp\Service\UserService;
+use QuizApp\Util\Paginator;
 
 /**
  * Class UserController
@@ -37,14 +38,23 @@ class UserController extends AbstractController
 
     public function showUsers(Request $request, array $requestAttributes)
     {
-        $arguments['currentPage'] = (int)$request->getParameter('page');
-        $arguments['pages'] = $this->userService->getUserNumber($requestAttributes);
+        $email = $this->userService->getFromParameter('email', $request, "");
+        $currentPage = (int)$this->userService->getFromParameter('page', $request, 1);
+        $totalResults = (int)$this->userService->getEntityNumberOfPagesByField(User::class, 'email', $email);
+        $resultsPerPage = 5;
+
+        $paginator = new Paginator($totalResults, $currentPage, $resultsPerPage);
+        $paginator->setTotalPages($totalResults, $resultsPerPage);
+//        $arguments['currentPage'] = (int)$request->getParameter('page');
+//        $arguments['pages'] = $this->userService->getUserNumber($requestAttributes);
+        $arguments['email'] = $email;
         $arguments['username'] = $this->userService->getName();
         $arguments['dropdown'] = $requestAttributes;
         if (empty($requestAttributes)) {
             $arguments['dropdown'] = '';
         }
-        $arguments['users'] = $this->userService->getUsers($requestAttributes, $request->getParameter('page'));
+        $arguments['paginator'] = $paginator;
+        $arguments['users'] = $this->userService->getEntitiesByField(User::class, 'email', $email, $currentPage, $resultsPerPage);
 
         return $this->renderer->renderView("admin-users-listing.phtml", $arguments);
     }
@@ -54,6 +64,7 @@ class UserController extends AbstractController
         $params = $this->userService->getEmptyParams();
         $params['username'] = $this->userService->getName();
         $params['path'] = 'create';
+
         return $this->renderer->renderView("admin-user-details.phtml", $params);
     }
 

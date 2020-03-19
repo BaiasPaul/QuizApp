@@ -62,7 +62,7 @@
 
     <!--Table actions block-->
     <div class="row">
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-md-3">
             <form action="">
                 <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                     <div class="btn-group" role="group">
@@ -71,19 +71,31 @@
                             <?php if ($arguments['dropdown'] === '') echo 'All'; else echo ucfirst($arguments['dropdown']['role']); ?>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                            <a class="dropdown-item" href="/admin-users-listing/candidate?page=1">Candidate</a>
-                            <a class="dropdown-item" href="/admin-users-listing/admin?page=1">Admin</a>
-                            <a class="dropdown-item" href="/admin-users-listing?page=1">All</a>
+                            <a class="dropdown-item" href="/admin-users-listing/candidate">Candidate</a>
+                            <a class="dropdown-item" href="/admin-users-listing/admin">Admin</a>
+                            <a class="dropdown-item" href="/admin-users-listing">All</a>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-        <div class="col-12 col-md-6 d-flex align-items-end justify-content-end">
+        <div class="col-12 col-md-6">
+            <form method="GET" action="/admin-users-listing">
+                <label for="textSearch">Email search</label>
+                <div class="input-group">
+                    <input name="email" type="text" id="textSearch" class="form-control" placeholder="" value="<?php echo $email;?>">
+                    <div class="input-group-append">
+                        <button class="btn btn-secondary" type="submit" >
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-12 col-md-3 d-flex align-items-end justify-content-end">
             <a class="btn btn-primary py-1 mb-3" href="/admin-user-details/create">Add new user</a>
         </div>
     </div>
-
 
     <!-- Modal -->
     <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
@@ -138,21 +150,16 @@
     <!--Pagination block-->
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-            <li class="page-item <?php if ($arguments['currentPage'] === 1) echo 'disabled'; ?>">
-                <a class="page-link" href="?page=<?php echo $arguments['currentPage']-1;?>" >Previous</a>
+            <li class="page-item <?php if ($paginator->getCurrentPage() === 1) echo 'disabled'; ?>">
+                <a class="page-link" href="?page=<?php echo $paginator->getPreviousPage();?>&email=<?php echo $email;?>" >Previous</a>
             </li>
-            <?php
-            $pages = $arguments['pages']['entitiesNumber'] / 5;
-            if ($arguments['pages']['entitiesNumber'] % 5 > 0){
-                $pages += 1;
-            }
-            for ($pageNumber = 1; $pageNumber <= $pages; $pageNumber++): ?>
-                <li class="page-item <?php if ($arguments['currentPage'] === $pageNumber) echo 'active'; ?>">
-                    <a class="page-link" href="?page=<?php echo $pageNumber; ?>"><?php echo $pageNumber; ?></a>
+            <?php for ($pageNumber = 1; $pageNumber <= $paginator->getTotalPages(); $pageNumber++): ?>
+                <li class="page-item <?php if ($paginator->getCurrentPage() === $pageNumber) echo 'active'; ?>">
+                    <a class="page-link" href="?page=<?php echo $pageNumber; ?>&email=<?php echo $email;?>"><?php echo $pageNumber; ?></a>
                 </li>
             <?php endfor; ?>
-            <li class="page-item <?php if ($arguments['currentPage'] === (int)$pages) echo 'disabled'; ?>">
-                <a class="page-link" href="?page=<?php echo $arguments['currentPage']+1;?>">Next</a>
+            <li class="page-item <?php if ($paginator->getCurrentPage() ==  $paginator->getTotalPages()) echo 'disabled'; ?>">
+                <a class="page-link" href="?page=<?php echo $paginator->getNextPage();?>&email=<?php echo $email;?>">Next</a>
             </li>
         </ul>
     </nav>
