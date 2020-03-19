@@ -1,12 +1,12 @@
 <?php
 
 
-namespace QuizApp\Services;
+namespace QuizApp\Service;
 
 
-use QuizApp\Entities\AnswerInstance;
-use QuizApp\Entities\QuestionInstance;
-use QuizApp\Entities\QuizInstance;
+use QuizApp\Entity\AnswerInstance;
+use QuizApp\Entity\QuestionInstance;
+use QuizApp\Entity\QuizInstance;
 
 class QuestionInstanceService extends AbstractService
 {

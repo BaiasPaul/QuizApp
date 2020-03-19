@@ -2,7 +2,7 @@
 
 namespace QuizApp\Repository;
 
-use QuizApp\Entities\QuizTemplate;
+use QuizApp\Entity\QuizTemplate;
 use ReallyOrm\Repository\AbstractRepository;
 
 class QuizTemplateRepository extends AbstractRepository

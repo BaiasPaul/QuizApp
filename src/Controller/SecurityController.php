@@ -1,13 +1,13 @@
 <?php
 
-namespace QuizApp\Controllers;
+namespace QuizApp\Controller;
 
 use Framework\Contracts\RendererInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
-use QuizApp\Services\SecurityService;
+use QuizApp\Service\SecurityService;
 
 class SecurityController extends AbstractController
 {

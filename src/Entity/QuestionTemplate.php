@@ -1,12 +1,14 @@
 <?php
 
-
-namespace QuizApp\Entities;
-
+namespace QuizApp\Entity;
 
 use ReallyOrm\Entity\AbstractEntity;
 
-class QuestionInstance extends AbstractEntity
+/**
+ * Class QuestionTemplate
+ * @package QuizApp\Entities
+ */
+class QuestionTemplate extends AbstractEntity
 {
     /**
      * @var int

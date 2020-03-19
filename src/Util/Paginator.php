@@ -27,12 +27,15 @@ class Paginator
 
     /**
      * Paginator constructor.
+     * @param int $totalResults
+     * @param int $currentPage
+     * @param int $resultsPerPage
      */
-    public function __construct()
+    public function __construct(int $totalResults, int $currentPage = 1, int $resultsPerPage = 5)
     {
-         $this->totalResults = 0;
-         $this->currentPage = 1;
-         $this->resultsPerPage = 5;
+        $this->totalResults = $totalResults;
+        $this->setCurrentPage($currentPage);
+        $this->setResultsPerPage($resultsPerPage);
     }
 
     /**

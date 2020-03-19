@@ -2,12 +2,12 @@
 
 use Framework\Contracts\SessionInterface;
 use Framework\Session\Session;
-use QuizApp\Controllers\QuestionInstanceController;
-use QuizApp\Controllers\QuestionTemplateController;
-use QuizApp\Controllers\QuizInstanceController;
-use QuizApp\Controllers\QuizTemplateController;
-use QuizApp\Controllers\SecurityController;
-use QuizApp\Controllers\UserController;
+use QuizApp\Controller\QuestionInstanceController;
+use QuizApp\Controller\QuestionTemplateController;
+use QuizApp\Controller\QuizInstanceController;
+use QuizApp\Controller\QuizTemplateController;
+use QuizApp\Controller\SecurityController;
+use QuizApp\Controller\UserController;
 use Framework\Contracts\DispatcherInterface;
 use Framework\Contracts\RendererInterface;
 use Framework\Contracts\RouterInterface;
@@ -15,13 +15,13 @@ use Framework\DependencyInjection\SymfonyContainer;
 use Framework\Dispatcher\Dispatcher;
 use Framework\Renderer\Renderer;
 use Framework\Routing\Router;
-use QuizApp\Entities\AnswerInstance;
-use QuizApp\Entities\AnswerTemplate;
-use QuizApp\Entities\QuestionInstance;
-use QuizApp\Entities\QuestionTemplate;
-use QuizApp\Entities\QuizInstance;
-use QuizApp\Entities\QuizTemplate;
-use QuizApp\Entities\User;
+use QuizApp\Entity\AnswerInstance;
+use QuizApp\Entity\AnswerTemplate;
+use QuizApp\Entity\QuestionInstance;
+use QuizApp\Entity\QuestionTemplate;
+use QuizApp\Entity\QuizInstance;
+use QuizApp\Entity\QuizTemplate;
+use QuizApp\Entity\User;
 use QuizApp\Repository\AnswerInstanceRepository;
 use QuizApp\Repository\AnswerTemplateRepository;
 use QuizApp\Repository\QuestionInstanceRepository;
@@ -30,13 +30,12 @@ use QuizApp\Repository\QuizInstanceRepository;
 use QuizApp\Repository\QuizTemplateRepository;
 use QuizApp\Repository\SecurityRepository;
 use QuizApp\Repository\UserRepository;
-use QuizApp\Services\QuestionInstanceService;
-use QuizApp\Services\QuestionTemplateService;
-use QuizApp\Services\QuizInstanceService;
-use QuizApp\Services\QuizTemplateService;
-use QuizApp\Services\SecurityService;
-use QuizApp\Services\UserService;
-use QuizApp\Util\Paginator;
+use QuizApp\Service\QuestionInstanceService;
+use QuizApp\Service\QuestionTemplateService;
+use QuizApp\Service\QuizInstanceService;
+use QuizApp\Service\QuizTemplateService;
+use QuizApp\Service\SecurityService;
+use QuizApp\Service\UserService;
 use ReallyOrm\Hydrator\HydratorInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
 use ReallyOrm\Test\Hydrator\Hydrator;
@@ -146,8 +145,6 @@ $container->register(SecurityService::class,SecurityService::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
-$container->register(Paginator::class,Paginator::class);
-
 $container->register(QuestionTemplateService::class,QuestionTemplateService::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
@@ -183,7 +180,6 @@ $container->register(QuizInstanceController::class, QuizInstanceController::clas
 $container->register(QuestionTemplateController::class, QuestionTemplateController::class)
     ->addArgument(new Reference(RendererInterface::class))
     ->addArgument(new Reference(QuestionTemplateService::class))
-    ->addArgument(new Reference(Paginator::class))
     ->addTag('controller');
 
 $container->register(QuestionInstanceController::class, QuestionInstanceController::class)

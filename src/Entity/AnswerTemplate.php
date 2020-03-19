@@ -1,14 +1,16 @@
 <?php
 
-namespace QuizApp\Entities;
+
+namespace QuizApp\Entity;
+
 
 use ReallyOrm\Entity\AbstractEntity;
 
 /**
- * Class QuestionTemplate
+ * Class AnswerTemplate
  * @package QuizApp\Entities
  */
-class QuestionTemplate extends AbstractEntity
+class AnswerTemplate extends AbstractEntity
 {
     /**
      * @var int
@@ -21,20 +23,14 @@ class QuestionTemplate extends AbstractEntity
      * @ORM text
      */
     private $text;
-    /**
-     * @var string
-     * @ORM type
-     */
-    private $type;
 
     /**
-     * QuestionTemplate constructor.
+     * AnswerTemplate constructor.
      */
     public function __construct()
     {
         $this->id = null;
         $this->text = '';
-        $this->type = 'Text';
     }
 
     /**
@@ -46,15 +42,7 @@ class QuestionTemplate extends AbstractEntity
     }
 
     /**
-     * @param mixed $type
-     */
-    public function setType($type): void
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * @return null
+     * @return mixed
      */
     public function getId()
     {
@@ -62,18 +50,11 @@ class QuestionTemplate extends AbstractEntity
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getText(): string
+    public function getText()
     {
         return $this->text;
     }
 
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return $this->type;
-    }
 }

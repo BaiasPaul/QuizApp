@@ -1,7 +1,7 @@
 <?php
 
 
-namespace QuizApp\Controllers;
+namespace QuizApp\Controller;
 
 
 use Framework\Contracts\RendererInterface;
@@ -9,28 +9,28 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
-use QuizApp\Services\QuestionInstanceService;
-use QuizApp\Services\QuestionTemplateService;
+use QuizApp\Service\QuestionInstanceService;
+use QuizApp\Service\QuestionTemplateService;
 
 class QuestionInstanceController extends AbstractController
 {
-    private $questionInstanceServices;
+    private $questionInstanceService;
 
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
-     * @param QuestionInstanceService $questionInstanceServices
+     * @param QuestionInstanceService $questionInstanceService
      */
-    public function __construct(RendererInterface $renderer, QuestionInstanceService $questionInstanceServices)
+    public function __construct(RendererInterface $renderer, QuestionInstanceService $questionInstanceService)
     {
         parent::__construct($renderer);
-        $this->questionInstanceServices = $questionInstanceServices;
+        $this->questionInstanceService = $questionInstanceService;
     }
 
     public function saveAnswer(Request $request, array $requestAttributes)
     {
         $answer = $request->getParameter('answer');
-        $this->questionInstanceServices->saveAnswer($answer,$requestAttributes['id']);
+        $this->questionInstanceService->saveAnswer($answer,$requestAttributes['id']);
         $questionNumber = $request->getParameter('question');
         $location = 'Location: http://quizApp.com/candidate-quiz-page?question='.($questionNumber+1);
         $body = Stream::createFromString("");
@@ -50,7 +50,7 @@ class QuestionInstanceController extends AbstractController
     public function save(Request $request, array $requestAttributes)
     {
         $answer = $request->getParameter('answer');
-        $this->questionInstanceServices->saveAnswer($answer,$requestAttributes['id']);
+        $this->questionInstanceService->saveAnswer($answer,$requestAttributes['id']);
         $location = 'Location: http://quizApp.com/candidate-results';
         $body = Stream::createFromString("");
 
@@ -58,15 +58,15 @@ class QuestionInstanceController extends AbstractController
     }
 
     public function showResults(){
-        $arguments['username'] = $this->questionInstanceServices->getName();
-        $questions = $this->questionInstanceServices->getQuestionsAnswered();
+        $arguments['username'] = $this->questionInstanceService->getName();
+        $questions = $this->questionInstanceService->getQuestionsAnswered();
         $arguments['questions'] = $questions;
 
         return $this->renderer->renderView("candidate-results.phtml", $arguments);
     }
 
     public function showSuccessPage(){
-        $arguments['username'] = $this->questionInstanceServices->getName();
+        $arguments['username'] = $this->questionInstanceService->getName();
 
         return $this->renderer->renderView("quiz-success-page.phtml", $arguments);
     }

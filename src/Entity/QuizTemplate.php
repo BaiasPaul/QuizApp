@@ -1,6 +1,6 @@
 <?php
 
-namespace QuizApp\Entities;
+namespace QuizApp\Entity;
 
 use ReallyOrm\Entity\AbstractEntity;
 

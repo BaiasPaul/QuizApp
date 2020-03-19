@@ -1,10 +1,10 @@
 <?php
 
-namespace QuizApp\Services;
+namespace QuizApp\Service;
 
-use QuizApp\Entities\QuestionTemplate;
-use QuizApp\Entities\QuizTemplate;
-use QuizApp\Entities\User;
+use QuizApp\Entity\QuestionTemplate;
+use QuizApp\Entity\QuizTemplate;
+use QuizApp\Entity\User;
 use QuizApp\Repository\QuestionTemplateRepository;
 
 class QuizTemplateService extends AbstractService

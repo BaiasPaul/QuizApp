@@ -4,7 +4,7 @@
 namespace QuizApp\Repository;
 
 
-use QuizApp\Entities\QuestionInstance;
+use QuizApp\Entity\QuestionInstance;
 use ReallyOrm\Repository\AbstractRepository;
 
 class QuestionInstanceRepository extends AbstractRepository

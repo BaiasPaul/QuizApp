@@ -1,11 +1,11 @@
 <?php
 
-namespace QuizApp\Services;
+namespace QuizApp\Service;
 
 use Framework\Http\Request;
-use QuizApp\Entities\AnswerTemplate;
-use QuizApp\Entities\QuestionTemplate;
-use QuizApp\Entities\User;
+use QuizApp\Entity\AnswerTemplate;
+use QuizApp\Entity\QuestionTemplate;
+use QuizApp\Entity\User;
 use ReallyOrm\Entity\EntityInterface;
 
 /**

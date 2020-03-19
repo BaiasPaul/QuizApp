@@ -1,12 +1,12 @@
 <?php
 
-namespace QuizApp\Services;
+namespace QuizApp\Service;
 
 use Framework\Contracts\SessionInterface;
 use phpDocumentor\Reflection\Types\This;
-use QuizApp\Entities\QuestionInstance;
-use QuizApp\Entities\QuizInstance;
-use QuizApp\Entities\User;
+use QuizApp\Entity\QuestionInstance;
+use QuizApp\Entity\QuizInstance;
+use QuizApp\Entity\User;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
 class UserService extends AbstractService

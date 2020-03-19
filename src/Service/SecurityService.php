@@ -1,9 +1,9 @@
 <?php
 
 
-namespace QuizApp\Services;
+namespace QuizApp\Service;
 
-use QuizApp\Entities\User;
+use QuizApp\Entity\User;
 
 class SecurityService extends AbstractService
 {
