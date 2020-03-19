@@ -2,16 +2,17 @@
 
 namespace QuizApp\Services;
 
+use Framework\Http\Request;
 use QuizApp\Entities\AnswerTemplate;
 use QuizApp\Entities\QuestionTemplate;
 use QuizApp\Entities\User;
 use ReallyOrm\Entity\EntityInterface;
 
 /**
- * Class QuestionTemplateServices
+ * Class QuestionTemplateService
  * @package QuizApp\Services
  */
-class QuestionTemplateServices extends AbstractServices
+class QuestionTemplateService extends AbstractService
 {
 
     /**
@@ -45,13 +46,16 @@ class QuestionTemplateServices extends AbstractServices
     }
 
     /**
-     * This method creates an array with empty string parameters to fill the create question form with
+     * Returns the parameter if found, otherwise returns a default
      *
-     * @return array
+     * @param string $key
+     * @param Request $request
+     * @param null $default
+     * @return mixed|null
      */
-    public function getEmptyParams()
+    public function getFromParameter(string $key, Request $request, $default = null)
     {
-        return ['text' => '', 'type' => '', 'answer' => ''];
+        return array_key_exists($key, $request->getParameters()) ? $request->getParameter($key) : $default;
     }
 
     /**
@@ -61,9 +65,9 @@ class QuestionTemplateServices extends AbstractServices
      * @param $currentPage
      * @return mixed
      */
-    public function getQuestionsByText($text, $currentPage)
+    public function getQuestionsByText($text, $currentPage, $resultsPerPage)
     {
-        return $this->repoManager->getRepository(QuestionTemplate::class)->getQuestionsByText($text, ($currentPage - 1) * 5, 5);
+        return $this->repoManager->getRepository(QuestionTemplate::class)->getQuestionsByText($text, ($currentPage - 1) * $resultsPerPage, $resultsPerPage);
     }
 
     /**
@@ -103,6 +107,7 @@ class QuestionTemplateServices extends AbstractServices
     {
         $question = $this->repoManager->getRepository(QuestionTemplate::class)->find($id);
         $answer = $this->repoManager->getRepository(AnswerTemplate::class)->findOneBy(['questiontemplate_id' => $id]);
+
         return ['id' => $question->getId(), 'text' => $question->getText(), 'type' => $question->getType(), 'answer' => $answer->getText()];
     }
 

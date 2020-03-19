@@ -5,7 +5,7 @@ namespace QuizApp\Services;
 
 use QuizApp\Entities\User;
 
-class SecurityServices extends AbstractServices
+class SecurityService extends AbstractService
 {
     public function searchUser(string $email, string $password)
     {

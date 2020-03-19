@@ -9,7 +9,7 @@ use QuizApp\Entities\QuizInstance;
 use QuizApp\Entities\User;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
-class UserServices extends AbstractServices
+class UserService extends AbstractService
 {
 
     public function saveUser(string $name, string $email, string $password, string $role)

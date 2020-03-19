@@ -8,10 +8,10 @@ use Framework\Contracts\SessionInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
 /**
- * Class AbstractServices
+ * Class AbstractService
  * @package QuizApp\Services
  */
-class AbstractServices
+class AbstractService
 {
 
     /**
@@ -25,7 +25,7 @@ class AbstractServices
     protected $repoManager;
 
     /**
-     * AbstractServices constructor.
+     * AbstractService constructor.
      * @param SessionInterface $session
      * @param RepositoryManager $repoManager
      */

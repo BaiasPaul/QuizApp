@@ -9,8 +9,8 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
-use QuizApp\Services\QuestionInstanceServices;
-use QuizApp\Services\QuestionTemplateServices;
+use QuizApp\Services\QuestionInstanceService;
+use QuizApp\Services\QuestionTemplateService;
 
 class QuestionInstanceController extends AbstractController
 {
@@ -19,9 +19,9 @@ class QuestionInstanceController extends AbstractController
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
-     * @param QuestionInstanceServices $questionInstanceServices
+     * @param QuestionInstanceService $questionInstanceServices
      */
-    public function __construct(RendererInterface $renderer, QuestionInstanceServices $questionInstanceServices)
+    public function __construct(RendererInterface $renderer, QuestionInstanceService $questionInstanceServices)
     {
         parent::__construct($renderer);
         $this->questionInstanceServices = $questionInstanceServices;

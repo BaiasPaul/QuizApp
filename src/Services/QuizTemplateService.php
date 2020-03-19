@@ -7,7 +7,7 @@ use QuizApp\Entities\QuizTemplate;
 use QuizApp\Entities\User;
 use QuizApp\Repository\QuestionTemplateRepository;
 
-class QuizTemplateServices extends AbstractServices
+class QuizTemplateService extends AbstractService
 {
     public function createQuestionList(array $questions)
     {

@@ -7,9 +7,9 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
-use QuizApp\Services\Paginator;
-use QuizApp\Services\QuestionTemplateServices;
-use QuizApp\Services\QuizTemplateServices;
+use QuizApp\Services\QuestionTemplateService;
+use QuizApp\Services\QuizTemplateService;
+use QuizApp\Util\Paginator;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 
 /**
@@ -20,7 +20,7 @@ class QuestionTemplateController extends AbstractController
 {
 
     /**
-     * @var QuestionTemplateServices
+     * @var QuestionTemplateService
      */
     private $questionTemplateServices;
 
@@ -32,10 +32,10 @@ class QuestionTemplateController extends AbstractController
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
-     * @param QuestionTemplateServices $questionInstanceServices
+     * @param QuestionTemplateService $questionInstanceServices
      * @param Paginator $paginator
      */
-    public function __construct(RendererInterface $renderer, QuestionTemplateServices $questionInstanceServices, Paginator $paginator)
+    public function __construct(RendererInterface $renderer, QuestionTemplateService $questionInstanceServices, Paginator $paginator)
     {
         parent::__construct($renderer);
         $this->questionTemplateServices = $questionInstanceServices;
@@ -43,7 +43,7 @@ class QuestionTemplateController extends AbstractController
     }
 
     /**
-     * This method creates a user and saves it in the database
+     * This method creates a question and saves it in the database
      *
      * @param Request $request
      * @return Response
@@ -54,14 +54,14 @@ class QuestionTemplateController extends AbstractController
         $type = $request->getParameter('type');
         $answer = $request->getParameter('answer');
         $this->questionTemplateServices->saveQuestion($text, $type, $answer);
-        $location = 'Location: http://quizApp.com/admin-questions-listing?page=1';
+        $location = 'Location: http://quizApp.com/admin-questions-listing';
         $body = Stream::createFromString("");
 
         return new Response($body, '1.1', '301', $location);
     }
 
     /**
-     * This method returns a Response with the questions from a specified page and text
+     * This method returns a Response with the questions searched by getQuestionsByText with the specified page and text
      *
      * @param Request $request
      * @param array $requestAttributes
@@ -69,18 +69,18 @@ class QuestionTemplateController extends AbstractController
      */
     public function showQuestions(Request $request, array $requestAttributes)
     {
-        $text = $request->getParameter('text');
-        $currentPage = (int)$request->getParameter('page');
+        $text = $this->questionTemplateServices->getFromParameter('text',$request,"");
+        $currentPage = (int)$this->questionTemplateServices->getFromParameter('page',$request,1);
         $totalResults = (int)$this->questionTemplateServices->getQuestionNumberOfPagesByText($text);
+        $resultsPerPage = 5;
+
+        $this->paginator->setCurrentPage($currentPage);
+        $this->paginator->setTotalResults($totalResults);
+        $this->paginator->setTotalPages($totalResults, $resultsPerPage);
 
         $arguments['username'] = $this->questionTemplateServices->getName();
         $arguments['text'] = $text;
-        $arguments['questions'] = $this->questionTemplateServices->getQuestionsByText($text, $request->getParameter('page'));
-
-        //sets the currentPage, totalResults and totalPages to us them in the view from the paginator variable
-        $this->paginator->setCurrentPage($currentPage);
-        $this->paginator->setTotalResults($totalResults);
-        $this->paginator->setTotalPages($totalResults, 5);
+        $arguments['questions'] = $this->questionTemplateServices->getQuestionsByText($text, $currentPage, $resultsPerPage);
         $arguments['paginator'] = $this->paginator;
 
         return $this->renderer->renderView("admin-questions-listing.phtml", $arguments);
@@ -100,14 +100,14 @@ class QuestionTemplateController extends AbstractController
         $answer = $request->getParameter('answer');
         $this->questionTemplateServices->editQuestion($requestAttributes['id'], $text, $type, $answer);
 
-        $location = 'Location: http://quizApp.com/admin-questions-listing?page=1';
+        $location = 'Location: http://quizApp.com/admin-questions-listing';
         $body = Stream::createFromString("");
 
         return new Response($body, '1.1', '301', $location);
     }
 
     /**
-     * This method searches for a question and deletes it from the database
+     * This method deletes a question and redirects to /admin-questions-listing
      *
      * @param Request $request
      * @param array $requestAttributes
@@ -117,14 +117,14 @@ class QuestionTemplateController extends AbstractController
     {
         $this->questionTemplateServices->deleteQuestion($requestAttributes['id']);
 
-        $location = 'Location: http://quizApp.com/admin-questions-listing?page=1';
+        $location = 'Location: http://quizApp.com/admin-questions-listing';
         $body = Stream::createFromString("");
 
         return new Response($body, '1.1', '301', $location);
     }
 
     /**
-     * This method returns a Response with the attributes of a question fro autocomplete them in the edit form
+     * This method displays a pre-filled 'Edit Question' form
      *
      * @param Request $request
      * @param array $requestAttributes
@@ -140,14 +140,12 @@ class QuestionTemplateController extends AbstractController
     }
 
     /**
-     * Because i use the same page for edit and create questions, it needs attributes to fill the inputs
-     * for create it does not need them so the function getEmptyParams() returns an array with empty string attributes
+     * This method displays a 'Create Question' form
      *
      * @return Response
      */
     public function showQuestionDetails()
     {
-        $params = $this->questionTemplateServices->getEmptyParams();
         $params['username'] = $this->questionTemplateServices->getName();
         $params['path'] = 'create';
 
@@ -161,14 +159,13 @@ class QuestionTemplateController extends AbstractController
      * @param array $requestAttributes
      * @return Response
      */
-    public function searchByText(Request $request, array $requestAttributes)
+    public function prepareTextForSearch(Request $request, array $requestAttributes)
     {
         $text = $request->getParameter('text');
 
-        $location = "Location: http://quizApp.com/admin-questions-listing?page=1&text=$text";
+        $location = "Location: http://quizApp.com/admin-questions-listing?text=$text";
         $body = Stream::createFromString("");
 
         return new Response($body, '1.1', '301', $location);
     }
-
 }

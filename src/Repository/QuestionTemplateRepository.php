@@ -11,14 +11,13 @@ use ReallyOrm\Repository\AbstractRepository;
 class QuestionTemplateRepository extends AbstractRepository
 {
     /**
-     * This method looks in the Database for questions with the text LIKE $text
-     * and from an offset specified returning the questions found
+     * Returns questions that contain the value of the $text argument in their text fields.
+     * The match is performed using the LIKE comparison operator.
+     * The result set is paginated.
      *
-     * the quantity of questions to be retuned is specified in the $size variable
-     *
-     * @param $text
-     * @param int $from
-     * @param int $size
+     * @param string $text The query string
+     * @param int $from The offset
+     * @param int $size The size of the result set (LIMIT)
      * @return array
      */
     public function getQuestionsByText($text, int $from, int $size)
@@ -40,7 +39,8 @@ class QuestionTemplateRepository extends AbstractRepository
     }
 
     /**
-     * This method looks in the Database for questions with the text LIKE $text and returns the number of questions found
+     * Returns number of questions that contain the value of the $text argument in their text fields.
+     * The match is performed using the LIKE comparison operator.
      *
      * @param $text
      * @return int

@@ -8,7 +8,7 @@ use QuizApp\Entities\AnswerInstance;
 use QuizApp\Entities\QuestionInstance;
 use QuizApp\Entities\QuizInstance;
 
-class QuestionInstanceServices extends AbstractServices
+class QuestionInstanceService extends AbstractService
 {
 
     public function saveAnswer($answerText, $questionText)

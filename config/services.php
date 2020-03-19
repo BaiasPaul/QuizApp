@@ -30,13 +30,13 @@ use QuizApp\Repository\QuizInstanceRepository;
 use QuizApp\Repository\QuizTemplateRepository;
 use QuizApp\Repository\SecurityRepository;
 use QuizApp\Repository\UserRepository;
-use QuizApp\Services\Paginator;
-use QuizApp\Services\QuestionInstanceServices;
-use QuizApp\Services\QuestionTemplateServices;
-use QuizApp\Services\QuizInstanceServices;
-use QuizApp\Services\QuizTemplateServices;
-use QuizApp\Services\SecurityServices;
-use QuizApp\Services\UserServices;
+use QuizApp\Services\QuestionInstanceService;
+use QuizApp\Services\QuestionTemplateService;
+use QuizApp\Services\QuizInstanceService;
+use QuizApp\Services\QuizTemplateService;
+use QuizApp\Services\SecurityService;
+use QuizApp\Services\UserService;
+use QuizApp\Util\Paginator;
 use ReallyOrm\Hydrator\HydratorInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
 use ReallyOrm\Test\Hydrator\Hydrator;
@@ -134,29 +134,29 @@ foreach ($container->findTaggedServiceIds('repository') as $id => $value) {
     $repoManager->addMethodCall('addRepository', [$repository]);
 }
 
-$container->register(QuizTemplateServices::class,QuizTemplateServices::class)
+$container->register(QuizTemplateService::class,QuizTemplateService::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
-$container->register(QuizInstanceServices::class,QuizInstanceServices::class)
+$container->register(QuizInstanceService::class,QuizInstanceService::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
-$container->register(SecurityServices::class,SecurityServices::class)
+$container->register(SecurityService::class,SecurityService::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
 $container->register(Paginator::class,Paginator::class);
 
-$container->register(QuestionTemplateServices::class,QuestionTemplateServices::class)
+$container->register(QuestionTemplateService::class,QuestionTemplateService::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
-$container->register(QuestionInstanceServices::class,QuestionInstanceServices::class)
+$container->register(QuestionInstanceService::class,QuestionInstanceService::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
-$container->register(UserServices::class,UserServices::class)
+$container->register(UserService::class,UserService::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
@@ -172,33 +172,33 @@ $container->register(RendererInterface::class, Renderer::class)
 
 $container->register(QuizTemplateController::class, QuizTemplateController::class)
     ->addArgument(new Reference(RendererInterface::class))
-    ->addArgument(new Reference(QuizTemplateServices::class))
+    ->addArgument(new Reference(QuizTemplateService::class))
     ->addTag('controller');
 
 $container->register(QuizInstanceController::class, QuizInstanceController::class)
     ->addArgument(new Reference(RendererInterface::class))
-    ->addArgument(new Reference(QuizInstanceServices::class))
+    ->addArgument(new Reference(QuizInstanceService::class))
     ->addTag('controller');
 
 $container->register(QuestionTemplateController::class, QuestionTemplateController::class)
     ->addArgument(new Reference(RendererInterface::class))
-    ->addArgument(new Reference(QuestionTemplateServices::class))
+    ->addArgument(new Reference(QuestionTemplateService::class))
     ->addArgument(new Reference(Paginator::class))
     ->addTag('controller');
 
 $container->register(QuestionInstanceController::class, QuestionInstanceController::class)
     ->addArgument(new Reference(RendererInterface::class))
-    ->addArgument(new Reference(QuestionInstanceServices::class))
+    ->addArgument(new Reference(QuestionInstanceService::class))
     ->addTag('controller');
 
 $container->register(SecurityController::class, SecurityController::class)
     ->addArgument(new Reference(RendererInterface::class))
-    ->addArgument(new Reference(SecurityServices::class))
+    ->addArgument(new Reference(SecurityService::class))
     ->addTag('controller');
 
 $container->register(UserController::class, UserController::class)
     ->addArgument(new Reference(RendererInterface::class))
-    ->addArgument(new Reference(UserServices::class))
+    ->addArgument(new Reference(UserService::class))
     ->addTag('controller');
 
 $controllerNamespace = $config['dispatcher']['controllers_namespace'];

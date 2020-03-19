@@ -9,7 +9,7 @@ use QuizApp\Entities\QuizInstance;
 use QuizApp\Entities\QuizTemplate;
 use QuizApp\Entities\User;
 
-class QuizInstanceServices extends AbstractServices
+class QuizInstanceService extends AbstractService
 {
     public function getQuizzes(array $filters, int $currentPage)
     {

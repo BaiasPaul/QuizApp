@@ -7,7 +7,7 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
-use QuizApp\Services\SecurityServices;
+use QuizApp\Services\SecurityService;
 
 class SecurityController extends AbstractController
 {
@@ -16,9 +16,9 @@ class SecurityController extends AbstractController
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
-     * @param SecurityServices $securityServices
+     * @param SecurityService $securityServices
      */
-    public function __construct(RendererInterface $renderer, SecurityServices $securityServices)
+    public function __construct(RendererInterface $renderer, SecurityService $securityServices)
     {
         parent::__construct($renderer);
         $this->securityServices = $securityServices;

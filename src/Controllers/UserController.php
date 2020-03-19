@@ -9,7 +9,7 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
 use QuizApp\Entities\User;
-use QuizApp\Services\UserServices;
+use QuizApp\Services\UserService;
 
 /**
  * Class UserController
@@ -22,9 +22,9 @@ class UserController extends AbstractController
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
-     * @param UserServices $questionInstanceServices
+     * @param UserService $questionInstanceServices
      */
-    public function __construct(RendererInterface $renderer, UserServices $questionInstanceServices)
+    public function __construct(RendererInterface $renderer, UserService $questionInstanceServices)
     {
         parent::__construct($renderer);
         $this->userServices = $questionInstanceServices;

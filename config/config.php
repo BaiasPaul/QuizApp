@@ -326,7 +326,7 @@ return array(
             'filter_by_text' => [
                 Router::CONFIG_KEY_METHOD => 'POST',
                 Router::CONFIG_KEY_PATH => '/admin-questions-listing',
-                Router::CONFIG_KEY_ACTION => 'searchByText',
+                Router::CONFIG_KEY_ACTION => 'prepareTextForSearch',
                 Router::CONFIG_KEY_CONTROLLER => 'questionTemplate',
                 Router::CONFIG_KEY_ATTRIBUTES => []
             ],
