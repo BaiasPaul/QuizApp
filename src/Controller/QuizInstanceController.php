@@ -1,7 +1,7 @@
 <?php
 
 
-namespace QuizApp\Controllers;
+namespace QuizApp\Controller;
 
 
 use Framework\Contracts\RendererInterface;
@@ -9,40 +9,39 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
-use QuizApp\Services\QuizInstanceServices;
-use QuizApp\Services\UserServices;
+use QuizApp\Service\QuizInstanceService;
+use QuizApp\Service\UserService;
 
 class QuizInstanceController extends AbstractController
 {
 
-    private $quizInstanceServices;
+    private $quizInstanceService;
 
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
-     * @param QuizInstanceServices $questionInstanceServices
+     * @param QuizInstanceService $questionInstanceService
      */
-    public function __construct(RendererInterface $renderer, QuizInstanceServices $questionInstanceServices)
+    public function __construct(RendererInterface $renderer, QuizInstanceService $questionInstanceService)
     {
         parent::__construct($renderer);
-        $this->quizInstanceServices = $questionInstanceServices;
+        $this->quizInstanceService = $questionInstanceService;
     }
 
     public function showCandidateQuizzes(Request $request, array $requestAttributes)
     {
         $arguments['currentPage'] = (int)$request->getParameter('page');
-        $arguments['pages'] = $this->quizInstanceServices->getQuizNumber($requestAttributes);
-        $arguments['username'] = $this->quizInstanceServices->getName();
-        $arguments['quizzes'] = $this->quizInstanceServices->getQuizzes($requestAttributes, $request->getParameter('page'));
+        $arguments['pages'] = $this->quizInstanceService->getQuizNumber($requestAttributes);
+        $arguments['username'] = $this->quizInstanceService->getName();
+        $arguments['quizzes'] = $this->quizInstanceService->getQuizzes($requestAttributes, $request->getParameter('page'));
 
         return $this->renderer->renderView("candidate-quiz-listing.phtml", $arguments);
     }
 
     public function showCandidateQuizListing(Request $request, array $requestAttributes)
     {
-        $this->quizInstanceServices->setQuizId($requestAttributes['id']);
-//        $this->quizInstanceServices->deleteOldAnswers();
-        $this->quizInstanceServices->createQuizInstance();
+        $this->quizInstanceService->setQuizId($requestAttributes['id']);
+        $this->quizInstanceService->createQuizInstance();
         $location = 'Location: http://quizApp.com/candidate-quiz-page?question=1';
         $body = Stream::createFromString("");
 
@@ -51,13 +50,13 @@ class QuizInstanceController extends AbstractController
 
     public function showQuestions(Request $request, array $requestAttributes){
         $questionNumber = $request->getParameter('question');
-        $question = $this->quizInstanceServices->getQuestion($questionNumber-1);
+        $question = $this->quizInstanceService->getQuestion($questionNumber-1);
         $arguments['question'] = $question;
-        $arguments['username'] = $this->quizInstanceServices->getName();
+        $arguments['username'] = $this->quizInstanceService->getName();
         $arguments['currentQuestion'] = $questionNumber;
         $questionInstanceNumber = $question->getId();
         $arguments['questionNumber'] = $questionInstanceNumber;
-        $maxQuestions = $this->quizInstanceServices->getMaxQuestions();
+        $maxQuestions = $this->quizInstanceService->getMaxQuestions();
         $arguments['maxQuestions'] = $maxQuestions;
 
         return $this->renderer->renderView("candidate-quiz-page.phtml", $arguments);

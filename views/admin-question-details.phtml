@@ -53,17 +53,18 @@
         <form method="POST" action="/admin-question-details/<?php echo $path; ?>">
             <div class="form-group">
                 <label for="questionText">Question text</label>
-                <textarea name="text" class="form-control" id="questionText" placeholder="Question text"><?php echo $text; ?></textarea>
+                <textarea name="text" class="form-control" id="questionText" placeholder="Question text"><?php if (isset($text)) echo $text;?></textarea>
             </div>
             <div class="form-group">
                 <label for="quizzes">Question type</label>
                 <select name="type" class="form-control" id="quizzes" >
-                    <option <?php if ($type === 'Text') echo 'selected'; ?> value="text">Text</option>
-                    <option <?php if ($type === 'Code') echo 'selected'; ?> value="code">Code</option>
+                    <option <?php if (isset($text) && $text === 'Text') echo 'selected'; ?> value="text">Text</option>
+                    <option <?php if (isset($text) && $text === 'Code') echo 'selected'; ?> value="code">Code</option>
                 </select>
-            </div><div class="form-group">
+            </div>
+            <div class="form-group">
                 <label for="questionAnswer">Question answer</label>
-                <textarea name="answer" class="form-control" id="questionAnswer" placeholder="Question answer"><?php echo $answer; ?></textarea>
+                <textarea name="answer" class="form-control" id="questionAnswer" placeholder="Question answer"><?php if (isset($answer)) echo $answer;?></textarea>
             </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">Save question</button>

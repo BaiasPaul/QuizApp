@@ -1,15 +1,15 @@
 <?php
 
-namespace QuizApp\Services;
+namespace QuizApp\Service;
 
-use QuizApp\Entities\AnswerInstance;
-use QuizApp\Entities\QuestionInstance;
-use QuizApp\Entities\QuestionTemplate;
-use QuizApp\Entities\QuizInstance;
-use QuizApp\Entities\QuizTemplate;
-use QuizApp\Entities\User;
+use QuizApp\Entity\AnswerInstance;
+use QuizApp\Entity\QuestionInstance;
+use QuizApp\Entity\QuestionTemplate;
+use QuizApp\Entity\QuizInstance;
+use QuizApp\Entity\QuizTemplate;
+use QuizApp\Entity\User;
 
-class QuizInstanceServices extends AbstractServices
+class QuizInstanceService extends AbstractService
 {
     public function getQuizzes(array $filters, int $currentPage)
     {

@@ -1,14 +1,14 @@
 <?php
 
 
-namespace QuizApp\Services;
+namespace QuizApp\Service;
 
 
 use Framework\Session\Session;
 
 /**
  * Class AppMessageManager
- * @package QuizApp\Services
+ * @package QuizApp\Service
  */
 class AppMessageManager
 {

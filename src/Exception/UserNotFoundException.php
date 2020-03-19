@@ -1,7 +1,7 @@
 <?php
 
 
-namespace QuizApp\Exceptions;
+namespace QuizApp\Exception;
 use Exception;
 use Throwable;
 

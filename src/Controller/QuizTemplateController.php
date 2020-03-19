@@ -1,27 +1,27 @@
 <?php
 
-namespace QuizApp\Controllers;
+namespace QuizApp\Controller;
 
 use Framework\Contracts\RendererInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
-use QuizApp\Services\QuizTemplateServices;
+use QuizApp\Service\QuizTemplateService;
 
 class QuizTemplateController extends AbstractController
 {
-    private $quizTemplateServices;
+    private $quizTemplateService;
 
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
-     * @param QuizTemplateServices $questionInstanceServices
+     * @param QuizTemplateService $questionInstanceService
      */
-    public function __construct(RendererInterface $renderer, QuizTemplateServices $questionInstanceServices)
+    public function __construct(RendererInterface $renderer, QuizTemplateService $questionInstanceService)
     {
         parent::__construct($renderer);
-        $this->quizTemplateServices = $questionInstanceServices;
+        $this->quizTemplateService = $questionInstanceService;
     }
 
     public function createQuiz(Request $request)
@@ -29,8 +29,8 @@ class QuizTemplateController extends AbstractController
         $name = $request->getParameter('name');
         $description = $request->getParameter('description');
         $questions = $request->getParameter('questions');
-        $currentUserId = $this->quizTemplateServices->getId();
-        $this->quizTemplateServices->saveQuiz($name, $description,$questions,$currentUserId);
+        $currentUserId = $this->quizTemplateService->getId();
+        $this->quizTemplateService->saveQuiz($name, $description,$questions,$currentUserId);
         $location = 'Location: http://quizApp.com/admin-quizzes-listing?page=1';
         $body = Stream::createFromString("");
 
@@ -40,10 +40,10 @@ class QuizTemplateController extends AbstractController
     public function showQuizzes(Request $request, array $requestAttributes)
     {
         $arguments['currentPage'] = (int)$request->getParameter('page');
-        $arguments['pages'] = $this->quizTemplateServices->getQuizNumber($requestAttributes);
-        $arguments['username'] = $this->quizTemplateServices->getName();
-        $arguments['quizzes'] = $this->quizTemplateServices->getQuizzes($requestAttributes, $request->getParameter('page'));
-//        $arguments['quizUser'] = $this->quizTemplateServices->getQuizUser();
+        $arguments['pages'] = $this->quizTemplateService->getQuizNumber($requestAttributes);
+        $arguments['username'] = $this->quizTemplateService->getName();
+        $arguments['quizzes'] = $this->quizTemplateService->getQuizzes($requestAttributes, $request->getParameter('page'));
+//        $arguments['quizUser'] = $this->quizTemplateService->getQuizUser();
 
 
         return $this->renderer->renderView("admin-quizzes-listing.phtml", $arguments);
@@ -54,7 +54,7 @@ class QuizTemplateController extends AbstractController
         $name = $request->getParameter('name');
         $description = $request->getParameter('description');
         $questions = $request->getParameter('questions');
-        $this->quizTemplateServices->editQuiz($requestAttributes['id'], $name, $description,$questions);
+        $this->quizTemplateService->editQuiz($requestAttributes['id'], $name, $description,$questions);
         $location = 'Location: http://quizApp.com/admin-quizzes-listing?page=1';
         $body = Stream::createFromString("");
 
@@ -63,7 +63,7 @@ class QuizTemplateController extends AbstractController
 
     public function deleteQuiz(Request $request, array $requestAttributes)
     {
-        $this->quizTemplateServices->deleteQuiz($requestAttributes['id']);
+        $this->quizTemplateService->deleteQuiz($requestAttributes['id']);
 
         $location = 'Location: http://quizApp.com/admin-quizzes-listing?page=1';
         $body = Stream::createFromString("");
@@ -73,10 +73,10 @@ class QuizTemplateController extends AbstractController
 
     public function showQuizDetailsEdit(Request $request, array $requestAttributes)
     {
-        $params = $this->quizTemplateServices->getParams($requestAttributes['id']);
-        $params['selectedQuestions'] = $this->quizTemplateServices->getSelectedQuestions($requestAttributes['id']);
-        $params['questions'] = $this->quizTemplateServices->getQuestions();
-        $params['username'] = $this->quizTemplateServices->getName();
+        $params = $this->quizTemplateService->getParams($requestAttributes['id']);
+        $params['selectedQuestions'] = $this->quizTemplateService->getSelectedQuestions($requestAttributes['id']);
+        $params['questions'] = $this->quizTemplateService->getQuestions();
+        $params['username'] = $this->quizTemplateService->getName();
         $params['path'] = 'edit/' . $params['id'];
 
         return $this->renderer->renderView("admin-quiz-details.phtml", $params);
@@ -84,10 +84,10 @@ class QuizTemplateController extends AbstractController
 
     public function showQuizDetails()
     {
-        $params = $this->quizTemplateServices->getEmptyParams();
+        $params = $this->quizTemplateService->getEmptyParams();
         $params['selectedQuestions'] = [];
-        $params['questions'] = $this->quizTemplateServices->getQuestions();
-        $params['username'] = $this->quizTemplateServices->getName();
+        $params['questions'] = $this->quizTemplateService->getQuestions();
+        $params['username'] = $this->quizTemplateService->getName();
         $params['path'] = 'create';
 
         return $this->renderer->renderView("admin-quiz-details.phtml", $params);

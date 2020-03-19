@@ -1,15 +1,15 @@
 <?php
 
-namespace QuizApp\Services;
+namespace QuizApp\Service;
 
 use Framework\Contracts\SessionInterface;
 use phpDocumentor\Reflection\Types\This;
-use QuizApp\Entities\QuestionInstance;
-use QuizApp\Entities\QuizInstance;
-use QuizApp\Entities\User;
+use QuizApp\Entity\QuestionInstance;
+use QuizApp\Entity\QuizInstance;
+use QuizApp\Entity\User;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
-class UserServices extends AbstractServices
+class UserService extends AbstractService
 {
 
     public function saveUser(string $name, string $email, string $password, string $role)

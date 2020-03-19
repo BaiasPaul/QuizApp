@@ -2,12 +2,11 @@
 
 use Framework\Contracts\SessionInterface;
 use Framework\Session\Session;
-use QuizApp\Controllers\QuestionInstanceController;
-use QuizApp\Controllers\QuestionTemplateController;
-use QuizApp\Controllers\QuizInstanceController;
-use QuizApp\Controllers\QuizTemplateController;
-use QuizApp\Controllers\AuthController;
-use QuizApp\Controllers\UserController;
+use QuizApp\Controller\QuestionInstanceController;
+use QuizApp\Controller\QuestionTemplateController;
+use QuizApp\Controller\QuizInstanceController;
+use QuizApp\Controller\QuizTemplateController;
+use QuizApp\Controller\UserController;
 use Framework\Contracts\DispatcherInterface;
 use Framework\Contracts\RendererInterface;
 use Framework\Contracts\RouterInterface;
@@ -15,13 +14,14 @@ use Framework\DependencyInjection\SymfonyContainer;
 use Framework\Dispatcher\Dispatcher;
 use Framework\Renderer\Renderer;
 use Framework\Routing\Router;
-use QuizApp\Entities\AnswerInstance;
-use QuizApp\Entities\AnswerTemplate;
-use QuizApp\Entities\QuestionInstance;
-use QuizApp\Entities\QuestionTemplate;
-use QuizApp\Entities\QuizInstance;
-use QuizApp\Entities\QuizTemplate;
-use QuizApp\Entities\User;
+use QuizApp\Controllers\AuthController;
+use QuizApp\Entity\AnswerInstance;
+use QuizApp\Entity\AnswerTemplate;
+use QuizApp\Entity\QuestionInstance;
+use QuizApp\Entity\QuestionTemplate;
+use QuizApp\Entity\QuizInstance;
+use QuizApp\Entity\QuizTemplate;
+use QuizApp\Entity\User;
 use QuizApp\Repository\AnswerInstanceRepository;
 use QuizApp\Repository\AnswerTemplateRepository;
 use QuizApp\Repository\QuestionInstanceRepository;
@@ -29,13 +29,13 @@ use QuizApp\Repository\QuestionTemplateRepository;
 use QuizApp\Repository\QuizInstanceRepository;
 use QuizApp\Repository\QuizTemplateRepository;
 use QuizApp\Repository\UserRepository;
-use QuizApp\Services\AppMessageManager;
-use QuizApp\Services\QuestionInstanceServices;
-use QuizApp\Services\QuestionTemplateServices;
-use QuizApp\Services\QuizInstanceServices;
-use QuizApp\Services\QuizTemplateServices;
-use QuizApp\Services\AuthServices;
-use QuizApp\Services\UserServices;
+use QuizApp\Service\AppMessageManager;
+use QuizApp\Service\AuthService;
+use QuizApp\Service\QuestionInstanceService;
+use QuizApp\Service\QuestionTemplateService;
+use QuizApp\Service\QuizInstanceService;
+use QuizApp\Service\QuizTemplateService;
+use QuizApp\Service\UserService;
 use ReallyOrm\Hydrator\HydratorInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
 use ReallyOrm\Test\Hydrator\Hydrator;
@@ -130,27 +130,27 @@ foreach ($container->findTaggedServiceIds('repository') as $id => $value) {
 $container->register(AppMessageManager::class,AppMessageManager::class)
     ->addArgument(new Reference(SessionInterface::class));
 
-$container->register(QuizTemplateServices::class,QuizTemplateServices::class)
+$container->register(QuizTemplateService::class,QuizTemplateService::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
-$container->register(QuizInstanceServices::class,QuizInstanceServices::class)
+$container->register(QuizInstanceService::class,QuizInstanceService::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
-$container->register(AuthServices::class,AuthServices::class)
+$container->register(AuthService::class,AuthService::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
-$container->register(QuestionTemplateServices::class,QuestionTemplateServices::class)
+$container->register(QuestionTemplateService::class,QuestionTemplateService::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
-$container->register(QuestionInstanceServices::class,QuestionInstanceServices::class)
+$container->register(QuestionInstanceService::class,QuestionInstanceService::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
-$container->register(UserServices::class,UserServices::class)
+$container->register(UserService::class,UserService::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
 
@@ -166,33 +166,33 @@ $container->register(RendererInterface::class, Renderer::class)
 
 $container->register(QuizTemplateController::class, QuizTemplateController::class)
     ->addArgument(new Reference(RendererInterface::class))
-    ->addArgument(new Reference(QuizTemplateServices::class))
+    ->addArgument(new Reference(QuizTemplateService::class))
     ->addTag('controller');
 
 $container->register(QuizInstanceController::class, QuizInstanceController::class)
     ->addArgument(new Reference(RendererInterface::class))
-    ->addArgument(new Reference(QuizInstanceServices::class))
+    ->addArgument(new Reference(QuizInstanceService::class))
     ->addTag('controller');
 
 $container->register(QuestionTemplateController::class, QuestionTemplateController::class)
     ->addArgument(new Reference(RendererInterface::class))
-    ->addArgument(new Reference(QuestionTemplateServices::class))
+    ->addArgument(new Reference(QuestionTemplateService::class))
     ->addTag('controller');
 
 $container->register(QuestionInstanceController::class, QuestionInstanceController::class)
     ->addArgument(new Reference(RendererInterface::class))
-    ->addArgument(new Reference(QuestionInstanceServices::class))
+    ->addArgument(new Reference(QuestionInstanceService::class))
     ->addTag('controller');
 
 $container->register(AuthController::class, AuthController::class)
     ->addArgument(new Reference(RendererInterface::class))
-    ->addArgument(new Reference(AuthServices::class))
+    ->addArgument(new Reference(AuthService::class))
     ->addArgument(new Reference(AppMessageManager::class))
     ->addTag('controller');
 
 $container->register(UserController::class, UserController::class)
     ->addArgument(new Reference(RendererInterface::class))
-    ->addArgument(new Reference(UserServices::class))
+    ->addArgument(new Reference(UserService::class))
     ->addTag('controller');
 
 $controllerNamespace = $config['dispatcher']['controllers_namespace'];

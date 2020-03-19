@@ -7,9 +7,9 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
-use QuizApp\Exceptions\UserNotFoundException;
+use QuizApp\Exception\UserNotFoundException;
+use QuizApp\Service\AuthService;
 use QuizApp\Services\AppMessageManager;
-use QuizApp\Services\AuthServices;
 
 /**
  * Class AuthController
@@ -18,9 +18,9 @@ use QuizApp\Services\AuthServices;
 class AuthController extends AbstractController
 {
     /**
-     * @var AuthServices
+     * @var AuthService
      */
-    private $authServices;
+    private $authService;
 
     /**
      * @var AppMessageManager
@@ -30,13 +30,13 @@ class AuthController extends AbstractController
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
-     * @param AuthServices $authServices
+     * @param AuthService $authService
      * @param AppMessageManager $messageManager
      */
-    public function __construct(RendererInterface $renderer, AuthServices $authServices, AppMessageManager $messageManager)
+    public function __construct(RendererInterface $renderer, AuthService $authService, AppMessageManager $messageManager)
     {
         parent::__construct($renderer);
-        $this->authServices = $authServices;
+        $this->authService = $authService;
         $this->messageManager = $messageManager;
     }
 
@@ -63,7 +63,7 @@ class AuthController extends AbstractController
         $password = $request->getParameter('password');
         try {
             //checks if a user with the specified email and password exists
-            $user = $this->authServices->authenticate($email, $password);
+            $user = $this->authService->authenticate($email, $password);
         } catch (UserNotFoundException $e) {
             //the messageManager holds all the errorMessages that will be displayed in the view
             $this->messageManager->addErrorMessage($e->getMessage());
@@ -82,7 +82,7 @@ class AuthController extends AbstractController
      */
     public function logout()
     {
-        $this->authServices->logout();
+        $this->authService->logout();
         $location = 'Location: http://quizApp.com/';
         $body = Stream::createFromString("");
 
@@ -94,7 +94,7 @@ class AuthController extends AbstractController
      */
     public function showAdminDashboard()
     {
-        $name = ['username' => $this->authServices->getName()];
+        $name = ['username' => $this->authService->getName()];
 
         return $this->renderer->renderView("admin-dashboard.phtml", $name);
     }

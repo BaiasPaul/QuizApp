@@ -1,17 +1,17 @@
 <?php
 
 
-namespace QuizApp\Services;
+namespace QuizApp\Service;
 
-use QuizApp\Entities\User;
-use QuizApp\Exceptions\UserNotFoundException;
+use QuizApp\Entity\User;
+use QuizApp\Exception\UserNotFoundException;
 use ReallyOrm\Entity\EntityInterface;
 
 /**
- * Class AuthServices
- * @package QuizApp\Services
+ * Class AuthService
+ * @package QuizApp\Service
  */
-class AuthServices extends AbstractServices
+class AuthService extends AbstractService
 {
     /**
      * @param string $email

@@ -1,10 +1,10 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use QuizApp\Entities\QuestionTemplate;
-use QuizApp\Entities\QuizInstance;
-use QuizApp\Entities\QuizTemplate;
-use QuizApp\Entities\User;
+use QuizApp\Entity\QuestionTemplate;
+use QuizApp\Entity\QuizInstance;
+use QuizApp\Entity\QuizTemplate;
+use QuizApp\Entity\User;
 use QuizApp\Repository\QuestionTemplateRepository;
 use QuizApp\Repository\QuizTemplateRepository;
 use ReallyOrm\Test\Hydrator\Hydrator;

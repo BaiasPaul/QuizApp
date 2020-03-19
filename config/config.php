@@ -8,7 +8,7 @@ return array(
         Renderer::CONFIG_KEY_BASE_VIEW_PATH => dirname(__DIR__) . '/views/'
     ],
     'dispatcher' => [
-        'controllers_namespace' => 'QuizApp\Controllers',
+        'controllers_namespace' => 'QuizApp\Controller',
         'controller_class_suffix' => 'Controller'
     ],
     'router' => [
@@ -321,14 +321,6 @@ return array(
                 Router::CONFIG_KEY_ATTRIBUTES => [
                     'role'=>'candidate|admin'
                 ]
-            ],
-
-            'filter_by_text' => [
-                Router::CONFIG_KEY_METHOD => 'POST',
-                Router::CONFIG_KEY_PATH => '/admin-questions-listing',
-                Router::CONFIG_KEY_ACTION => 'searchByText',
-                Router::CONFIG_KEY_CONTROLLER => 'questionsTemplate',
-                Router::CONFIG_KEY_ATTRIBUTES => []
             ],
 
             'exceptions_page' => [

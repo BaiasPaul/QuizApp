@@ -1,17 +1,17 @@
 <?php
 
 
-namespace QuizApp\Services;
+namespace QuizApp\Service;
 
 
 use Framework\Contracts\SessionInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
 /**
- * Class AbstractServices
- * @package QuizApp\Services
+ * Class AbstractService
+ * @package QuizApp\Service
  */
-class AbstractServices
+class AbstractService
 {
 
     /**
@@ -25,7 +25,7 @@ class AbstractServices
     protected $repoManager;
 
     /**
-     * AbstractServices constructor.
+     * AbstractService constructor.
      * @param SessionInterface $session
      * @param RepositoryManager $repoManager
      */

@@ -63,12 +63,12 @@
     <!--Table actions block-->
     <div class="row">
         <div class="col-12 col-md-6">
-            <form action="">
+            <form method="GET" action="/admin-questions-listing">
                 <label for="textSearch">Text search</label>
                 <div class="input-group">
-                    <input name="text" type="text" id="textSearch" class="form-control" placeholder="">
+                    <input name="text" type="text" id="textSearch" class="form-control" placeholder="" value="<?php echo $text;?>">
                     <div class="input-group-append">
-                        <button class="btn btn-secondary" type="submit">
+                        <button class="btn btn-secondary" type="submit" >
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
@@ -113,7 +113,7 @@
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($arguments['questions'] as $question): ?>
+            <?php foreach ($questions as $question): ?>
                 <tr>
                     <td scope="row"><?php echo $question->getId(); ?></td>
                     <td><?php echo $question->getText(); ?></td>
@@ -133,21 +133,16 @@
     <!--Pagination block-->
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-            <li class="page-item <?php if ($arguments['currentPage'] === 1) echo 'disabled'; ?>">
-                <a class="page-link" href="?page=<?php echo $arguments['currentPage']-1;?>" >Previous</a>
+            <li class="page-item <?php if ($paginator->getCurrentPage() === 1) echo 'disabled'; ?>">
+                <a class="page-link" href="?page=<?php echo $paginator->getPreviousPage();?>&text=<?php echo $text;?>" >Previous</a>
             </li>
-            <?php
-            $pages = $arguments['pages']['entitiesNumber'] / 5;
-            if ($arguments['pages']['entitiesNumber'] % 5 > 0){
-                $pages += 1;
-            }
-            for ($pageNumber = 1; $pageNumber <= $pages; $pageNumber++): ?>
-                <li class="page-item <?php if ($arguments['currentPage'] === $pageNumber) echo 'active'; ?>">
-                    <a class="page-link" href="?page=<?php echo $pageNumber; ?>"><?php echo $pageNumber; ?></a>
+            <?php for ($pageNumber = 1; $pageNumber <= $paginator->getTotalPages(); $pageNumber++): ?>
+                <li class="page-item <?php if ($paginator->getCurrentPage() === $pageNumber) echo 'active'; ?>">
+                    <a class="page-link" href="?page=<?php echo $pageNumber; ?>&text=<?php echo $text;?>"><?php echo $pageNumber; ?></a>
                 </li>
             <?php endfor; ?>
-            <li class="page-item <?php if ($arguments['currentPage'] === (int)$pages) echo 'disabled'; ?>">
-                <a class="page-link" href="?page=<?php echo $arguments['currentPage']+1;?>">Next</a>
+            <li class="page-item <?php if ($paginator->getCurrentPage() ==  $paginator->getTotalPages()) echo 'disabled'; ?>">
+                <a class="page-link" href="?page=<?php echo $paginator->getNextPage();?>&text=<?php echo $text;?>">Next</a>
             </li>
         </ul>
     </nav>
