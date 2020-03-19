@@ -1,6 +1,6 @@
 <?php
 
-namespace QuizApp\Controllers;
+namespace QuizApp\Controller;
 
 use Framework\Contracts\RendererInterface;
 use Framework\Controller\AbstractController;
@@ -8,8 +8,8 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
 use QuizApp\Exception\UserNotFoundException;
+use QuizApp\Service\AppMessageManager;
 use QuizApp\Service\AuthService;
-use QuizApp\Services\AppMessageManager;
 
 /**
  * Class AuthController

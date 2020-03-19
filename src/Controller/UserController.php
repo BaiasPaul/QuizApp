@@ -32,19 +32,7 @@ class UserController extends AbstractController
 
     public function showLogin()
     {
-<<<<<<< HEAD:src/Controllers/UserController.php
         return $this->renderer->renderView("login.html", []);
-=======
-        $name = $request->getParameter('name');
-        $email = $request->getParameter('email');
-        $password = md5($request->getParameter('password'));
-        $role = $request->getParameter('role');
-        $this->userService->saveUser($name, $email, $password, $role);
-        $location = 'Location: http://quizApp.com/admin-users-listing?page=1';
-        $body = Stream::createFromString("");
-
-        return new Response($body, '1.1', '301', $location);
->>>>>>> 005-feature-search-bar:src/Controller/UserController.php
     }
 
     public function showUsers(Request $request, array $requestAttributes)
@@ -75,7 +63,7 @@ class UserController extends AbstractController
         $email = $request->getParameter('email');
         $password = $request->getParameter('password');
         $role = $request->getParameter('role');
-        $this->userServices->saveUser($name, $email, $password, $role);
+        $this->userService->saveUser($name, $email, $password, $role);
         $location = 'Location: http://quizApp.com/admin-users-listing?page=1';
         $body = Stream::createFromString("");
 
@@ -97,12 +85,7 @@ class UserController extends AbstractController
         $email = $request->getParameter('email');
         $password = $request->getParameter('password');
         $role = $request->getParameter('role');
-<<<<<<< HEAD:src/Controllers/UserController.php
-        $this->userServices->editUser($requestAttributes['id'], $name, $email, $password, $role);
-=======
-
         $this->userService->editUser($requestAttributes['id'], $name, $email, $password, $role);
->>>>>>> 005-feature-search-bar:src/Controller/UserController.php
 
         $location = 'Location: http://quizApp.com/admin-users-listing?page=1';
         $body = Stream::createFromString("");
