@@ -939,12 +939,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BaiasPaul/ormSkeleton.git",
-                "reference": "17649ae5d5b2b9c65304bdf102b101b0581b8796"
+                "reference": "a4c76c63277302c43f9d5f3c731a92be03b487d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BaiasPaul/ormSkeleton/zipball/17649ae5d5b2b9c65304bdf102b101b0581b8796",
-                "reference": "17649ae5d5b2b9c65304bdf102b101b0581b8796",
+                "url": "https://api.github.com/repos/BaiasPaul/ormSkeleton/zipball/a4c76c63277302c43f9d5f3c731a92be03b487d5",
+                "reference": "a4c76c63277302c43f9d5f3c731a92be03b487d5",
                 "shasum": ""
             },
             "require": {
@@ -971,7 +971,7 @@
                 "source": "https://github.com/BaiasPaul/ormSkeleton/tree/master",
                 "issues": "https://github.com/BaiasPaul/ormSkeleton/issues"
             },
-            "time": "2020-03-11T19:38:08+00:00"
+            "time": "2020-03-20T16:39:27+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",

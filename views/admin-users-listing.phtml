@@ -66,26 +66,27 @@
             <form action="">
                 <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                     <div class="btn-group" role="group">
-                        <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle"
+                        <button name="role" id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <?php if ($arguments['dropdown'] === '') echo 'All'; else echo ucfirst($arguments['dropdown']['role']); ?>
+                            <?php if (isset($dropdownRole) && $dropdownRole === '') echo 'All'; else if(isset($dropdownRole)) echo ucfirst($dropdownRole); ?>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                            <a class="dropdown-item" href="/admin-users-listing/candidate">Candidate</a>
-                            <a class="dropdown-item" href="/admin-users-listing/admin">Admin</a>
-                            <a class="dropdown-item" href="/admin-users-listing">All</a>
+                            <a class="dropdown-item" href="/admin-users-listing?role=candidate&email=<?php echo $email;?>">Candidate</a>
+                            <a class="dropdown-item" href="/admin-users-listing?role=admin&email=<?php echo $email;?>">Admin</a>
+                            <a class="dropdown-item" href="/admin-users-listing?role=&email=<?php echo $email;?>">All</a>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
         <div class="col-12 col-md-6">
-            <form method="GET" action="/admin-users-listing">
+            <form method="GET" action="/admin-users-listing" >
+                <input type="hidden" name="role" value="<?php echo $dropdownRole;?>" />
                 <label for="textSearch">Email search</label>
                 <div class="input-group">
                     <input name="email" type="text" id="textSearch" class="form-control" placeholder="" value="<?php echo $email;?>">
                     <div class="input-group-append">
-                        <button class="btn btn-secondary" type="submit" >
+                        <button class="btn btn-secondary" type="submit">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
@@ -131,7 +132,7 @@
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($arguments['users'] as $user): ?>
+            <?php foreach ($users as $user): ?>
                 <tr>
                     <td scope="row"><?php echo $user->getId(); ?></td>
                     <td><?php echo $user->getEmail(); ?></td>
@@ -151,15 +152,15 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <li class="page-item <?php if ($paginator->getCurrentPage() === 1) echo 'disabled'; ?>">
-                <a class="page-link" href="?page=<?php echo $paginator->getPreviousPage();?>&email=<?php echo $email;?>" >Previous</a>
+                <a class="page-link" href="?page=<?php echo $paginator->getPreviousPage();?>&email=<?php echo $email;?>&role=<?php echo $dropdownRole;?>" >Previous</a>
             </li>
             <?php for ($pageNumber = 1; $pageNumber <= $paginator->getTotalPages(); $pageNumber++): ?>
                 <li class="page-item <?php if ($paginator->getCurrentPage() === $pageNumber) echo 'active'; ?>">
-                    <a class="page-link" href="?page=<?php echo $pageNumber; ?>&email=<?php echo $email;?>"><?php echo $pageNumber; ?></a>
+                    <a class="page-link" href="?page=<?php echo $pageNumber; ?>&email=<?php echo $email;?>&role=<?php echo $dropdownRole;?>"><?php echo $pageNumber; ?></a>
                 </li>
             <?php endfor; ?>
             <li class="page-item <?php if ($paginator->getCurrentPage() ==  $paginator->getTotalPages()) echo 'disabled'; ?>">
-                <a class="page-link" href="?page=<?php echo $paginator->getNextPage();?>&email=<?php echo $email;?>">Next</a>
+                <a class="page-link" href="?page=<?php echo $paginator->getNextPage();?>&email=<?php echo $email;?>&role=<?php echo $dropdownRole;?>">Next</a>
             </li>
         </ul>
     </nav>

@@ -315,12 +315,10 @@ return array(
 
             'admin_user_listing_candidate' => [
                 Router::CONFIG_KEY_METHOD => 'GET',
-                Router::CONFIG_KEY_PATH => '/admin-users-listing/{role}',
+                Router::CONFIG_KEY_PATH => '/admin-users-listing',
                 Router::CONFIG_KEY_ACTION => 'showUsers',
                 Router::CONFIG_KEY_CONTROLLER => 'user',
-                Router::CONFIG_KEY_ATTRIBUTES => [
-                    'role'=>'candidate|admin'
-                ]
+                Router::CONFIG_KEY_ATTRIBUTES => []
             ],
 
             'exceptions_page' => [

@@ -66,26 +66,28 @@ class AbstractService
     }
 
     /**
+     * This method return the number of entities with the searched text
+     *
      * @param $class
-     * @param $fieldName
-     * @param $fieldValue
-     * @return mixed
+     * @param $fields
+     * @return int
      */
-    public function getEntityNumberOfPagesByField($class, $fieldName, $fieldValue)
+    public function getEntityNumberOfPagesByField($class, $fields): int
     {
-        return $this->repoManager->getRepository($class)->getEntityNumberByField($fieldName, $fieldValue);
+        return $this->repoManager->getRepository($class)->getNumberOfEntitiesByField($fields);
     }
 
     /**
+     * This method returns a list of entities that have the fieldName LIKE the searched one
+     *
      * @param $class
-     * @param $fieldName
-     * @param $fieldValue
+     * @param $fields
      * @param $currentPage
      * @param $resultsPerPage
-     * @return mixed
+     * @return array
      */
-    public function getEntitiesByField($class, $fieldName, $fieldValue, $currentPage, $resultsPerPage)
+    public function getEntitiesByField($class, $fields, $currentPage, $resultsPerPage): array
     {
-        return $this->repoManager->getRepository($class)->getEntitiesByField($fieldName, $fieldValue, ($currentPage - 1) * $resultsPerPage, $resultsPerPage);
+        return $this->repoManager->getRepository($class)->getEntitiesByField($fields, ($currentPage - 1) * $resultsPerPage, $resultsPerPage);
     }
 }
