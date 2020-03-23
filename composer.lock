@@ -103,12 +103,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BaiasPaul/mvc-framework-skeleton.git",
-                "reference": "23a6b7f5ee0ebe2fd9f6a59d1cf7e4e0ac3e6b4d"
+                "reference": "ee16f7469c6857a688ccea183196e7f8e663b6de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BaiasPaul/mvc-framework-skeleton/zipball/23a6b7f5ee0ebe2fd9f6a59d1cf7e4e0ac3e6b4d",
-                "reference": "23a6b7f5ee0ebe2fd9f6a59d1cf7e4e0ac3e6b4d",
+                "url": "https://api.github.com/repos/BaiasPaul/mvc-framework-skeleton/zipball/ee16f7469c6857a688ccea183196e7f8e663b6de",
+                "reference": "ee16f7469c6857a688ccea183196e7f8e663b6de",
                 "shasum": ""
             },
             "require": {
@@ -133,7 +133,7 @@
             "support": {
                 "source": "https://github.com/BaiasPaul/mvc-framework-skeleton/tree/master"
             },
-            "time": "2020-03-19T11:12:05+00:00"
+            "time": "2020-03-23T15:20:31+00:00"
         },
         {
             "name": "myclabs/deep-copy",

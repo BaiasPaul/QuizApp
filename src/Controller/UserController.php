@@ -5,9 +5,11 @@ namespace QuizApp\Controller;
 
 use Framework\Contracts\RendererInterface;
 use Framework\Controller\AbstractController;
+use Framework\Http\Message;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
+use Psr\Http\Message\MessageInterface;
 use QuizApp\Entity\User;
 use QuizApp\Service\UserService;
 use QuizApp\Util\Paginator;
@@ -37,7 +39,7 @@ class UserController extends AbstractController
     /**
      * @return Response
      */
-    public function showLogin(): Response
+    public function showLogin()
     {
         return $this->renderer->renderView("login.html", []);
     }
@@ -49,7 +51,7 @@ class UserController extends AbstractController
      * @param array $requestAttributes
      * @return Response
      */
-    public function showUsers(Request $request, array $requestAttributes): Response
+    public function showUsers(Request $request, array $requestAttributes)
     {
         $resultsPerPage = 5;
         $email = $this->userService->getFromParameter('email', $request, "");
@@ -75,7 +77,7 @@ class UserController extends AbstractController
      *
      * @return Response
      */
-    public function showUserDetails(): Response
+    public function showUserDetails()
     {
         $params['username'] = $this->userService->getName();
         $params['path'] = 'create';
@@ -87,9 +89,9 @@ class UserController extends AbstractController
      * This method creates an user and saves it in the database
      *
      * @param Request $request
-     * @return Response
+     * @return Message|MessageInterface
      */
-    public function createUser(Request $request): Response
+    public function createUser(Request $request)
     {
         $name = $request->getParameter('name');
         $email = $request->getParameter('email');
@@ -97,8 +99,9 @@ class UserController extends AbstractController
         $role = $request->getParameter('role');
         $this->userService->saveUser($name, $email, $password, $role);
         $body = Stream::createFromString("");
+        $response = new Response($body, '1.1', 301);
 
-        return new Response($body, '1.1', '301', 'Location: http://quizApp.com/admin-users-listing');
+        return $response->withHeader('Location', 'http://quizApp.com/admin-users-listing');
     }
 
     /**
@@ -108,7 +111,7 @@ class UserController extends AbstractController
      * @param array $requestAttributes
      * @return Response
      */
-    public function showUserDetailsEdit(Request $request, array $requestAttributes): Response
+    public function showUserDetailsEdit(Request $request, array $requestAttributes)
     {
         $params = $this->userService->getParams($requestAttributes['id']);
         $params['username'] = $this->userService->getName();
@@ -122,9 +125,9 @@ class UserController extends AbstractController
      *
      * @param Request $request
      * @param array $requestAttributes
-     * @return Response
+     * @return Message|MessageInterface
      */
-    public function editUser(Request $request, array $requestAttributes): Response
+    public function editUser(Request $request, array $requestAttributes)
     {
         $name = $request->getParameter('name');
         $email = $request->getParameter('email');
@@ -132,8 +135,9 @@ class UserController extends AbstractController
         $role = $request->getParameter('role');
         $this->userService->editUser($requestAttributes['id'], $name, $email, $password, $role);
         $body = Stream::createFromString("");
+        $response = new Response($body, '1.1', 301);
 
-        return new Response($body, '1.1', '301', 'Location: http://quizApp.com/admin-users-listing');
+        return $response->withHeader('Location', 'http://quizApp.com/admin-users-listing');
     }
 
     /**
@@ -141,14 +145,15 @@ class UserController extends AbstractController
      *
      * @param Request $request
      * @param array $requestAttributes
-     * @return Response
+     * @return Message|MessageInterface
      */
-    public function deleteUser(Request $request, array $requestAttributes): Response
+    public function deleteUser(Request $request, array $requestAttributes)
     {
         $this->userService->deleteUser($requestAttributes['id']);
         $body = Stream::createFromString("");
+        $response = new Response($body, '1.1', 301);
 
-        return new Response($body, '1.1', '301', 'Location: http://quizApp.com/admin-users-listing');
+        return $response->withHeader('Location', 'http://quizApp.com/admin-users-listing');
     }
 
     public function showExceptionsPage()
@@ -163,7 +168,7 @@ class UserController extends AbstractController
      * @param array $requestAttributes
      * @return Response
      */
-    public function showResults(Request $request, array $requestAttributes): Response
+    public function showResults(Request $request, array $requestAttributes)
     {
         $arguments['currentPage'] = (int)$request->getParameter('page');
         $arguments['pages'] = $this->userService->getQuizzesNumber($requestAttributes);
@@ -180,7 +185,7 @@ class UserController extends AbstractController
      * @param array $requestAttributes
      * @return Response
      */
-    public function showQuizzesResults(Request $request, array $requestAttributes): Response
+    public function showQuizzesResults(Request $request, array $requestAttributes)
     {
         $arguments['username'] = $this->userService->getName();
         $questions = $this->userService->getQuestionsAnswered($requestAttributes['id']);
@@ -196,7 +201,7 @@ class UserController extends AbstractController
      * @param array $requestAttributes
      * @return Response
      */
-    public function saveScore(Request $request, array $requestAttributes): Response
+    public function saveScore(Request $request, array $requestAttributes)
     {
         $arguments['currentPage'] = (int)$request->getParameter('page');
         $arguments['pages'] = $this->userService->getQuizzesNumber($requestAttributes);

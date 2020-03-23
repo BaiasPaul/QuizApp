@@ -4,9 +4,11 @@ namespace QuizApp\Controller;
 
 use Framework\Contracts\RendererInterface;
 use Framework\Controller\AbstractController;
+use Framework\Http\Message;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
+use Psr\Http\Message\MessageInterface;
 use QuizApp\Exception\UserNotFoundException;
 use QuizApp\Service\AppMessageManager;
 use QuizApp\Service\AuthService;
@@ -52,12 +54,13 @@ class AuthController extends AbstractController
 
     /**
      * @param Request $request
-     * @return Response
+     * @return Message|MessageInterface
      */
     public function login(Request $request)
     {
-        $location = 'Location: http://quizApp.com/';
+        $location = 'http://quizApp.com/';
         $body = Stream::createFromString("");
+        $response = new Response($body, '1.1', 301);
 
         $email = $request->getParameter('email');
         $password = $request->getParameter('password');
@@ -67,26 +70,27 @@ class AuthController extends AbstractController
         } catch (UserNotFoundException $e) {
             //the messageManager holds all the errorMessages that will be displayed in the view
             $this->messageManager->addErrorMessage($e->getMessage());
-            return new Response($body, '1.1', '301', $location);
+
+            return $response->withHeader('Location', $location);
         }
         $location .= strtolower($user->getRole());
         if ($user->getRole() === 'candidate'){
             $location .= '?page=1';
         }
 
-        return new Response($body, '1.1', '301', $location);
+        return $response->withHeader('Location', $location);
     }
 
     /**
-     * @return Response
+     * @return Message|MessageInterface
      */
     public function logout()
     {
         $this->authService->logout();
-        $location = 'Location: http://quizApp.com/';
         $body = Stream::createFromString("");
+        $response = new Response($body, '1.1', '301');
 
-        return new Response($body, '1.1', '301', $location);
+        return $response->withHeader('Location', 'http://quizApp.com/');
     }
 
     /**

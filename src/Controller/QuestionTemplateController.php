@@ -4,9 +4,11 @@ namespace QuizApp\Controller;
 
 use Framework\Contracts\RendererInterface;
 use Framework\Controller\AbstractController;
+use Framework\Http\Message;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
+use Psr\Http\Message\MessageInterface;
 use QuizApp\Entity\QuestionTemplate;
 use QuizApp\Service\QuestionTemplateService;
 use QuizApp\Util\Paginator;
@@ -39,7 +41,7 @@ class QuestionTemplateController extends AbstractController
      * This method creates a question and saves it in the database
      *
      * @param Request $request
-     * @return Response
+     * @return Message|MessageInterface
      */
     public function createQuestion(Request $request)
     {
@@ -47,10 +49,10 @@ class QuestionTemplateController extends AbstractController
         $type = $request->getParameter('type');
         $answer = $request->getParameter('answer');
         $this->questionTemplateService->saveQuestion($text, $type, $answer);
-        $location = 'Location: http://quizApp.com/admin-questions-listing';
         $body = Stream::createFromString("");
+        $response = new Response($body, '1.1', 301);
 
-        return new Response($body, '1.1', '301', $location);
+        return $response->withHeader('Location', 'http://quizApp.com/admin-questions-listing');
     }
 
     /**
@@ -86,7 +88,7 @@ class QuestionTemplateController extends AbstractController
      *
      * @param Request $request
      * @param array $requestAttributes
-     * @return Response
+     * @return Message|MessageInterface
      */
     public function editQuestion(Request $request, array $requestAttributes)
     {
@@ -95,10 +97,10 @@ class QuestionTemplateController extends AbstractController
         $answer = $request->getParameter('answer');
         $this->questionTemplateService->editQuestion($requestAttributes['id'], $text, $type, $answer);
 
-        $location = 'Location: http://quizApp.com/admin-questions-listing';
         $body = Stream::createFromString("");
+        $response = new Response($body, '1.1', 301);
 
-        return new Response($body, '1.1', '301', $location);
+        return $response->withHeader('Location', 'http://quizApp.com/admin-questions-listing');
     }
 
     /**
@@ -106,7 +108,7 @@ class QuestionTemplateController extends AbstractController
      *
      * @param Request $request
      * @param array $requestAttributes
-     * @return Response
+     * @return Message|MessageInterface
      */
     public function deleteQuestion(Request $request, array $requestAttributes)
     {
@@ -114,8 +116,9 @@ class QuestionTemplateController extends AbstractController
 
         $location = 'Location: http://quizApp.com/admin-questions-listing';
         $body = Stream::createFromString("");
+        $response = new Response($body, '1.1', 301);
 
-        return new Response($body, '1.1', '301', $location);
+        return $response->withHeader('Location', 'http://quizApp.com/candidate-results');
     }
 
     /**

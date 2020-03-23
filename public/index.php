@@ -23,6 +23,7 @@ try {
     $response = $application->handle($request);
 } catch (RouteNotFoundException $e){
     $body = Stream::createFromString("");
-    $response = new Response($body, '1.1', '301', 'Location: http://quizApp.com/exceptions-page');
+    $responseWithoutHeader = new Response($body, '1.1', 301);
+    $response = $responseWithoutHeader->withHeader('Location', 'http://quizApp.com/exceptions-page');
 }
 $response->send();

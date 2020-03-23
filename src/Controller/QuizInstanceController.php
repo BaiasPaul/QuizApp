@@ -42,10 +42,10 @@ class QuizInstanceController extends AbstractController
     {
         $this->quizInstanceService->setQuizId($requestAttributes['id']);
         $this->quizInstanceService->createQuizInstance();
-        $location = 'Location: http://quizApp.com/candidate-quiz-page?question=1';
         $body = Stream::createFromString("");
+        $response = new Response($body, '1.1', 301);
 
-        return new Response($body, '1.1', '301', $location);
+        return $response->withHeader('Location', 'http://quizApp.com/candidate-quiz-page?question=1');
     }
 
     public function showQuestions(Request $request, array $requestAttributes){

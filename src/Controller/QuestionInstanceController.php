@@ -32,29 +32,29 @@ class QuestionInstanceController extends AbstractController
         $answer = $request->getParameter('answer');
         $this->questionInstanceService->saveAnswer($answer,$requestAttributes['id']);
         $questionNumber = $request->getParameter('question');
-        $location = 'Location: http://quizApp.com/candidate-quiz-page?question='.($questionNumber+1);
         $body = Stream::createFromString("");
+        $response = new Response($body, '1.1', 301);
 
-        return new Response($body, '1.1', '301', $location);
+        return $response->withHeader('Location', 'http://quizApp.com/candidate-quiz-page?question='.($questionNumber+1));
     }
 
     public function back(Request $request, array $requestAttributes)
     {
         $questionNumber = $request->getParameter('question');
-        $location = 'Location: http://quizApp.com/candidate-quiz-page?question='.($questionNumber-1);
         $body = Stream::createFromString("");
+        $response = new Response($body, '1.1', '301');
 
-        return new Response($body, '1.1', '301', $location);
+        return $response->withHeader('Location', 'http://quizApp.com/candidate-quiz-page?question='.($questionNumber-1));
     }
 
     public function save(Request $request, array $requestAttributes)
     {
         $answer = $request->getParameter('answer');
         $this->questionInstanceService->saveAnswer($answer,$requestAttributes['id']);
-        $location = 'Location: http://quizApp.com/candidate-results';
         $body = Stream::createFromString("");
+        $response = new Response($body, '1.1', '301');
 
-        return new Response($body, '1.1', '301', $location);
+        return $response->withHeader('Location', 'http://quizApp.com/candidate-results');
     }
 
     public function showResults(){
