@@ -53,11 +53,11 @@
         <form method="POST" action="/admin-user-details/<?php echo $path?>">
             <div class="form-group">
                 <label for="userName">Name</label>
-                <input name="name" type="text" class="form-control" id="userName" placeholder="User name" value="<?php echo $name ?>">
+                <input name="name" type="text" class="form-control" id="userName" placeholder="User name" value="<?php if (isset($name)) echo $name; ?>">
             </div>
             <div class="form-group">
                 <label for="userEmail">Email</label>
-                <input name="email" type="email" class="form-control" id="userEmail" placeholder="User email" value="<?php echo $email ?>">
+                <input name="email" type="email" class="form-control" id="userEmail" placeholder="User email" value="<?php if (isset($email)) echo $email; ?>">
             </div>
             <div class="form-group">
                 <label for="userPassword">Password</label>
@@ -66,8 +66,8 @@
             <div class="form-group">
                 <label for="userRole">Role</label>
                 <select name="role" class="form-control" id="userRole">
-                    <option <?php if ($role === 'Candidate') echo 'selected'; ?> value="Candidate" >Candidate</option>
-                    <option <?php if ($role === 'Admin') echo 'selected'; ?> value="Admin">Admin</option>
+                    <option <?php if ( isset($role) && $role === 'Candidate') echo 'selected'; ?> value="Candidate" >Candidate</option>
+                    <option <?php if ( isset($role) && $role === 'Admin') echo 'selected'; ?> value="Admin">Admin</option>
                 </select>
             </div>
             <div class="text-center">

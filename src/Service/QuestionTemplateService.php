@@ -46,23 +46,11 @@ class QuestionTemplateService extends AbstractService
     }
 
     /**
-     * Returns the parameter if found, otherwise returns a default
-     *
-     * @param string $key
-     * @param Request $request
-     * @param null $default
-     * @return mixed|null
-     */
-    public function getFromParameter(string $key, Request $request, $default = null)
-    {
-        return array_key_exists($key, $request->getParameters()) ? $request->getParameter($key) : $default;
-    }
-
-    /**
      * This method returns a list of questions that have the text LIKE the searched one
      *
      * @param $text
      * @param $currentPage
+     * @param $resultsPerPage
      * @return mixed
      */
     public function getQuestionsByText($text, $currentPage, $resultsPerPage)
