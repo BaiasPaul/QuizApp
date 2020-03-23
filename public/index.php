@@ -21,8 +21,7 @@ $application = Application::create($container);
 $request = Request::createFromGlobals();
 try {
     $response = $application->handle($request);
-}
-catch (RouteNotFoundException $e){
+} catch (RouteNotFoundException $e){
     $location = 'Location: http://quizApp.com/exceptions-page';
     $body = Stream::createFromString("");
     $response = new Response($body, '1.1', '301', $location);
