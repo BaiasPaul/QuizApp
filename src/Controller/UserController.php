@@ -51,22 +51,23 @@ class UserController extends AbstractController
      */
     public function showUsers(Request $request, array $requestAttributes): Response
     {
+        $resultsPerPage = 5;
         $email = $this->userService->getFromParameter('email', $request, "");
         $role = $this->userService->getFromParameter('role', $request, "");
         $currentPage = (int)$this->userService->getFromParameter('page', $request, 1);
         $totalResults = (int)$this->userService->getEntityNumberOfPagesByField(User::class, ['email' => $email, 'role' => $role]);
-        $resultsPerPage = 5;
+        $users = $this->userService->getEntitiesByField(User::class, ['email' => $email, 'role' => $role], $currentPage, $resultsPerPage);
 
         $paginator = new Paginator($totalResults, $currentPage, $resultsPerPage);
         $paginator->setTotalPages($totalResults, $resultsPerPage);
 
-        $arguments['email'] = $email;
-        $arguments['username'] = $this->userService->getName();
-        $arguments['dropdownRole'] = $role;
-        $arguments['paginator'] = $paginator;
-        $arguments['users'] = $this->userService->getEntitiesByField(User::class, ['email' => $email, 'role' => $role], $currentPage, $resultsPerPage);
-
-        return $this->renderer->renderView("admin-users-listing.phtml", $arguments);
+        return $this->renderer->renderView("admin-users-listing.phtml", [
+            'email' => $email,
+            'username'=>$this->userService->getName(),
+            'dropdownRole' => $role,
+            'paginator' => $paginator,
+            'users' => $users,
+        ]);
     }
 
     /**
@@ -95,10 +96,9 @@ class UserController extends AbstractController
         $password = $request->getParameter('password');
         $role = $request->getParameter('role');
         $this->userService->saveUser($name, $email, $password, $role);
-        $location = 'Location: http://quizApp.com/admin-users-listing';
         $body = Stream::createFromString("");
 
-        return new Response($body, '1.1', '301', $location);
+        return new Response($body, '1.1', '301', 'Location: http://quizApp.com/admin-users-listing');
     }
 
     /**
@@ -131,11 +131,9 @@ class UserController extends AbstractController
         $password = $request->getParameter('password');
         $role = $request->getParameter('role');
         $this->userService->editUser($requestAttributes['id'], $name, $email, $password, $role);
-
-        $location = 'Location: http://quizApp.com/admin-users-listing';
         $body = Stream::createFromString("");
 
-        return new Response($body, '1.1', '301', $location);
+        return new Response($body, '1.1', '301', 'Location: http://quizApp.com/admin-users-listing');
     }
 
     /**
@@ -148,11 +146,9 @@ class UserController extends AbstractController
     public function deleteUser(Request $request, array $requestAttributes): Response
     {
         $this->userService->deleteUser($requestAttributes['id']);
-
-        $location = 'Location: http://quizApp.com/admin-users-listing';
         $body = Stream::createFromString("");
 
-        return new Response($body, '1.1', '301', $location);
+        return new Response($body, '1.1', '301', 'Location: http://quizApp.com/admin-users-listing');
     }
 
     /**
