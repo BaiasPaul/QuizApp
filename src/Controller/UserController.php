@@ -103,6 +103,11 @@ class UserController extends AbstractController
         return new Response($body, '1.1', '301', $location);
     }
 
+    public function showExceptionsPage()
+    {
+        return $this->renderer->renderView("exceptions-page.phtml", ['errorMessage'=>'Route not found!']);
+    }
+
     public function showResults(Request $request, array $requestAttributes)
     {
         $arguments['currentPage'] = (int)$request->getParameter('page');
