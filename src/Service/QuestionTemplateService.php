@@ -46,19 +46,6 @@ class QuestionTemplateService extends AbstractService
     }
 
     /**
-     * This method returns a list of questions that have the text LIKE the searched one
-     *
-     * @param $text
-     * @param $currentPage
-     * @param $resultsPerPage
-     * @return mixed
-     */
-    public function getQuestionsByText($text, $currentPage, $resultsPerPage)
-    {
-        return $this->repoManager->getRepository(QuestionTemplate::class)->getQuestionsByText($text, ($currentPage - 1) * $resultsPerPage, $resultsPerPage);
-    }
-
-    /**
      * This method searches for a question to update it and adds it a new answer if it does not have one
      * than saves it in the database
      *
@@ -110,17 +97,6 @@ class QuestionTemplateService extends AbstractService
         $question = $this->repoManager->getRepository(QuestionTemplate::class)->find($id);
 
         return $this->repoManager->getRepository(QuestionTemplate::class)->delete($question);
-    }
-
-    /**
-     * This method return the number of questions with the searched text
-     *
-     * @param $text
-     * @return int
-     */
-    public function getQuestionNumberOfPagesByText($text)
-    {
-        return $this->repoManager->getRepository(QuestionTemplate::class)->getQuestionNumberByText($text);
     }
 
 }

@@ -7,6 +7,7 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
+use QuizApp\Entity\QuestionTemplate;
 use QuizApp\Service\QuestionTemplateService;
 use QuizApp\Util\Paginator;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
@@ -61,20 +62,23 @@ class QuestionTemplateController extends AbstractController
      */
     public function showQuestions(Request $request, array $requestAttributes)
     {
-        $text = $this->questionTemplateService->getFromParameter('text',$request,"");
-        $currentPage = (int)$this->questionTemplateService->getFromParameter('page',$request,1);
-        $totalResults = (int)$this->questionTemplateService->getQuestionNumberOfPagesByText($text);
         $resultsPerPage = 5;
+        $text = $this->questionTemplateService->getFromParameter('text', $request, "");
+        $type = $this->questionTemplateService->getFromParameter('type', $request, "");
+        $currentPage = (int)$this->questionTemplateService->getFromParameter('page', $request, 1);
+        $totalResults = (int)$this->questionTemplateService->getEntityNumberOfPagesByField(QuestionTemplate::class, ['type' => $type, 'text' => $text]);
+        $questions = $this->questionTemplateService->getEntitiesByField(QuestionTemplate::class, ['type' => $type, 'text' => $text], $currentPage, $resultsPerPage);
 
-        $paginator = new Paginator($totalResults,$currentPage,$resultsPerPage);
+        $paginator = new Paginator($totalResults, $currentPage, $resultsPerPage);
         $paginator->setTotalPages($totalResults, $resultsPerPage);
 
-        $arguments['username'] = $this->questionTemplateService->getName();
-        $arguments['text'] = $text;
-        $arguments['questions'] = $this->questionTemplateService->getQuestionsByText($text, $currentPage, $resultsPerPage);
-        $arguments['paginator'] = $paginator;
-
-        return $this->renderer->renderView("admin-questions-listing.phtml", $arguments);
+        return $this->renderer->renderView("admin-questions-listing.phtml", [
+            'text' => $text,
+            'username'=>$this->questionTemplateService->getName(),
+            'dropdownType' => $type,
+            'paginator' => $paginator,
+            'questions' => $questions,
+        ]);
     }
 
     /**
