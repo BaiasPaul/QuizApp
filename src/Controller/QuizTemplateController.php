@@ -7,7 +7,9 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
+use QuizApp\Entity\QuizTemplate;
 use QuizApp\Service\QuizTemplateService;
+use QuizApp\Util\Paginator;
 
 class QuizTemplateController extends AbstractController
 {
@@ -39,14 +41,23 @@ class QuizTemplateController extends AbstractController
 
     public function showQuizzes(Request $request, array $requestAttributes)
     {
-        $arguments['currentPage'] = (int)$request->getParameter('page');
-        $arguments['pages'] = $this->quizTemplateService->getQuizNumber($requestAttributes);
-        $arguments['username'] = $this->quizTemplateService->getName();
-        $arguments['quizzes'] = $this->quizTemplateService->getQuizzes($requestAttributes, $request->getParameter('page'));
-//        $arguments['quizUser'] = $this->quizTemplateService->getQuizUser();
+        $resultsPerPage = 5;
+        $quizName = $this->quizTemplateService->getFromParameter('quizName', $request, "");
+        $userId = $this->quizTemplateService->getFromParameter('userId', $request, "");
+        $currentPage = (int)$this->quizTemplateService->getFromParameter('page', $request, 1);
+        $totalResults = (int)$this->quizTemplateService->getEntityNumberOfPagesByField(QuizTemplate::class, ['name' => $quizName, 'user_id' => $userId]);
+        $quizzes = $this->quizTemplateService->getEntitiesByField(QuizTemplate::class, ['name' => $quizName, 'user_id' => $userId], $currentPage, $resultsPerPage);
 
+        $paginator = new Paginator($totalResults, $currentPage, $resultsPerPage);
+        $paginator->setTotalPages($totalResults, $resultsPerPage);
 
-        return $this->renderer->renderView("admin-quizzes-listing.phtml", $arguments);
+        return $this->renderer->renderView("admin-quizzes-listing.phtml", [
+            'quizName' => $quizName,
+            'username'=>$this->quizTemplateService->getName(),
+            'dropdownUserId' => $userId,
+            'paginator' => $paginator,
+            'quizzes' => $quizzes,
+        ]);
     }
 
     public function editQuiz(Request $request, array $requestAttributes)
