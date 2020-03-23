@@ -151,6 +151,11 @@ class UserController extends AbstractController
         return new Response($body, '1.1', '301', 'Location: http://quizApp.com/admin-users-listing');
     }
 
+    public function showExceptionsPage()
+    {
+        return $this->renderer->renderView("exceptions-page.phtml", ['errorMessage'=>'Route not found!']);
+    }
+
     /**
      * Will be moved in another issue
      *
