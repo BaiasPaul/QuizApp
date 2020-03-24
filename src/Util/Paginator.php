@@ -36,6 +36,7 @@ class Paginator
         $this->totalResults = $totalResults;
         $this->setCurrentPage($currentPage);
         $this->setResultsPerPage($resultsPerPage);
+        $this->totalPages = ceil($totalResults / $resultsPerPage);
     }
 
     /**

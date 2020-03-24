@@ -15,6 +15,7 @@ use QuizApp\Util\Paginator;
 class QuizTemplateController extends AbstractController
 {
     private $quizTemplateService;
+    const RESULTS_PER_PAGE = 5;
 
     /**
      * UserController constructor.
@@ -42,16 +43,13 @@ class QuizTemplateController extends AbstractController
 
     public function showQuizzes(Request $request, array $requestAttributes)
     {
-        $resultsPerPage = 5;
         $quizName = $this->quizTemplateService->getFromParameter('quizName', $request, "");
         $userId = $this->quizTemplateService->getFromParameter('userId', $request, "");
         $currentPage = (int)$this->quizTemplateService->getFromParameter('page', $request, 1);
         $totalResults = (int)$this->quizTemplateService->getEntityNumberOfPagesByField(QuizTemplate::class, ['name' => $quizName, 'user_id' => $userId]);
-        $quizzes = $this->quizTemplateService->getEntitiesByField(QuizTemplate::class, ['name' => $quizName, 'user_id' => $userId], $currentPage, $resultsPerPage);
+        $quizzes = $this->quizTemplateService->getEntitiesByField(QuizTemplate::class, ['name' => $quizName, 'user_id' => $userId], $currentPage, self::RESULTS_PER_PAGE);
         $users = $this->quizTemplateService->getEntitiesByField(User::class, ['role' => 'Admin'], 1, 99999999);
-
-        $paginator = new Paginator($totalResults, $currentPage, $resultsPerPage);
-        $paginator->setTotalPages($totalResults, $resultsPerPage);
+        $paginator = new Paginator($totalResults, $currentPage, self::RESULTS_PER_PAGE);
 
         return $this->renderer->renderView("admin-quizzes-listing.phtml", [
             'quizName' => $quizName,

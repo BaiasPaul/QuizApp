@@ -156,7 +156,7 @@
                         <a class="page-link" href="?page=<?php echo $pageNumber; ?>&quizName=<?php echo $quizName;?>&userId=<?php echo $dropdownUserId;?>"><?php echo $pageNumber; ?></a>
                     </li>
                 <?php endfor; ?>
-                <li class="page-item <?php if ($paginator->getCurrentPage() ==  $paginator->getTotalPages()) echo 'disabled'; ?>">
+                <li class="page-item <?php if ($paginator->getCurrentPage() ===  $paginator->getTotalPages()) echo 'disabled'; ?>">
                     <a class="page-link" href="?page=<?php echo $paginator->getNextPage();?>&quizName=<?php echo $quizName;?>&userId=<?php echo $dropdownUserId;?>">Next</a>
                 </li>
             </ul>
