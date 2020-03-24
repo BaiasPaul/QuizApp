@@ -8,6 +8,7 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
 use QuizApp\Entity\QuizTemplate;
+use QuizApp\Entity\User;
 use QuizApp\Service\QuizTemplateService;
 use QuizApp\Util\Paginator;
 
@@ -47,6 +48,7 @@ class QuizTemplateController extends AbstractController
         $currentPage = (int)$this->quizTemplateService->getFromParameter('page', $request, 1);
         $totalResults = (int)$this->quizTemplateService->getEntityNumberOfPagesByField(QuizTemplate::class, ['name' => $quizName, 'user_id' => $userId]);
         $quizzes = $this->quizTemplateService->getEntitiesByField(QuizTemplate::class, ['name' => $quizName, 'user_id' => $userId], $currentPage, $resultsPerPage);
+        $users = $this->quizTemplateService->getEntitiesByField(User::class, ['role' => 'Admin'], 1, 99999999);
 
         $paginator = new Paginator($totalResults, $currentPage, $resultsPerPage);
         $paginator->setTotalPages($totalResults, $resultsPerPage);
@@ -54,6 +56,7 @@ class QuizTemplateController extends AbstractController
         return $this->renderer->renderView("admin-quizzes-listing.phtml", [
             'quizName' => $quizName,
             'username'=>$this->quizTemplateService->getName(),
+            'users'=>$users,
             'dropdownUserId' => $userId,
             'paginator' => $paginator,
             'quizzes' => $quizzes,

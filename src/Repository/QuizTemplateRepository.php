@@ -15,7 +15,7 @@ class QuizTemplateRepository extends AbstractRepository
 
         $dbStmt->execute();
 
-        return $dbStmt->fetch();
+        return $dbStmt->fetch()['entitiesNumber'];
     }
 
     public function getUserId($id)
@@ -26,14 +26,14 @@ class QuizTemplateRepository extends AbstractRepository
 
         $dbStmt->execute();
 
-        return $dbStmt->fetch();
+        return $dbStmt->fetch()['user_id'];
     }
 
-    public function getSelectedQuestions($quizid)
+    public function getSelectedQuestions($quizId)
     {
         $query = "SELECT * FROM quiztemplatequestiontemplate WHERE quiztemplate_id=:id";
         $dbStmt = $this->pdo->prepare($query);
-        $dbStmt->bindParam(':id', $quizid);
+        $dbStmt->bindParam(':id', $quizId);
 
         $dbStmt->execute();
         $rows = $dbStmt->fetchAll();
@@ -46,11 +46,11 @@ class QuizTemplateRepository extends AbstractRepository
         return $result;
     }
 
-    public function deleteQuestions($quizid)
+    public function deleteQuestions($quizId)
     {
         $query = "DELETE FROM quiztemplatequestiontemplate WHERE quiztemplate_id=:id";
         $dbStmt = $this->pdo->prepare($query);
-        $dbStmt->bindParam(':id', $quizid);
+        $dbStmt->bindParam(':id', $quizId);
 
         $dbStmt->execute();
     }
