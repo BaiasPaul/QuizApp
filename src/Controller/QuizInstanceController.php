@@ -9,12 +9,15 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
+use QuizApp\Entity\QuizInstance;
 use QuizApp\Service\QuizInstanceService;
 use QuizApp\Service\UserService;
+use QuizApp\Util\Paginator;
 
 class QuizInstanceController extends AbstractController
 {
 
+    const RESULTS_PER_PAGE = 5;
     private $quizInstanceService;
 
     /**
@@ -30,12 +33,21 @@ class QuizInstanceController extends AbstractController
 
     public function showCandidateQuizzes(Request $request, array $requestAttributes)
     {
-        $arguments['currentPage'] = (int)$request->getParameter('page');
-        $arguments['pages'] = $this->quizInstanceService->getQuizNumber($requestAttributes);
-        $arguments['username'] = $this->quizInstanceService->getName();
-        $arguments['quizzes'] = $this->quizInstanceService->getQuizzes($requestAttributes, $request->getParameter('page'));
+        $currentPage = (int)$this->quizInstanceService->getFromParameter('page', $request, 1);
+        $totalResults = (int)$this->quizInstanceService->getEntityNumberOfPagesByField(QuizInstance::class, []);
+        $quizzes = $this->quizInstanceService->getEntitiesByField(QuizInstance::class, [], $currentPage, self::RESULTS_PER_PAGE);
 
-        return $this->renderer->renderView("candidate-quiz-listing.phtml", $arguments);
+        $paginator = new Paginator($totalResults, $currentPage, self::RESULTS_PER_PAGE);
+        //to be removed after pr 009
+        $paginator->setTotalPages($totalResults, self::RESULTS_PER_PAGE);
+
+        return $this->renderer->renderView("candidate-quiz-listing.phtml", [
+//            'email' => $email,
+            'username' => $this->quizInstanceService->getName(),
+//            'dropdownRole' => $role,
+            'paginator' => $paginator,
+            'quizzes' => $quizzes,
+        ]);
     }
 
     public function showCandidateQuizListing(Request $request, array $requestAttributes)

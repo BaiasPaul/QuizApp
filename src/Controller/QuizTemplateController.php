@@ -39,6 +39,10 @@ class QuizTemplateController extends AbstractController
 
     public function showQuizzes(Request $request, array $requestAttributes)
     {
+        $redirectToLogin = $this->verifySessionUserName($this->quizTemplateService->getSession());
+        if ($redirectToLogin){
+            return $redirectToLogin;
+        }
         $arguments['currentPage'] = (int)$request->getParameter('page');
         $arguments['pages'] = $this->quizTemplateService->getQuizNumber($requestAttributes);
         $arguments['username'] = $this->quizTemplateService->getName();

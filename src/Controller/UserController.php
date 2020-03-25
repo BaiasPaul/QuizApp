@@ -49,10 +49,14 @@ class UserController extends AbstractController
      *
      * @param Request $request
      * @param array $requestAttributes
-     * @return Response
+     * @return Message|MessageInterface
      */
     public function showUsers(Request $request, array $requestAttributes)
     {
+        $redirectToLogin = $this->verifySessionUserName($this->userService->getSession());
+        if ($redirectToLogin) {
+            return $redirectToLogin;
+        }
         $resultsPerPage = 5;
         $email = $this->userService->getFromParameter('email', $request, "");
         $role = $this->userService->getFromParameter('role', $request, "");
@@ -65,7 +69,7 @@ class UserController extends AbstractController
 
         return $this->renderer->renderView("admin-users-listing.phtml", [
             'email' => $email,
-            'username'=>$this->userService->getName(),
+            'username' => $this->userService->getName(),
             'dropdownRole' => $role,
             'paginator' => $paginator,
             'users' => $users,
@@ -79,10 +83,10 @@ class UserController extends AbstractController
      */
     public function showUserDetails()
     {
-        $params['username'] = $this->userService->getName();
-        $params['path'] = 'create';
-
-        return $this->renderer->renderView("admin-user-details.phtml", $params);
+        return $this->renderer->renderView("admin-user-details.phtml", [
+            'username' => $this->userService->getName(),
+            'path' => 'create'
+        ]);
     }
 
     /**
@@ -114,10 +118,14 @@ class UserController extends AbstractController
     public function showUserDetailsEdit(Request $request, array $requestAttributes)
     {
         $params = $this->userService->getParams($requestAttributes['id']);
-        $params['username'] = $this->userService->getName();
-        $params['path'] = 'edit/' . $params['id'];
 
-        return $this->renderer->renderView("admin-user-details.phtml", $params);
+        return $this->renderer->renderView("admin-user-details.phtml", [
+            'name' => $params['name'],
+            'email'=>$params['email'],
+            'role'=>$params['role'],
+            'username' => $this->userService->getName(),
+            'path' => 'edit/' . $params['id']
+        ]);
     }
 
     /**
@@ -158,58 +166,6 @@ class UserController extends AbstractController
 
     public function showExceptionsPage()
     {
-        return $this->renderer->renderView("exceptions-page.phtml", ['errorMessage'=>'Route not found!']);
-    }
-
-    /**
-     * Will be moved in another issue
-     *
-     * @param Request $request
-     * @param array $requestAttributes
-     * @return Response
-     */
-    public function showResults(Request $request, array $requestAttributes)
-    {
-        $arguments['currentPage'] = (int)$request->getParameter('page');
-        $arguments['pages'] = $this->userService->getQuizzesNumber($requestAttributes);
-        $arguments['username'] = $this->userService->getName();
-        $arguments['quizzes'] = $this->userService->getQuestionsInfo($request->getParameter('page'));
-
-        return $this->renderer->renderView("admin-results-listing.phtml", $arguments);
-    }
-
-    /**
-     * Will be moved in another issue
-     *
-     * @param Request $request
-     * @param array $requestAttributes
-     * @return Response
-     */
-    public function showQuizzesResults(Request $request, array $requestAttributes)
-    {
-        $arguments['username'] = $this->userService->getName();
-        $questions = $this->userService->getQuestionsAnswered($requestAttributes['id']);
-        $arguments['questions'] = $questions;
-
-        return $this->renderer->renderView("admin-results.phtml", $arguments);
-    }
-
-    /**
-     * Will be moved in another issue
-     *
-     * @param Request $request
-     * @param array $requestAttributes
-     * @return Response
-     */
-    public function saveScore(Request $request, array $requestAttributes)
-    {
-        $arguments['currentPage'] = (int)$request->getParameter('page');
-        $arguments['pages'] = $this->userService->getQuizzesNumber($requestAttributes);
-        $arguments['username'] = $this->userService->getName();
-        $arguments['quizzes'] = $this->userService->getQuestionsInfo($request->getParameter('page'));
-        $score = $request->getParameter('score');
-        $this->userService->setScore($score);
-
-        return $this->renderer->renderView("admin-results-listing.phtml", $arguments);
+        return $this->renderer->renderView("exceptions-page.phtml", ['errorMessage' => 'Route not found!']);
     }
 }

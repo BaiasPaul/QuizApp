@@ -1,8 +1,6 @@
 <?php
 
-
 namespace QuizApp\Service;
-
 
 use Framework\Contracts\SessionInterface;
 use Framework\Http\Request;
@@ -37,17 +35,17 @@ class AbstractService
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->session->get('name');
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->session->get('id');
     }
@@ -58,7 +56,7 @@ class AbstractService
      * @param string $key
      * @param Request $request
      * @param null $default
-     * @return mixed|null
+     * @return array|int
      */
     public function getFromParameter(string $key, Request $request, $default = null)
     {
@@ -89,5 +87,13 @@ class AbstractService
     public function getEntitiesByField($class, $fields, $currentPage, $resultsPerPage): array
     {
         return $this->repoManager->getRepository($class)->getEntitiesByField($fields, ($currentPage - 1) * $resultsPerPage, $resultsPerPage);
+    }
+
+    /**
+     * @return SessionInterface
+     */
+    public function getSession()
+    {
+        return $this->session;
     }
 }

@@ -57,7 +57,7 @@
             </tr>
             </thead>
             <tbody>
-                <?php foreach ($arguments['quizzes'] as $quiz): ?>
+                <?php foreach ($quizzes as $quiz): ?>
                     <tr>
                         <td scope="row"><?php echo $quiz->getName(); ?></td>
                         <td class="text-center">
@@ -72,21 +72,16 @@
     <!--Pagination block-->
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-            <li class="page-item <?php if ($arguments['currentPage'] === 1) echo 'disabled'; ?>">
-                <a class="page-link" href="?page=<?php echo $arguments['currentPage']-1;?>" >Previous</a>
+            <li class="page-item <?php if ($paginator->getCurrentPage() === 1) echo 'disabled'; ?>">
+                <a class="page-link" href="?page=<?php echo $paginator->getPreviousPage();?>" >Previous</a>
             </li>
-            <?php
-                $pages = $arguments['pages']['entitiesNumber'] / 5;
-                if ($arguments['pages']['entitiesNumber'] % 5 > 0){
-                    $pages += 1;
-                }
-                for ($pageNumber = 1; $pageNumber <= $pages; $pageNumber++): ?>
-                    <li class="page-item <?php if ($arguments['currentPage'] === $pageNumber) echo 'active'; ?>">
-                        <a class="page-link" href="?page=<?php echo $pageNumber; ?>"><?php echo $pageNumber; ?></a>
-                    </li>
+            <?php for ($pageNumber = 1; $pageNumber <= $paginator->getTotalPages(); $pageNumber++): ?>
+                <li class="page-item <?php if ($paginator->getCurrentPage() === $pageNumber) echo 'active'; ?>">
+                    <a class="page-link" href="?page=<?php echo $pageNumber; ?>"><?php echo $pageNumber; ?></a>
+                </li>
             <?php endfor; ?>
-            <li class="page-item <?php if ($arguments['currentPage'] === (int)$pages) echo 'disabled'; ?>">
-                <a class="page-link" href="?page=<?php echo $arguments['currentPage']+1;?>">Next</a>
+            <li class="page-item <?php if ($paginator->getCurrentPage() ==  $paginator->getTotalPages()) echo 'disabled'; ?>">
+                <a class="page-link" href="?page=<?php echo $paginator->getNextPage();?>">Next</a>
             </li>
         </ul>
     </nav>

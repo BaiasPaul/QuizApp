@@ -38,11 +38,6 @@ class QuizTemplateService extends AbstractService
         }
     }
 
-    public function getEmptyParams()
-    {
-        return ['name' => '', 'description' => ''];
-    }
-
     public function getQuizNumber(array $filters)
     {
         return $this->repoManager->getRepository(QuizTemplate::class)->getNumberOfEntities($filters);

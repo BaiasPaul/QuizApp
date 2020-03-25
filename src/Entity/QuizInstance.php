@@ -46,7 +46,7 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getId()
     {
@@ -54,7 +54,7 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getScore()
     {
@@ -62,7 +62,7 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @param mixed $score
+     * @param int $score
      */
     public function setScore($score): void
     {
@@ -70,7 +70,7 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getName()
     {
@@ -78,7 +78,7 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @param mixed $name
+     * @param string $name
      */
     public function setName($name): void
     {
@@ -86,7 +86,7 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getIsSaved()
     {
@@ -94,11 +94,19 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @param mixed $isSaved
+     * @param int $isSaved
      */
     public function setIsSaved($isSaved): void
     {
         $this->isSaved = $isSaved;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUserId()
+    {
+        return $this->getRepository()->getUserId($this->getId());
     }
 
 }

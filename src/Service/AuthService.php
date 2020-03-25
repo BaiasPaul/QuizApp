@@ -19,7 +19,7 @@ class AuthService extends AbstractService
      * @return EntityInterface|null
      * @throws UserNotFoundException
      */
-    public function authenticate(string $email, string $password)
+    public function authenticate(string $email, string $password): EntityInterface
     {
         $filters = ['email' => $email, 'password' => md5($password)];
         $user =  $this->repoManager->getRepository(User::class)->findOneBy($filters);
@@ -34,7 +34,7 @@ class AuthService extends AbstractService
         return $user;
     }
 
-    public function logout()
+    public function logout(): void
     {
         $this->session->destroy();
     }

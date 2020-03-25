@@ -98,9 +98,7 @@ class AuthController extends AbstractController
      */
     public function showAdminDashboard()
     {
-        $name = ['username' => $this->authService->getName()];
-
-        return $this->renderer->renderView("admin-dashboard.phtml", $name);
+        return $this->renderer->renderView("admin-dashboard.phtml", ['username' => $this->authService->getName()]);
     }
 
 }

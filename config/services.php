@@ -6,6 +6,7 @@ use QuizApp\Controller\QuestionInstanceController;
 use QuizApp\Controller\QuestionTemplateController;
 use QuizApp\Controller\QuizInstanceController;
 use QuizApp\Controller\QuizTemplateController;
+use QuizApp\Controller\ResultController;
 use QuizApp\Controller\UserController;
 use Framework\Contracts\DispatcherInterface;
 use Framework\Contracts\RendererInterface;
@@ -35,6 +36,7 @@ use QuizApp\Service\QuestionInstanceService;
 use QuizApp\Service\QuestionTemplateService;
 use QuizApp\Service\QuizInstanceService;
 use QuizApp\Service\QuizTemplateService;
+use QuizApp\Service\ResultService;
 use QuizApp\Service\UserService;
 use ReallyOrm\Hydrator\HydratorInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
@@ -130,6 +132,10 @@ foreach ($container->findTaggedServiceIds('repository') as $id => $value) {
 $container->register(AppMessageManager::class, AppMessageManager::class)
     ->addArgument(new Reference(SessionInterface::class));
 
+$container->register(ResultService::class, ResultService::class)
+    ->addArgument(new Reference(SessionInterface::class))
+    ->addArgument(new Reference(RepositoryManagerInterface::class));
+
 $container->register(QuizTemplateService::class, QuizTemplateService::class)
     ->addArgument(new Reference(SessionInterface::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class));
@@ -163,6 +169,11 @@ $baseViewPath = $config['renderer'][Renderer::CONFIG_KEY_BASE_VIEW_PATH];
 $container->setParameter('baseViewPath', $baseViewPath);
 $container->register(RendererInterface::class, Renderer::class)
     ->addArgument('%baseViewPath%');
+
+$container->register(ResultController::class, ResultController::class)
+    ->addArgument(new Reference(RendererInterface::class))
+    ->addArgument(new Reference(ResultService::class))
+    ->addTag('controller');
 
 $container->register(QuizTemplateController::class, QuizTemplateController::class)
     ->addArgument(new Reference(RendererInterface::class))

@@ -22,7 +22,7 @@ class QuestionTemplateService extends AbstractService
      * @param $type
      * @param $answerText
      */
-    public function saveQuestion($text, $type, $answerText)
+    public function saveQuestion($text, $type, $answerText): void
     {
         //create a new QuestionTemplate with the specified attributes
         $question = new QuestionTemplate();
@@ -54,7 +54,7 @@ class QuestionTemplateService extends AbstractService
      * @param $type
      * @param $answerText
      */
-    public function editQuestion($id, $text, $type, $answerText)
+    public function editQuestion($id, $text, $type, $answerText): void
     {
         $question = $this->repoManager->getRepository(QuestionTemplate::class)->find($id);
         $question->setText($text);
@@ -78,7 +78,7 @@ class QuestionTemplateService extends AbstractService
      * @param $id
      * @return array
      */
-    public function getParams($id)
+    public function getParams($id): array
     {
         $question = $this->repoManager->getRepository(QuestionTemplate::class)->find($id);
         $answer = $this->repoManager->getRepository(AnswerTemplate::class)->findOneBy(['questiontemplate_id' => $id]);
@@ -92,7 +92,7 @@ class QuestionTemplateService extends AbstractService
      * @param $id
      * @return bool
      */
-    public function deleteQuestion($id)
+    public function deleteQuestion($id): bool
     {
         $question = $this->repoManager->getRepository(QuestionTemplate::class)->find($id);
 
