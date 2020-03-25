@@ -7,7 +7,7 @@ use ReallyOrm\Repository\AbstractRepository;
 
 class QuizTemplateRepository extends AbstractRepository
 {
-    public function getNumberOfQuestions(int $id)
+    public function getNumberOfQuestions(int $id): int
     {
         $query = "SELECT count(*) as entitiesNumber FROM quiztemplatequestiontemplate WHERE quiztemplate_id=:id";
         $dbStmt = $this->pdo->prepare($query);
@@ -15,10 +15,10 @@ class QuizTemplateRepository extends AbstractRepository
 
         $dbStmt->execute();
 
-        return $dbStmt->fetch();
+        return $dbStmt->fetch()['entitiesNumber'];
     }
 
-    public function getUserId($id)
+    public function getUserId($id): int
     {
         $query = "SELECT user_id FROM quiztemplate WHERE id=:id";
         $dbStmt = $this->pdo->prepare($query);
@@ -26,14 +26,14 @@ class QuizTemplateRepository extends AbstractRepository
 
         $dbStmt->execute();
 
-        return $dbStmt->fetch();
+        return $dbStmt->fetch()['user_id'];
     }
 
-    public function getSelectedQuestions($quizid)
+    public function getSelectedQuestions($quizId): array
     {
         $query = "SELECT * FROM quiztemplatequestiontemplate WHERE quiztemplate_id=:id";
         $dbStmt = $this->pdo->prepare($query);
-        $dbStmt->bindParam(':id', $quizid);
+        $dbStmt->bindParam(':id', $quizId);
 
         $dbStmt->execute();
         $rows = $dbStmt->fetchAll();
@@ -46,11 +46,11 @@ class QuizTemplateRepository extends AbstractRepository
         return $result;
     }
 
-    public function deleteQuestions($quizid)
+    public function deleteQuestions($quizId): void
     {
         $query = "DELETE FROM quiztemplatequestiontemplate WHERE quiztemplate_id=:id";
         $dbStmt = $this->pdo->prepare($query);
-        $dbStmt->bindParam(':id', $quizid);
+        $dbStmt->bindParam(':id', $quizId);
 
         $dbStmt->execute();
     }

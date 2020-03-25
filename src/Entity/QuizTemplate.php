@@ -72,21 +72,27 @@ class QuizTemplate extends AbstractEntity
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getNumberOfQuestions()
+    /**
+     * @return int
+     */
+    public function getNumberOfQuestions(): int
     {
-       return $this->getRepository()->getNumberOfQuestions($this->getId())['entitiesNumber'];
+       return $this->getRepository()->getNumberOfQuestions($this->getId());
     }
 
-    public function getUserId()
+    /**
+     * @return int
+     */
+    public function getUserId(): int
     {
-        return $this->getRepository()->getUserId($this->getId())['user_id'];
+        return $this->getRepository()->getUserId($this->getId());
     }
 
 }

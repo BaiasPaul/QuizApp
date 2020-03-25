@@ -63,19 +63,21 @@
                                 <?php if (isset($dropdownUserId) && $dropdownUserId === '') echo 'All'; else if(isset($dropdownUserId)) echo ucfirst($dropdownUserId); ?>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                <a class="dropdown-item" href="/admin-quizzes-listing?userId=candidate&email=<?php echo $email;?>">Candidate</a>
-                                <a class="dropdown-item" href="/admin-quizzes-listing?userId=admin&email=<?php echo $email;?>">Admin</a>
-                                <a class="dropdown-item" href="/admin-quizzes-listing?userId=&email=<?php echo $email;?>">All</a>
+                                <?php foreach ($users as $user): ?>
+                                    <a class="dropdown-item" href="/admin-quizzes-listing?userId=<?php echo $user->getId();?>&quizName=<?php echo $quizName;?>"><?php echo $user->getId();?></a>
+                                <?php endforeach; ?>
+                                <a class="dropdown-item" href="/admin-quizzes-listing?userId=&quizName=<?php echo $quizName;?>">All</a>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="col-12 col-md-6">
-                <form action="">
+                <form method="GET" action="/admin-quizzes-listing" >
+                    <input type="hidden" name="userId" value="<?php echo $dropdownUserId;?>" />
                     <label for="quizSearch">Quiz name search</label>
                     <div class="input-group">
-                        <input type="text" id="quizSearch" class="form-control" placeholder="">
+                        <input name="quizName" type="text" id="quizSearch" class="form-control" placeholder="" value="<?php echo $quizName;?>">
                         <div class="input-group-append">
                             <button class="btn btn-secondary" type="submit">
                                 <i class="fa fa-search"></i>
@@ -147,15 +149,15 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
                 <li class="page-item <?php if ($paginator->getCurrentPage() === 1) echo 'disabled'; ?>">
-                    <a class="page-link" href="?page=<?php echo $paginator->getPreviousPage();?>&email=<?php echo $email;?>&role=<?php echo $dropdownUserId;?>" >Previous</a>
+                    <a class="page-link" href="?page=<?php echo $paginator->getPreviousPage();?>&quizName=<?php echo $quizName;?>&userId=<?php echo $dropdownUserId;?>" >Previous</a>
                 </li>
                 <?php for ($pageNumber = 1; $pageNumber <= $paginator->getTotalPages(); $pageNumber++): ?>
                     <li class="page-item <?php if ($paginator->getCurrentPage() === $pageNumber) echo 'active'; ?>">
-                        <a class="page-link" href="?page=<?php echo $pageNumber; ?>&email=<?php echo $email;?>&role=<?php echo $dropdownUserId;?>"><?php echo $pageNumber; ?></a>
+                        <a class="page-link" href="?page=<?php echo $pageNumber; ?>&quizName=<?php echo $quizName;?>&userId=<?php echo $dropdownUserId;?>"><?php echo $pageNumber; ?></a>
                     </li>
                 <?php endfor; ?>
-                <li class="page-item <?php if ($paginator->getCurrentPage() ==  $paginator->getTotalPages()) echo 'disabled'; ?>">
-                    <a class="page-link" href="?page=<?php echo $paginator->getNextPage();?>&email=<?php echo $email;?>&role=<?php echo $dropdownUserId;?>">Next</a>
+                <li class="page-item <?php if ($paginator->getCurrentPage() ===  $paginator->getTotalPages()) echo 'disabled'; ?>">
+                    <a class="page-link" href="?page=<?php echo $paginator->getNextPage();?>&quizName=<?php echo $quizName;?>&userId=<?php echo $dropdownUserId;?>">Next</a>
                 </li>
             </ul>
         </nav>

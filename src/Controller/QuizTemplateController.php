@@ -7,11 +7,15 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
+use QuizApp\Entity\QuizTemplate;
+use QuizApp\Entity\User;
 use QuizApp\Service\QuizTemplateService;
+use QuizApp\Util\Paginator;
 
 class QuizTemplateController extends AbstractController
 {
     private $quizTemplateService;
+    const RESULTS_PER_PAGE = 5;
 
     /**
      * UserController constructor.
@@ -39,17 +43,22 @@ class QuizTemplateController extends AbstractController
 
     public function showQuizzes(Request $request, array $requestAttributes)
     {
-        $redirectToLogin = $this->verifySessionUserName($this->quizTemplateService->getSession());
-        if ($redirectToLogin){
-            return $redirectToLogin;
-        }
-        $arguments['currentPage'] = (int)$request->getParameter('page');
-        $arguments['pages'] = $this->quizTemplateService->getQuizNumber($requestAttributes);
-        $arguments['username'] = $this->quizTemplateService->getName();
-        $arguments['quizzes'] = $this->quizTemplateService->getQuizzes($requestAttributes, $request->getParameter('page'));
-//        $arguments['quizUser'] = $this->quizTemplateService->getQuizUser();
+        $quizName = $this->quizTemplateService->getFromParameter('quizName', $request, "");
+        $userId = $this->quizTemplateService->getFromParameter('userId', $request, "");
+        $currentPage = (int)$this->quizTemplateService->getFromParameter('page', $request, 1);
+        $totalResults = (int)$this->quizTemplateService->getEntityNumberOfPagesByField(QuizTemplate::class, ['name' => $quizName, 'user_id' => $userId]);
+        $quizzes = $this->quizTemplateService->getEntitiesByField(QuizTemplate::class, ['name' => $quizName, 'user_id' => $userId], $currentPage, self::RESULTS_PER_PAGE);
+        $users = $this->quizTemplateService->getEntitiesByField(User::class, ['role' => 'Admin'], 1, 99999999);
+        $paginator = new Paginator($totalResults, $currentPage, self::RESULTS_PER_PAGE);
 
-        return $this->renderer->renderView("admin-quizzes-listing.phtml", $arguments);
+        return $this->renderer->renderView("admin-quizzes-listing.phtml", [
+            'quizName' => $quizName,
+            'username'=>$this->quizTemplateService->getName(),
+            'users'=>$users,
+            'dropdownUserId' => $userId,
+            'paginator' => $paginator,
+            'quizzes' => $quizzes,
+        ]);
     }
 
     public function editQuiz(Request $request, array $requestAttributes)
