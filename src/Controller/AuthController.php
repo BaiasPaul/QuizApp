@@ -58,7 +58,6 @@ class AuthController extends AbstractController
      */
     public function login(Request $request)
     {
-        $location = 'http://quizApp.com/';
         $body = Stream::createFromString("");
         $response = new Response($body, '1.1', 301);
 
@@ -71,14 +70,10 @@ class AuthController extends AbstractController
             //the messageManager holds all the errorMessages that will be displayed in the view
             $this->messageManager->addErrorMessage($e->getMessage());
 
-            return $response->withHeader('Location', $location);
-        }
-        $location .= strtolower($user->getRole());
-        if ($user->getRole() === 'candidate'){
-            $location .= '?page=1';
+            return $response->withHeader('Location', "/");
         }
 
-        return $response->withHeader('Location', $location);
+        return $response->withHeader('Location', "/". strtolower($user->getRole()));
     }
 
     /**
@@ -90,7 +85,7 @@ class AuthController extends AbstractController
         $body = Stream::createFromString("");
         $response = new Response($body, '1.1', '301');
 
-        return $response->withHeader('Location', 'http://quizApp.com/');
+        return $response->withHeader('Location', '/');
     }
 
     /**

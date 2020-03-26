@@ -52,7 +52,7 @@ class QuestionTemplateController extends AbstractController
         $body = Stream::createFromString("");
         $response = new Response($body, '1.1', 301);
 
-        return $response->withHeader('Location', 'http://quizApp.com/admin-questions-listing');
+        return $response->withHeader('Location', '/admin-questions-listing');
     }
 
     /**
@@ -100,7 +100,7 @@ class QuestionTemplateController extends AbstractController
         $body = Stream::createFromString("");
         $response = new Response($body, '1.1', 301);
 
-        return $response->withHeader('Location', 'http://quizApp.com/admin-questions-listing');
+        return $response->withHeader('Location', '/admin-questions-listing');
     }
 
     /**
@@ -114,11 +114,11 @@ class QuestionTemplateController extends AbstractController
     {
         $this->questionTemplateService->deleteQuestion($requestAttributes['id']);
 
-        $location = 'Location: http://quizApp.com/admin-questions-listing';
+        $location = 'Location: /admin-questions-listing';
         $body = Stream::createFromString("");
         $response = new Response($body, '1.1', 301);
 
-        return $response->withHeader('Location', 'http://quizApp.com/candidate-results');
+        return $response->withHeader('Location', '/candidate-results');
     }
 
     /**

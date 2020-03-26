@@ -10,6 +10,7 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
 use QuizApp\Entity\QuizInstance;
+use QuizApp\Entity\QuizTemplate;
 use QuizApp\Service\QuizInstanceService;
 use QuizApp\Service\UserService;
 use QuizApp\Util\Paginator;
@@ -33,18 +34,17 @@ class QuizInstanceController extends AbstractController
 
     public function showCandidateQuizzes(Request $request, array $requestAttributes)
     {
+        $redirectToLogin = $this->verifySessionUserName($this->quizInstanceService->getSession());
+        if ($redirectToLogin) {
+            return $redirectToLogin;
+        }
         $currentPage = (int)$this->quizInstanceService->getFromParameter('page', $request, 1);
-        $totalResults = (int)$this->quizInstanceService->getEntityNumberOfPagesByField(QuizInstance::class, []);
-        $quizzes = $this->quizInstanceService->getEntitiesByField(QuizInstance::class, [], $currentPage, self::RESULTS_PER_PAGE);
-
+        $totalResults = (int)$this->quizInstanceService->getEntityNumberOfPagesByField(QuizTemplate::class, []);
+        $quizzes = $this->quizInstanceService->getEntitiesByField(QuizTemplate::class, [], $currentPage, self::RESULTS_PER_PAGE);
         $paginator = new Paginator($totalResults, $currentPage, self::RESULTS_PER_PAGE);
-        //to be removed after pr 009
-        $paginator->setTotalPages($totalResults, self::RESULTS_PER_PAGE);
 
         return $this->renderer->renderView("candidate-quiz-listing.phtml", [
-//            'email' => $email,
             'username' => $this->quizInstanceService->getName(),
-//            'dropdownRole' => $role,
             'paginator' => $paginator,
             'quizzes' => $quizzes,
         ]);
@@ -57,7 +57,7 @@ class QuizInstanceController extends AbstractController
         $body = Stream::createFromString("");
         $response = new Response($body, '1.1', 301);
 
-        return $response->withHeader('Location', 'http://quizApp.com/candidate-quiz-page?question=1');
+        return $response->withHeader('Location', '/candidate-quiz-page?question=1');
     }
 
     public function showQuestions(Request $request, array $requestAttributes){

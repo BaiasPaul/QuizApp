@@ -58,6 +58,9 @@ class AppMessageManager
      */
     public function getErrorMessagesCount(): int
     {
+        if (!$this->session->get('errorMessages')){
+            return 0;
+        }
         return count($this->session->get('errorMessages'));
     }
 

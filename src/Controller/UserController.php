@@ -105,7 +105,7 @@ class UserController extends AbstractController
         $body = Stream::createFromString("");
         $response = new Response($body, '1.1', 301);
 
-        return $response->withHeader('Location', 'http://quizApp.com/admin-users-listing');
+        return $response->withHeader('Location', '/admin-users-listing');
     }
 
     /**
@@ -145,7 +145,7 @@ class UserController extends AbstractController
         $body = Stream::createFromString("");
         $response = new Response($body, '1.1', 301);
 
-        return $response->withHeader('Location', 'http://quizApp.com/admin-users-listing');
+        return $response->withHeader('Location', '/admin-users-listing');
     }
 
     /**
@@ -161,7 +161,7 @@ class UserController extends AbstractController
         $body = Stream::createFromString("");
         $response = new Response($body, '1.1', 301);
 
-        return $response->withHeader('Location', 'http://quizApp.com/admin-users-listing');
+        return $response->withHeader('Location', '/admin-users-listing');
     }
 
     public function showExceptionsPage()
