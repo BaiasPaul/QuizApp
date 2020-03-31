@@ -82,7 +82,8 @@ class ResultController extends AbstractController
 
         return $this->renderer->renderView("admin-results.phtml", [
             'username'=>$this->resultService->getName(),
-            'questions'=>$questions
+            'questions'=>$questions,
+            'quizId'=>$requestAttributes['id']
         ]);
     }
 
