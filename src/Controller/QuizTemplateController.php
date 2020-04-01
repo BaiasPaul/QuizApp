@@ -42,6 +42,8 @@ class QuizTemplateController extends AbstractController
     }
 
     /**
+     * Redirects to the Admin quizzes listing after creating a quiz
+     *
      * @param Request $request
      * @return Message|MessageInterface
      */
@@ -60,6 +62,8 @@ class QuizTemplateController extends AbstractController
     }
 
     /**
+     * Return a Response with all questions paginated
+     *
      * @param Request $request
      * @param array $requestAttributes
      * @return Response
@@ -86,6 +90,8 @@ class QuizTemplateController extends AbstractController
     }
 
     /**
+     * Redirects to the Admin quizzes listing after editing a quiz
+     *
      * @param Request $request
      * @param array $requestAttributes
      * @return Message|MessageInterface
@@ -103,6 +109,8 @@ class QuizTemplateController extends AbstractController
     }
 
     /**
+     * Redirects to the Admin quizzes listing after deleting a quiz
+     *
      * @param Request $request
      * @param array $requestAttributes
      * @return Message|MessageInterface
@@ -117,6 +125,8 @@ class QuizTemplateController extends AbstractController
     }
 
     /**
+     * Return a Response with a pre-filled edit form
+     *
      * @param Request $request
      * @param array $requestAttributes
      * @return Response
@@ -139,6 +149,8 @@ class QuizTemplateController extends AbstractController
     }
 
     /**
+     * Return a Response with a create form
+     *
      * @return Response
      */
     public function showQuizDetails(): Response

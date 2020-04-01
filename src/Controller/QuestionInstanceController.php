@@ -11,9 +11,15 @@ use Psr\Http\Message\MessageInterface;
 use QuizApp\Service\QuestionInstanceService;
 use QuizApp\Service\QuestionTemplateService;
 
-//TODO add comments
+/**
+ * Class QuestionInstanceController
+ * @package QuizApp\Controller
+ */
 class QuestionInstanceController extends AbstractController
 {
+    /**
+     * @var QuestionInstanceService
+     */
     private $questionInstanceService;
 
     /**
@@ -27,6 +33,13 @@ class QuestionInstanceController extends AbstractController
         $this->questionInstanceService = $questionInstanceService;
     }
 
+    /**
+     * Redirect to the Candidate quiz page with the next question shown
+     *
+     * @param Request $request
+     * @param array $requestAttributes
+     * @return MessageInterface
+     */
     public function saveAnswer(Request $request, array $requestAttributes): MessageInterface
     {
         $answer = $request->getParameter('answer');
@@ -38,6 +51,13 @@ class QuestionInstanceController extends AbstractController
         return $response->withHeader('Location', '/candidate-quiz-page?question=' . ($questionNumber + 1));
     }
 
+    /**
+     * Redirects to the Candidate quiz page with the previous question shown
+     *
+     * @param Request $request
+     * @param array $requestAttributes
+     * @return MessageInterface
+     */
     public function back(Request $request, array $requestAttributes): MessageInterface
     {
         $questionNumber = $request->getParameter('question');
@@ -47,6 +67,13 @@ class QuestionInstanceController extends AbstractController
         return $response->withHeader('Location', '/candidate-quiz-page?question=' . ($questionNumber - 1));
     }
 
+    /**
+     * redirects to the Candidate results page after saving the quiz
+     *
+     * @param Request $request
+     * @param array $requestAttributes
+     * @return MessageInterface
+     */
     public function save(Request $request, array $requestAttributes): MessageInterface
     {
         $answer = $request->getParameter('answer');
@@ -57,6 +84,9 @@ class QuestionInstanceController extends AbstractController
         return $response->withHeader('Location', '/candidate-results');
     }
 
+    /**
+     * @return Response
+     */
     public function showResults(): Response
     {
         //TODO modify username after injecting the Session class in Controller
@@ -66,6 +96,9 @@ class QuestionInstanceController extends AbstractController
         ]);
     }
 
+    /**
+     * @return Response
+     */
     public function showSuccessPage(): Response
     {
         //TODO modify username after injecting the Session class in Controller

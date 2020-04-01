@@ -17,10 +17,18 @@ use QuizApp\Service\UserService;
 use QuizApp\Util\Paginator;
 
 //TODO add comments
+
+/**
+ * Class QuizInstanceController
+ * @package QuizApp\Controller
+ */
 class QuizInstanceController extends AbstractController
 {
 
     const RESULTS_PER_PAGE = 5;
+    /**
+     * @var QuizInstanceService
+     */
     private $quizInstanceService;
 
     /**
@@ -34,6 +42,13 @@ class QuizInstanceController extends AbstractController
         $this->quizInstanceService = $questionInstanceService;
     }
 
+    /**
+     * Returns a Response with quizzes paginated
+     *
+     * @param Request $request
+     * @param array $requestAttributes
+     * @return MessageInterface
+     */
     public function showCandidateQuizzes(Request $request, array $requestAttributes): MessageInterface
     {
         //TODO modify after injecting the Session class in Controller
@@ -54,6 +69,13 @@ class QuizInstanceController extends AbstractController
         ]);
     }
 
+    /**
+     * Redirect to the Candidate quiz page after creating an instance of a quiz
+     *
+     * @param Request $request
+     * @param array $requestAttributes
+     * @return MessageInterface
+     */
     public function showCandidateQuizListing(Request $request, array $requestAttributes): MessageInterface
     {
         $this->quizInstanceService->setQuizId($requestAttributes['id']);
@@ -64,6 +86,11 @@ class QuizInstanceController extends AbstractController
         return $response->withHeader('Location', '/candidate-quiz-page?question=1');
     }
 
+    /**
+     * @param Request $request
+     * @param array $requestAttributes
+     * @return MessageInterface
+     */
     public function showQuestions(Request $request, array $requestAttributes): MessageInterface
     {
         //TODO modify after injecting the Session class in Controller

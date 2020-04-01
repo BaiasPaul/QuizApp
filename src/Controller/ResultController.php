@@ -21,7 +21,7 @@ use QuizApp\Util\Paginator;
 class ResultController extends AbstractController
 {
     /**
-     * @var
+     * @var ResultService
      */
     private $resultService;
     const RESULTS_PER_PAGE = 5;
@@ -38,7 +38,7 @@ class ResultController extends AbstractController
     }
 
     /**
-     * Will be moved in another issue
+     * Returns a Response with paginated results
      *
      * @param Request $request
      * @param array $requestAttributes
@@ -64,7 +64,7 @@ class ResultController extends AbstractController
     }
 
     /**
-     * Will be moved in another issue
+     * Returns a Response with all the questions answered
      *
      * @param Request $request
      * @param array $requestAttributes
@@ -82,7 +82,7 @@ class ResultController extends AbstractController
     }
 
     /**
-     * Will be moved in another issue
+     * Redirects to the Admin results listing page after setting a score to a quiz
      *
      * @param Request $request
      * @param array $requestAttributes

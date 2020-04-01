@@ -77,6 +77,8 @@ class AuthController extends AbstractController
     }
 
     /**
+     * Destroys session and redirect to login page
+     *
      * @return Message|MessageInterface
      */
     public function logout(): MessageInterface
@@ -95,7 +97,9 @@ class AuthController extends AbstractController
     public function showAdminDashboard(): Response
     {
         //TODO modify the array after injecting the Session class in Controller
-        return $this->renderer->renderView("admin-dashboard.phtml", ['username' => $this->authService->getName()]);
+        return $this->renderer->renderView("admin-dashboard.phtml", [
+            'username' => $this->authService->getName()
+        ]);
     }
 
 }
