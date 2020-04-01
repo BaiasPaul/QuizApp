@@ -14,6 +14,7 @@ use QuizApp\Entity\User;
 use QuizApp\Service\UserService;
 use QuizApp\Util\Paginator;
 
+//TODO add return types
 /**
  * Class UserController
  * @package QuizApp\Controllers
@@ -53,6 +54,7 @@ class UserController extends AbstractController
      */
     public function showUsers(Request $request, array $requestAttributes)
     {
+        //TODO modify after injecting the Session class in Controller
         $redirectToLogin = $this->verifySessionUserName($this->userService->getSession());
         if ($redirectToLogin) {
             return $redirectToLogin;
@@ -60,6 +62,7 @@ class UserController extends AbstractController
         $resultsPerPage = 5;
         $email = $this->userService->getFromParameter('email', $request, "");
         $role = $this->userService->getFromParameter('role', $request, "");
+        //TODO remove casts and fix methods
         $currentPage = (int)$this->userService->getFromParameter('page', $request, 1);
         $totalResults = (int)$this->userService->getEntityNumberOfPagesByField(User::class, ['email' => $email, 'role' => $role]);
         $users = $this->userService->getEntitiesByField(User::class, ['email' => $email, 'role' => $role], $currentPage, $resultsPerPage);
@@ -67,6 +70,7 @@ class UserController extends AbstractController
         $paginator = new Paginator($totalResults, $currentPage, $resultsPerPage);
         $paginator->setTotalPages($totalResults, $resultsPerPage);
 
+        //TODO modify after injecting the Session class in Controller
         return $this->renderer->renderView("admin-users-listing.phtml", [
             'email' => $email,
             'username' => $this->userService->getName(),
@@ -83,6 +87,7 @@ class UserController extends AbstractController
      */
     public function showUserDetails()
     {
+        //TODO modify after injecting the Session class in Controller
         return $this->renderer->renderView("admin-user-details.phtml", [
             'username' => $this->userService->getName(),
             'path' => 'create'
@@ -119,6 +124,7 @@ class UserController extends AbstractController
     {
         $params = $this->userService->getParams($requestAttributes['id']);
 
+        //TODO modify after injecting the Session class in Controller
         return $this->renderer->renderView("admin-user-details.phtml", [
             'name' => $params['name'],
             'email'=>$params['email'],

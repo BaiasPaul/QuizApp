@@ -13,6 +13,8 @@ use QuizApp\Exception\UserNotFoundException;
 use QuizApp\Service\AppMessageManager;
 use QuizApp\Service\AuthService;
 
+
+//TODO add return types
 /**
  * Class AuthController
  * @package QuizApp\Controllers
@@ -73,7 +75,7 @@ class AuthController extends AbstractController
             return $response->withHeader('Location', "/");
         }
 
-        return $response->withHeader('Location', "/". strtolower($user->getRole()));
+        return $response->withHeader('Location', "/" . strtolower($user->getRole()));
     }
 
     /**
@@ -81,6 +83,7 @@ class AuthController extends AbstractController
      */
     public function logout()
     {
+        //TODO move session destroy here after injecting the Session class in Controller
         $this->authService->logout();
         $body = Stream::createFromString("");
         $response = new Response($body, '1.1', '301');
@@ -93,6 +96,7 @@ class AuthController extends AbstractController
      */
     public function showAdminDashboard()
     {
+        //TODO modify the array after injecting the Session class in Controller
         return $this->renderer->renderView("admin-dashboard.phtml", ['username' => $this->authService->getName()]);
     }
 

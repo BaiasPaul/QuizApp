@@ -15,6 +15,7 @@ use QuizApp\Service\QuizInstanceService;
 use QuizApp\Service\UserService;
 use QuizApp\Util\Paginator;
 
+//TODO add comments and return types
 class QuizInstanceController extends AbstractController
 {
 
@@ -34,10 +35,12 @@ class QuizInstanceController extends AbstractController
 
     public function showCandidateQuizzes(Request $request, array $requestAttributes)
     {
+        //TODO modify after injecting the Session class in Controller
         $redirectToLogin = $this->verifySessionUserName($this->quizInstanceService->getSession());
         if ($redirectToLogin) {
             return $redirectToLogin;
         }
+        //TODO remove cast and modify methods to return the expected type
         $currentPage = (int)$this->quizInstanceService->getFromParameter('page', $request, 1);
         $totalResults = (int)$this->quizInstanceService->getEntityNumberOfPagesByField(QuizTemplate::class, []);
         $quizzes = $this->quizInstanceService->getEntitiesByField(QuizTemplate::class, [], $currentPage, self::RESULTS_PER_PAGE);
@@ -61,6 +64,8 @@ class QuizInstanceController extends AbstractController
     }
 
     public function showQuestions(Request $request, array $requestAttributes){
+        //TODO modify after injecting the Session class in Controller
+        //TODO move params in an array for renderView
         $questionNumber = $request->getParameter('question');
         $question = $this->quizInstanceService->getQuestion($questionNumber-1);
         $arguments['question'] = $question;

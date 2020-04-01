@@ -12,6 +12,7 @@ use Framework\Http\Stream;
 use QuizApp\Service\QuestionInstanceService;
 use QuizApp\Service\QuestionTemplateService;
 
+//TODO add comments and return types
 class QuestionInstanceController extends AbstractController
 {
     private $questionInstanceService;
@@ -59,6 +60,7 @@ class QuestionInstanceController extends AbstractController
 
     public function showResults()
     {
+        //TODO modify username after injecting the Session class in Controller
         return $this->renderer->renderView("candidate-results.phtml", [
             'username'=>$this->questionInstanceService->getName(),
             'questions'=>$this->questionInstanceService->getQuestionsAnswered()
@@ -67,6 +69,7 @@ class QuestionInstanceController extends AbstractController
 
     public function showSuccessPage()
     {
+        //TODO modify username after injecting the Session class in Controller
         return $this->renderer->renderView("quiz-success-page.phtml", [
             'username' => $this->questionInstanceService->getName()
         ]);

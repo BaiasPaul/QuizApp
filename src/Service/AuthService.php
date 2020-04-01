@@ -26,6 +26,7 @@ class AuthService extends AbstractService
         if (!$user){
             throw new UserNotFoundException('Email or Password incorrect !');
         }
+        //TODO modify after injecting the Session class in Controller
         $this->session->set('id', $user->getId());
         $this->session->set('name', $user->getName());
         $this->session->set('email', $user->getEmail());
@@ -34,6 +35,7 @@ class AuthService extends AbstractService
         return $user;
     }
 
+    //TODO remove after injecting the Session class in Controller
     public function logout(): void
     {
         $this->session->destroy();

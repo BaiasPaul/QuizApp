@@ -14,6 +14,8 @@ use QuizApp\Service\QuestionTemplateService;
 use QuizApp\Util\Paginator;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 
+
+//TODO add return types
 /**
  * Class QuestionTemplateController
  * @package QuizApp\Controllers
@@ -74,6 +76,7 @@ class QuestionTemplateController extends AbstractController
         $paginator = new Paginator($totalResults, $currentPage, $resultsPerPage);
         $paginator->setTotalPages($totalResults, $resultsPerPage);
 
+        //TODO username modify after injecting the Session class in Controller
         return $this->renderer->renderView("admin-questions-listing.phtml", [
             'text' => $text,
             'username'=>$this->questionTemplateService->getName(),
@@ -130,6 +133,8 @@ class QuestionTemplateController extends AbstractController
      */
     public function showQuestionDetailsEdit(Request $request, array $requestAttributes)
     {
+        //TODO modify username after injecting the Session class in Controller
+        //TODO move params in an array for renderView
         $params = $this->questionTemplateService->getParams($requestAttributes['id']);
         $params['username'] = $this->questionTemplateService->getName();
         $params['path'] = 'edit/' . $params['id'];
@@ -144,6 +149,8 @@ class QuestionTemplateController extends AbstractController
      */
     public function showQuestionDetails()
     {
+        //TODO modify username after injecting the Session class in Controller
+        //TODO move params in an array for renderView
         $params['username'] = $this->questionTemplateService->getName();
         $params['path'] = 'create';
 

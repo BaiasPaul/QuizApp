@@ -47,6 +47,7 @@ class QuizTemplateController extends AbstractController
      */
     public function createQuiz(Request $request): MessageInterface
     {
+        //TODO modify after injecting the Session class in Controller
         $name = $request->getParameter('name');
         $description = $request->getParameter('description');
         $questions = $request->getParameter('questions');
@@ -73,6 +74,7 @@ class QuizTemplateController extends AbstractController
         $users = $this->quizTemplateService->getEntitiesByField(User::class, ['role' => 'Admin'], 1, 99999999);
         $paginator = new Paginator($totalResults, $currentPage, self::RESULTS_PER_PAGE);
 
+        //TODO modify after injecting the Session class in Controller
         return $this->renderer->renderView("admin-quizzes-listing.phtml", [
             'quizName' => $quizName,
             'username' => $this->quizTemplateService->getName(),
@@ -123,10 +125,12 @@ class QuizTemplateController extends AbstractController
     {
         $params = $this->quizTemplateService->getParams($requestAttributes['id']);
 
+        //TODO modify after injecting the Session class in Controller
         return $this->renderer->renderView("admin-quiz-details.phtml", [
             'id' => $params['id'],
             'name' => $params['name'],
             'description' => $params['description'],
+            //TODO create class for these parameters
             'questions' => $quizzes = $this->quizTemplateService->getEntitiesByField(QuestionTemplate::class, [], 1, 99999999999),
             'selectedQuestions' => $this->quizTemplateService->getSelectedQuestions($requestAttributes['id']),
             'username' => $this->quizTemplateService->getName(),
@@ -139,6 +143,7 @@ class QuizTemplateController extends AbstractController
      */
     public function showQuizDetails(): Response
     {
+        //TODO modify after injecting the Session class in Controller
         return $this->renderer->renderView("admin-quiz-details.phtml", [
             'questions' => $quizzes = $this->quizTemplateService->getEntitiesByField(QuestionTemplate::class, [], 1, 99999999999),
             'username' => $this->quizTemplateService->getName(),
