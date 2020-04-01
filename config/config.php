@@ -145,7 +145,7 @@ return array(
                 Router::CONFIG_KEY_METHOD => 'GET',
                 Router::CONFIG_KEY_PATH => '/candidate-results',
                 Router::CONFIG_KEY_ACTION => 'showResults',
-                Router::CONFIG_KEY_CONTROLLER => 'result',
+                Router::CONFIG_KEY_CONTROLLER => 'questionInstance',
                 Router::CONFIG_KEY_ATTRIBUTES => []
             ],
 
@@ -161,6 +161,16 @@ return array(
                 Router::CONFIG_KEY_METHOD => 'GET',
                 Router::CONFIG_KEY_PATH => '/admin-results/{id}',
                 Router::CONFIG_KEY_ACTION => 'showQuizzesResults',
+                Router::CONFIG_KEY_CONTROLLER => 'result',
+                Router::CONFIG_KEY_ATTRIBUTES => [
+                    'id' => '\d+'
+                ]
+            ],
+
+            'save_score' => [
+                Router::CONFIG_KEY_METHOD => 'POST',
+                Router::CONFIG_KEY_PATH => '/admin-results/{id}',
+                Router::CONFIG_KEY_ACTION => 'saveScore',
                 Router::CONFIG_KEY_CONTROLLER => 'result',
                 Router::CONFIG_KEY_ATTRIBUTES => [
                     'id' => '\d+'
@@ -305,13 +315,13 @@ return array(
                 Router::CONFIG_KEY_ATTRIBUTES => []
             ],
 
-            'save_score' => [
-                Router::CONFIG_KEY_METHOD => 'POST',
-                Router::CONFIG_KEY_PATH => '/admin-results-listing',
-                Router::CONFIG_KEY_ACTION => 'saveScore',
-                Router::CONFIG_KEY_CONTROLLER => 'result',
-                Router::CONFIG_KEY_ATTRIBUTES => []
-            ],
+//            'save_score' => [
+//                Router::CONFIG_KEY_METHOD => 'POST',
+//                Router::CONFIG_KEY_PATH => '/admin-results-listing',
+//                Router::CONFIG_KEY_ACTION => 'saveScore',
+//                Router::CONFIG_KEY_CONTROLLER => 'result',
+//                Router::CONFIG_KEY_ATTRIBUTES => []
+//            ],
 
             'admin_user_listing_candidate' => [
                 Router::CONFIG_KEY_METHOD => 'GET',

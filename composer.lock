@@ -103,12 +103,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BaiasPaul/mvc-framework-skeleton.git",
-                "reference": "ee16f7469c6857a688ccea183196e7f8e663b6de"
+                "reference": "55ef9eeb0c525c2d77d5848351a8e6bda32713d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BaiasPaul/mvc-framework-skeleton/zipball/ee16f7469c6857a688ccea183196e7f8e663b6de",
-                "reference": "ee16f7469c6857a688ccea183196e7f8e663b6de",
+                "url": "https://api.github.com/repos/BaiasPaul/mvc-framework-skeleton/zipball/55ef9eeb0c525c2d77d5848351a8e6bda32713d3",
+                "reference": "55ef9eeb0c525c2d77d5848351a8e6bda32713d3",
                 "shasum": ""
             },
             "require": {
@@ -133,7 +133,7 @@
             "support": {
                 "source": "https://github.com/BaiasPaul/mvc-framework-skeleton/tree/master"
             },
-            "time": "2020-03-23T15:20:31+00:00"
+            "time": "2020-03-26T17:06:29+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -939,12 +939,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/BaiasPaul/ormSkeleton.git",
-                "reference": "9fce9d3e7b37fa20ea1018f710fcda80413238ae"
+                "reference": "a3a7fcb4ccc1f6cbf2f64ca8d9f7a555c4d5b019"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/BaiasPaul/ormSkeleton/zipball/9fce9d3e7b37fa20ea1018f710fcda80413238ae",
-                "reference": "9fce9d3e7b37fa20ea1018f710fcda80413238ae",
+                "url": "https://api.github.com/repos/BaiasPaul/ormSkeleton/zipball/a3a7fcb4ccc1f6cbf2f64ca8d9f7a555c4d5b019",
+                "reference": "a3a7fcb4ccc1f6cbf2f64ca8d9f7a555c4d5b019",
                 "shasum": ""
             },
             "require": {
@@ -971,7 +971,7 @@
                 "source": "https://github.com/BaiasPaul/ormSkeleton/tree/master",
                 "issues": "https://github.com/BaiasPaul/ormSkeleton/issues"
             },
-            "time": "2020-03-24T11:52:32+00:00"
+            "time": "2020-03-26T17:07:08+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace QuizApp\Entity;
-
 
 use ReallyOrm\Entity\AbstractEntity;
 
@@ -94,7 +92,7 @@ class QuizInstance extends AbstractEntity
     }
 
     /**
-     * @param int $isSaved
+     * @param int
      */
     public function setIsSaved($isSaved): void
     {

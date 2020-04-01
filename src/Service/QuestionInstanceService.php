@@ -11,12 +11,16 @@ use QuizApp\Entity\QuizInstance;
 class QuestionInstanceService extends AbstractService
 {
 
-    public function saveAnswer($answerText, $questionText)
+    public function saveAnswer($answerText, $questionInstanceId)
     {
         $answer = new AnswerInstance();
-        $answer->setText($answerText);
         $this->repoManager->register($answer);
-        $questionInstance = $this->repoManager->getRepository(QuestionInstance::class)->find($questionText);
+        $answerFound = $this->repoManager->getRepository(AnswerInstance::class)->findOneBy(['questioninstance_id'=>$questionInstanceId]);
+        if ($answerFound){
+            $answer = $answerFound;
+        }
+        $answer->setText($answerText);
+        $questionInstance = $this->repoManager->getRepository(QuestionInstance::class)->find($questionInstanceId);
         $this->repoManager->register($questionInstance);
         $this->repoManager->getRepository(AnswerInstance::class)->saveAnswer($answer,$questionInstance);
     }

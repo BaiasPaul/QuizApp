@@ -11,16 +11,6 @@ use QuizApp\Entity\User;
 
 class QuizInstanceService extends AbstractService
 {
-    public function getQuizzes(array $filters, int $currentPage)
-    {
-        return $this->repoManager->getRepository(QuizTemplate::class)->findBy($filters, [], ($currentPage - 1) * 5, 5);
-    }
-
-    public function getQuizNumber(array $filters)
-    {
-        return $this->repoManager->getRepository(QuizTemplate::class)->getNumberOfEntities($filters);
-    }
-
     public function createQuestionList(array $questions)
     {
         $result = [];

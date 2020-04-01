@@ -120,7 +120,7 @@ class Paginator
      */
     public function getTotalPages()
     {
-        return $this->totalPages;
+        return (int)$this->totalPages;
     }
 
     /**

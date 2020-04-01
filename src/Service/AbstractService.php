@@ -92,7 +92,7 @@ class AbstractService
     /**
      * @return SessionInterface
      */
-    public function getSession()
+    public function getSession(): SessionInterface
     {
         return $this->session;
     }

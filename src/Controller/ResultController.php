@@ -8,6 +8,7 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Message;
 use Framework\Http\Request;
 use Framework\Http\Response;
+use Framework\Http\Stream;
 use Psr\Http\Message\MessageInterface;
 use QuizApp\Entity\QuizInstance;
 use QuizApp\Service\ResultService;
@@ -43,26 +44,19 @@ class ResultController extends AbstractController
      * @param array $requestAttributes
      * @return Message|MessageInterface
      */
-    public function showResults(Request $request, array $requestAttributes)
+    public function showResults(Request $request, array $requestAttributes): MessageInterface
     {
         $redirectToLogin = $this->verifySessionUserName($this->resultService->getSession());
         if ($redirectToLogin){
             return $redirectToLogin;
         }
-//        $email = $this->resultService->getFromParameter('email', $request, "");
-//        $role = $this->resultService->getFromParameter('role', $request, "");
         $currentPage = (int)$this->resultService->getFromParameter('page', $request, 1);
         $totalResults = (int)$this->resultService->getEntityNumberOfPagesByField(QuizInstance::class, []);
         $quizzes = $this->resultService->getEntitiesByField(QuizInstance::class, [], $currentPage, self::RESULTS_PER_PAGE);
-
         $paginator = new Paginator($totalResults, $currentPage, self::RESULTS_PER_PAGE);
-        //to be removed after pr 009
-        $paginator->setTotalPages($totalResults, self::RESULTS_PER_PAGE);
 
         return $this->renderer->renderView("admin-results-listing.phtml", [
-//            'email' => $email,
             'username' => $this->resultService->getName(),
-//            'dropdownRole' => $role,
             'paginator' => $paginator,
             'quizzes' => $quizzes,
         ]);
@@ -75,13 +69,14 @@ class ResultController extends AbstractController
      * @param array $requestAttributes
      * @return Response
      */
-    public function showQuizzesResults(Request $request, array $requestAttributes)
+    public function showQuizzesResults(Request $request, array $requestAttributes): Response
     {
         $questions = $this->resultService->getQuestionsAnswered($requestAttributes['id']);
 
         return $this->renderer->renderView("admin-results.phtml", [
             'username'=>$this->resultService->getName(),
-            'questions'=>$questions
+            'questions'=>$questions,
+            'quizId'=>$requestAttributes['id']
         ]);
     }
 
@@ -90,26 +85,15 @@ class ResultController extends AbstractController
      *
      * @param Request $request
      * @param array $requestAttributes
-     * @return Response
+     * @return Message|MessageInterface
      */
-    public function saveScore(Request $request, array $requestAttributes)
+    public function saveScore(Request $request, array $requestAttributes): MessageInterface
     {
         $score = (int)$this->resultService->getFromParameter('score', $request, 0);
-        $currentPage = (int)$this->resultService->getFromParameter('page', $request, 1);
-        $totalResults = (int)$this->resultService->getEntityNumberOfPagesByField(QuizInstance::class, []);
-        $quizzes = $this->resultService->getEntitiesByField(QuizInstance::class, [], $currentPage, self::RESULTS_PER_PAGE);
+        $this->resultService->setScore($score,$requestAttributes['id']);
+        $body = Stream::createFromString("");
+        $response = new Response($body, '1.1', 301);
 
-        $paginator = new Paginator($totalResults, $currentPage, self::RESULTS_PER_PAGE);
-        //to be removed after pr 009
-        $paginator->setTotalPages($totalResults, self::RESULTS_PER_PAGE);
-        $this->resultService->setScore($score);
-
-        return $this->renderer->renderView("admin-results-listing.phtml", [
-//            'email' => $email,
-            'username' => $this->resultService->getName(),
-//            'dropdownRole' => $role,
-            'paginator' => $paginator,
-            'quizzes' => $quizzes,
-        ]);
+        return $response->withHeader('Location', '/admin-results-listing');
     }
 }

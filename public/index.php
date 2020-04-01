@@ -24,6 +24,6 @@ try {
 } catch (RouteNotFoundException $e){
     $body = Stream::createFromString("");
     $responseWithoutHeader = new Response($body, '1.1', 301);
-    $response = $responseWithoutHeader->withHeader('Location', 'http://quizApp.com/exceptions-page');
+    $response = $responseWithoutHeader->withHeader('Location', '/exceptions-page');
 }
 $response->send();

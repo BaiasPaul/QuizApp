@@ -35,10 +35,11 @@ class ResultService extends AbstractService
      * Will be moved in another issue
      *
      * @param $score
+     * @param $quizId
      */
-    public function setScore($score)
+    public function setScore($score, $quizId)
     {
-        $quizInstance = $this->repoManager->getRepository(QuizInstance::class)->find($this->session->get('quizInstanceId'));
+        $quizInstance = $this->repoManager->getRepository(QuizInstance::class)->find($quizId);
         $quizInstance->setScore($score);
         $quizInstance->setRepositoryManager($this->repoManager);
         $quizInstance->save();

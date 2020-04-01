@@ -72,7 +72,7 @@
             </div>
         </div>
         <?php endforeach; ?>
-        <form method="POST" action="/admin-results-listing?page=1">
+        <form method="POST" action="/admin-results/<?php if (isset($quizId)) echo $quizId; ?>">
             <div class="form-group">
                 <label for="quizScore">Score</label>
                 <input name="score" type="number" class="form-control" id="quizScore" placeholder="Quiz score">

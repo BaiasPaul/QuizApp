@@ -30,44 +30,45 @@ class QuestionInstanceController extends AbstractController
     public function saveAnswer(Request $request, array $requestAttributes)
     {
         $answer = $request->getParameter('answer');
-        $this->questionInstanceService->saveAnswer($answer,$requestAttributes['id']);
+        $this->questionInstanceService->saveAnswer($answer, $requestAttributes['id']);
         $questionNumber = $request->getParameter('question');
         $body = Stream::createFromString("");
         $response = new Response($body, '1.1', 301);
 
-        return $response->withHeader('Location', 'http://quizApp.com/candidate-quiz-page?question='.($questionNumber+1));
+        return $response->withHeader('Location', '/candidate-quiz-page?question=' . ($questionNumber + 1));
     }
 
     public function back(Request $request, array $requestAttributes)
     {
         $questionNumber = $request->getParameter('question');
         $body = Stream::createFromString("");
-        $response = new Response($body, '1.1', '301');
+        $response = new Response($body, '1.1', 301);
 
-        return $response->withHeader('Location', 'http://quizApp.com/candidate-quiz-page?question='.($questionNumber-1));
+        return $response->withHeader('Location', '/candidate-quiz-page?question=' . ($questionNumber - 1));
     }
 
     public function save(Request $request, array $requestAttributes)
     {
         $answer = $request->getParameter('answer');
-        $this->questionInstanceService->saveAnswer($answer,$requestAttributes['id']);
+        $this->questionInstanceService->saveAnswer($answer, $requestAttributes['id']);
         $body = Stream::createFromString("");
-        $response = new Response($body, '1.1', '301');
+        $response = new Response($body, '1.1', 301);
 
-        return $response->withHeader('Location', 'http://quizApp.com/candidate-results');
+        return $response->withHeader('Location', '/candidate-results');
     }
 
-    public function showResults(){
-        $arguments['username'] = $this->questionInstanceService->getName();
-        $questions = $this->questionInstanceService->getQuestionsAnswered();
-        $arguments['questions'] = $questions;
-
-        return $this->renderer->renderView("candidate-results.phtml", $arguments);
+    public function showResults()
+    {
+        return $this->renderer->renderView("candidate-results.phtml", [
+            'username'=>$this->questionInstanceService->getName(),
+            'questions'=>$this->questionInstanceService->getQuestionsAnswered()
+        ]);
     }
 
-    public function showSuccessPage(){
-        $arguments['username'] = $this->questionInstanceService->getName();
-
-        return $this->renderer->renderView("quiz-success-page.phtml", $arguments);
+    public function showSuccessPage()
+    {
+        return $this->renderer->renderView("quiz-success-page.phtml", [
+            'username' => $this->questionInstanceService->getName()
+        ]);
     }
 }

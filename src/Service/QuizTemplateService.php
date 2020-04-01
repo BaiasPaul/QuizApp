@@ -6,10 +6,19 @@ use QuizApp\Entity\QuestionTemplate;
 use QuizApp\Entity\QuizTemplate;
 use QuizApp\Entity\User;
 use QuizApp\Repository\QuestionTemplateRepository;
+use ReallyOrm\Entity\EntityInterface;
 
+/**
+ * Class QuizTemplateService
+ * @package QuizApp\Service
+ */
 class QuizTemplateService extends AbstractService
 {
-    public function createQuestionList(array $questions)
+    /**
+     * @param array $questions
+     * @return array
+     */
+    public function createQuestionList(array $questions): array
     {
         $result = [];
         foreach ($questions as $question) {
@@ -19,7 +28,15 @@ class QuizTemplateService extends AbstractService
         return $result;
     }
 
-    public function saveQuiz($name, $description, $questions, $userId)
+    /**
+     * This method creates an user
+     *
+     * @param $name
+     * @param $description
+     * @param $questions
+     * @param $userId
+     */
+    public function saveQuiz($name, $description, $questions, $userId): void
     {
         $quiz = new QuizTemplate();
         $quiz->setName($name);
@@ -38,21 +55,15 @@ class QuizTemplateService extends AbstractService
         }
     }
 
-    public function getQuizNumber(array $filters)
-    {
-        return $this->repoManager->getRepository(QuizTemplate::class)->getNumberOfEntities($filters);
-    }
-
-    public function getQuizzes(array $filters, $currentPage)
-    {
-        $quizzes = $this->repoManager->getRepository(QuizTemplate::class)->findBy($filters, [], ($currentPage - 1) * 5, 5);
-        foreach ($quizzes as $quiz){
-            $this->repoManager->register($quiz);
-        }
-        return $quizzes;
-    }
-
-    public function editQuiz($quizId, $name, $description, $questions)
+    /**
+     * This method updates an existing user
+     *
+     * @param $quizId
+     * @param $name
+     * @param $description
+     * @param $questions
+     */
+    public function editQuiz($quizId, $name, $description, $questions): void
     {
         $quiz = $this->repoManager->getRepository(QuizTemplate::class)->find($quizId);
         $quiz->setName($name);
@@ -65,30 +76,37 @@ class QuizTemplateService extends AbstractService
         $this->repoManager->getRepository(QuizTemplate::class)->setEntitiesToTarget($quiz, $questionsFound);
     }
 
-    public function getParams($id)
+    /**
+     * This method returns an array with the attributes of an user for autocomplete in the edit user form
+     *
+     * @param $id
+     * @return array
+     */
+    public function getParams($id): array
     {
         $quiz = $this->repoManager->getRepository(QuizTemplate::class)->find($id);
 
         return ['id' => $quiz->getId(), 'name' => $quiz->getName(), 'description' => $quiz->getDescription()];
     }
 
-    public function deleteQuiz($id)
+    /**
+     * This method removes a user with the specified id from the database
+     *
+     * @param $id
+     * @return bool
+     */
+    public function deleteQuiz($id): bool
     {
         $quiz = $this->repoManager->getRepository(QuizTemplate::class)->find($id);
         $this->repoManager->getRepository(QuizTemplate::class)->deleteQuestions($quiz->getId());
+
         return $this->repoManager->getRepository(QuizTemplate::class)->delete($quiz);
     }
 
-    public function searchByText($text)
-    {
-        return $this->repoManager->getRepository(QuizTemplate::class)->searchByField('text', $text);
-    }
-
-    public function getQuestions()
-    {
-        return $this->repoManager->getRepository(QuestionTemplate::class)->findBy([], [], 0, 999999999999);
-    }
-
+    /**
+     * @param $quizId
+     * @return mixed
+     */
     public function getSelectedQuestions($quizId)
     {
         return $this->repoManager->getRepository(QuizTemplate::class)->getSelectedQuestions($quizId);
