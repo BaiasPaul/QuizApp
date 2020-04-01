@@ -53,7 +53,7 @@ class User extends AbstractEntity
     /**
      * @param string
      */
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
     }
@@ -61,7 +61,7 @@ class User extends AbstractEntity
     /**
      * @param string
      */
-    public function setEmail($email)
+    public function setEmail($email): void
     {
         $this->email = $email;
     }
@@ -69,7 +69,7 @@ class User extends AbstractEntity
     /**
      * @param string
      */
-    public function setPassword($password)
+    public function setPassword($password): void
     {
         $this->password = md5($password);
     }
@@ -77,7 +77,7 @@ class User extends AbstractEntity
     /**
      * @param string
      */
-    public function setRole($role)
+    public function setRole($role): void
     {
         $this->role = $role;
     }
@@ -85,7 +85,7 @@ class User extends AbstractEntity
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }

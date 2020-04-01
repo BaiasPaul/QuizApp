@@ -1,8 +1,6 @@
 <?php
 
-
 namespace QuizApp\Entity;
-
 
 use ReallyOrm\Entity\AbstractEntity;
 
@@ -15,6 +13,7 @@ class AnswerInstance extends AbstractEntity
      * @ORM id
      */
     private $id;
+
     /**
      * @var string
      * @ORM text
@@ -41,7 +40,7 @@ class AnswerInstance extends AbstractEntity
     /**
      * @return mixed
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -49,7 +48,7 @@ class AnswerInstance extends AbstractEntity
     /**
      * @return mixed
      */
-    public function getText()
+    public function getText(): string
     {
         return $this->text;
     }

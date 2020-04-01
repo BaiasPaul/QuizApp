@@ -16,11 +16,13 @@ class QuestionTemplate extends AbstractEntity
      * @ORM id
      */
     private $id;
+
     /**
      * @var string
      * @ORM text
      */
     private $text;
+
     /**
      * @var string
      * @ORM type
@@ -54,9 +56,9 @@ class QuestionTemplate extends AbstractEntity
     }
 
     /**
-     * @return null
+     * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }

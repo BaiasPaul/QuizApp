@@ -16,16 +16,19 @@ class QuizInstance extends AbstractEntity
      * @ORM id
      */
     private $id;
+
     /**
      * @var int
      * @ORM score
      */
     private $score;
+
     /**
      * @var string
      * @ORM name
      */
     private $name;
+
     /**
      * @var int
      * @ORM is_saved
@@ -46,7 +49,7 @@ class QuizInstance extends AbstractEntity
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -54,7 +57,7 @@ class QuizInstance extends AbstractEntity
     /**
      * @return int
      */
-    public function getScore()
+    public function getScore(): int
     {
         return $this->score;
     }
@@ -70,7 +73,7 @@ class QuizInstance extends AbstractEntity
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -86,7 +89,7 @@ class QuizInstance extends AbstractEntity
     /**
      * @return int
      */
-    public function getIsSaved()
+    public function getIsSaved(): int
     {
         return $this->isSaved;
     }
@@ -102,7 +105,7 @@ class QuizInstance extends AbstractEntity
     /**
      * @return int
      */
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->getRepository()->getUserId($this->getId());
     }
