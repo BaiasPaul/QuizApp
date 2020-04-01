@@ -1,18 +1,17 @@
 <?php
 
-
 namespace QuizApp\Controller;
-
 
 use Framework\Contracts\RendererInterface;
 use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
+use Psr\Http\Message\MessageInterface;
 use QuizApp\Service\QuestionInstanceService;
 use QuizApp\Service\QuestionTemplateService;
 
-//TODO add comments and return types
+//TODO add comments
 class QuestionInstanceController extends AbstractController
 {
     private $questionInstanceService;
@@ -28,7 +27,7 @@ class QuestionInstanceController extends AbstractController
         $this->questionInstanceService = $questionInstanceService;
     }
 
-    public function saveAnswer(Request $request, array $requestAttributes)
+    public function saveAnswer(Request $request, array $requestAttributes): MessageInterface
     {
         $answer = $request->getParameter('answer');
         $this->questionInstanceService->saveAnswer($answer, $requestAttributes['id']);
@@ -39,7 +38,7 @@ class QuestionInstanceController extends AbstractController
         return $response->withHeader('Location', '/candidate-quiz-page?question=' . ($questionNumber + 1));
     }
 
-    public function back(Request $request, array $requestAttributes)
+    public function back(Request $request, array $requestAttributes): MessageInterface
     {
         $questionNumber = $request->getParameter('question');
         $body = Stream::createFromString("");
@@ -48,7 +47,7 @@ class QuestionInstanceController extends AbstractController
         return $response->withHeader('Location', '/candidate-quiz-page?question=' . ($questionNumber - 1));
     }
 
-    public function save(Request $request, array $requestAttributes)
+    public function save(Request $request, array $requestAttributes): MessageInterface
     {
         $answer = $request->getParameter('answer');
         $this->questionInstanceService->saveAnswer($answer, $requestAttributes['id']);
@@ -58,7 +57,7 @@ class QuestionInstanceController extends AbstractController
         return $response->withHeader('Location', '/candidate-results');
     }
 
-    public function showResults()
+    public function showResults(): Response
     {
         //TODO modify username after injecting the Session class in Controller
         return $this->renderer->renderView("candidate-results.phtml", [
@@ -67,7 +66,7 @@ class QuestionInstanceController extends AbstractController
         ]);
     }
 
-    public function showSuccessPage()
+    public function showSuccessPage(): Response
     {
         //TODO modify username after injecting the Session class in Controller
         return $this->renderer->renderView("quiz-success-page.phtml", [

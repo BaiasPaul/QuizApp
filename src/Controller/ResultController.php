@@ -48,7 +48,7 @@ class ResultController extends AbstractController
     {
         //TODO modify after injecting the Session class in Controller
         $redirectToLogin = $this->verifySessionUserName($this->resultService->getSession());
-        if ($redirectToLogin){
+        if ($redirectToLogin) {
             return $redirectToLogin;
         }
         $currentPage = (int)$this->resultService->getFromParameter('page', $request, 1);
@@ -75,9 +75,9 @@ class ResultController extends AbstractController
         $questions = $this->resultService->getQuestionsAnswered($requestAttributes['id']);
         //TODO modify after injecting the Session class in Controller
         return $this->renderer->renderView("admin-results.phtml", [
-            'username'=>$this->resultService->getName(),
-            'questions'=>$questions,
-            'quizId'=>$requestAttributes['id']
+            'username' => $this->resultService->getName(),
+            'questions' => $questions,
+            'quizId' => $requestAttributes['id']
         ]);
     }
 
@@ -92,7 +92,7 @@ class ResultController extends AbstractController
     {
         //TODO remove cast and fix method
         $score = (int)$this->resultService->getFromParameter('score', $request, 0);
-        $this->resultService->setScore($score,$requestAttributes['id']);
+        $this->resultService->setScore($score, $requestAttributes['id']);
         $body = Stream::createFromString("");
         $response = new Response($body, '1.1', 301);
 

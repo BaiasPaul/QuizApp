@@ -14,8 +14,6 @@ use QuizApp\Service\QuestionTemplateService;
 use QuizApp\Util\Paginator;
 use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 
-
-//TODO add return types
 /**
  * Class QuestionTemplateController
  * @package QuizApp\Controllers
@@ -45,7 +43,7 @@ class QuestionTemplateController extends AbstractController
      * @param Request $request
      * @return Message|MessageInterface
      */
-    public function createQuestion(Request $request)
+    public function createQuestion(Request $request): MessageInterface
     {
         $text = $request->getParameter('text');
         $type = $request->getParameter('type');
@@ -64,7 +62,7 @@ class QuestionTemplateController extends AbstractController
      * @param array $requestAttributes
      * @return Response
      */
-    public function showQuestions(Request $request, array $requestAttributes)
+    public function showQuestions(Request $request, array $requestAttributes): Response
     {
         $resultsPerPage = 5;
         $text = $this->questionTemplateService->getFromParameter('text', $request, "");
@@ -79,7 +77,7 @@ class QuestionTemplateController extends AbstractController
         //TODO username modify after injecting the Session class in Controller
         return $this->renderer->renderView("admin-questions-listing.phtml", [
             'text' => $text,
-            'username'=>$this->questionTemplateService->getName(),
+            'username' => $this->questionTemplateService->getName(),
             'dropdownType' => $type,
             'paginator' => $paginator,
             'questions' => $questions,
@@ -93,7 +91,7 @@ class QuestionTemplateController extends AbstractController
      * @param array $requestAttributes
      * @return Message|MessageInterface
      */
-    public function editQuestion(Request $request, array $requestAttributes)
+    public function editQuestion(Request $request, array $requestAttributes): MessageInterface
     {
         $text = $request->getParameter('text');
         $type = $request->getParameter('type');
@@ -113,7 +111,7 @@ class QuestionTemplateController extends AbstractController
      * @param array $requestAttributes
      * @return Message|MessageInterface
      */
-    public function deleteQuestion(Request $request, array $requestAttributes)
+    public function deleteQuestion(Request $request, array $requestAttributes): MessageInterface
     {
         $this->questionTemplateService->deleteQuestion($requestAttributes['id']);
 
@@ -131,7 +129,7 @@ class QuestionTemplateController extends AbstractController
      * @param array $requestAttributes
      * @return Response
      */
-    public function showQuestionDetailsEdit(Request $request, array $requestAttributes)
+    public function showQuestionDetailsEdit(Request $request, array $requestAttributes): Response
     {
         //TODO modify username after injecting the Session class in Controller
         //TODO move params in an array for renderView
@@ -147,7 +145,7 @@ class QuestionTemplateController extends AbstractController
      *
      * @return Response
      */
-    public function showQuestionDetails()
+    public function showQuestionDetails(): Response
     {
         //TODO modify username after injecting the Session class in Controller
         //TODO move params in an array for renderView

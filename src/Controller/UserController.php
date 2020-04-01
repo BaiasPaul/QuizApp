@@ -1,6 +1,5 @@
 <?php
 
-
 namespace QuizApp\Controller;
 
 use Framework\Contracts\RendererInterface;
@@ -14,7 +13,6 @@ use QuizApp\Entity\User;
 use QuizApp\Service\UserService;
 use QuizApp\Util\Paginator;
 
-//TODO add return types
 /**
  * Class UserController
  * @package QuizApp\Controllers
@@ -40,7 +38,7 @@ class UserController extends AbstractController
     /**
      * @return Response
      */
-    public function showLogin()
+    public function showLogin(): Response
     {
         return $this->renderer->renderView("login.html", []);
     }
@@ -52,7 +50,7 @@ class UserController extends AbstractController
      * @param array $requestAttributes
      * @return Message|MessageInterface
      */
-    public function showUsers(Request $request, array $requestAttributes)
+    public function showUsers(Request $request, array $requestAttributes): MessageInterface
     {
         //TODO modify after injecting the Session class in Controller
         $redirectToLogin = $this->verifySessionUserName($this->userService->getSession());
@@ -85,7 +83,7 @@ class UserController extends AbstractController
      *
      * @return Response
      */
-    public function showUserDetails()
+    public function showUserDetails(): Response
     {
         //TODO modify after injecting the Session class in Controller
         return $this->renderer->renderView("admin-user-details.phtml", [
@@ -100,7 +98,7 @@ class UserController extends AbstractController
      * @param Request $request
      * @return Message|MessageInterface
      */
-    public function createUser(Request $request)
+    public function createUser(Request $request): MessageInterface
     {
         $name = $request->getParameter('name');
         $email = $request->getParameter('email');
@@ -120,15 +118,15 @@ class UserController extends AbstractController
      * @param array $requestAttributes
      * @return Response
      */
-    public function showUserDetailsEdit(Request $request, array $requestAttributes)
+    public function showUserDetailsEdit(Request $request, array $requestAttributes): Response
     {
         $params = $this->userService->getParams($requestAttributes['id']);
 
         //TODO modify after injecting the Session class in Controller
         return $this->renderer->renderView("admin-user-details.phtml", [
             'name' => $params['name'],
-            'email'=>$params['email'],
-            'role'=>$params['role'],
+            'email' => $params['email'],
+            'role' => $params['role'],
             'username' => $this->userService->getName(),
             'path' => 'edit/' . $params['id']
         ]);
@@ -141,7 +139,7 @@ class UserController extends AbstractController
      * @param array $requestAttributes
      * @return Message|MessageInterface
      */
-    public function editUser(Request $request, array $requestAttributes)
+    public function editUser(Request $request, array $requestAttributes): MessageInterface
     {
         $name = $request->getParameter('name');
         $email = $request->getParameter('email');
@@ -161,7 +159,7 @@ class UserController extends AbstractController
      * @param array $requestAttributes
      * @return Message|MessageInterface
      */
-    public function deleteUser(Request $request, array $requestAttributes)
+    public function deleteUser(Request $request, array $requestAttributes): MessageInterface
     {
         $this->userService->deleteUser($requestAttributes['id']);
         $body = Stream::createFromString("");
@@ -170,7 +168,8 @@ class UserController extends AbstractController
         return $response->withHeader('Location', '/admin-users-listing');
     }
 
-    public function showExceptionsPage()
+    //TODO add comment
+    public function showExceptionsPage(): Response
     {
         return $this->renderer->renderView("exceptions-page.phtml", ['errorMessage' => 'Route not found!']);
     }

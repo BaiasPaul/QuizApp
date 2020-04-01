@@ -9,13 +9,14 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
+use Psr\Http\Message\MessageInterface;
 use QuizApp\Entity\QuizInstance;
 use QuizApp\Entity\QuizTemplate;
 use QuizApp\Service\QuizInstanceService;
 use QuizApp\Service\UserService;
 use QuizApp\Util\Paginator;
 
-//TODO add comments and return types
+//TODO add comments
 class QuizInstanceController extends AbstractController
 {
 
@@ -33,7 +34,7 @@ class QuizInstanceController extends AbstractController
         $this->quizInstanceService = $questionInstanceService;
     }
 
-    public function showCandidateQuizzes(Request $request, array $requestAttributes)
+    public function showCandidateQuizzes(Request $request, array $requestAttributes): MessageInterface
     {
         //TODO modify after injecting the Session class in Controller
         $redirectToLogin = $this->verifySessionUserName($this->quizInstanceService->getSession());
@@ -53,7 +54,7 @@ class QuizInstanceController extends AbstractController
         ]);
     }
 
-    public function showCandidateQuizListing(Request $request, array $requestAttributes)
+    public function showCandidateQuizListing(Request $request, array $requestAttributes): MessageInterface
     {
         $this->quizInstanceService->setQuizId($requestAttributes['id']);
         $this->quizInstanceService->createQuizInstance();
@@ -63,11 +64,12 @@ class QuizInstanceController extends AbstractController
         return $response->withHeader('Location', '/candidate-quiz-page?question=1');
     }
 
-    public function showQuestions(Request $request, array $requestAttributes){
+    public function showQuestions(Request $request, array $requestAttributes): MessageInterface
+    {
         //TODO modify after injecting the Session class in Controller
         //TODO move params in an array for renderView
         $questionNumber = $request->getParameter('question');
-        $question = $this->quizInstanceService->getQuestion($questionNumber-1);
+        $question = $this->quizInstanceService->getQuestion($questionNumber - 1);
         $arguments['question'] = $question;
         $arguments['username'] = $this->quizInstanceService->getName();
         $arguments['currentQuestion'] = $questionNumber;
