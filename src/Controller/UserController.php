@@ -80,6 +80,7 @@ class UserController extends AbstractController
         $users = $this->userRepo->getFilteredEntities($filtersForEntity);
 
         $paginator = new Paginator($totalResults, $currentPage, $resultsPerPage);
+        //TODO to be removed
         $paginator->setTotalPages($totalResults, $resultsPerPage);
 
         //TODO modify after injecting the Session class in Controller
