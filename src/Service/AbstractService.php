@@ -77,17 +77,6 @@ class AbstractService
         return $this->repoManager->getRepository($class)->getNumberOfEntitiesByField($fields);
     }
 
-    /**
-     * This method returns a list of entities that have the fieldName LIKE the searched one
-     *
-     * @param string $class
-     * @param EntityInterface $filtersForEntity
-     * @return array
-     */
-    public function getEntitiesByField(string $class, EntityInterface $filtersForEntity): array
-    {
-        return $this->repoManager->getRepository($class)->getEntitiesByField($filtersForEntity);
-    }
 
     /**
      * @return SessionInterface

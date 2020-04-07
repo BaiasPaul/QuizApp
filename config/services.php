@@ -204,6 +204,7 @@ $container->register(AuthController::class, AuthController::class)
 $container->register(UserController::class, UserController::class)
     ->addArgument(new Reference(RendererInterface::class))
     ->addArgument(new Reference(UserService::class))
+    ->addArgument(new Reference(RepositoryManagerInterface::class))
     ->addTag('controller');
 
 $controllerNamespace = $config['dispatcher']['controllers_namespace'];

@@ -9,10 +9,11 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
 use Psr\Http\Message\MessageInterface;
-use QuizApp\Entity\FiltersForEntity;
 use QuizApp\Entity\User;
 use QuizApp\Service\UserService;
 use QuizApp\Util\Paginator;
+use ReallyOrm\Entity\Filter;
+use ReallyOrm\Test\Repository\RepositoryManager;
 
 /**
  * Class UserController
@@ -26,14 +27,21 @@ class UserController extends AbstractController
     private $userService;
 
     /**
+     * @var RepositoryManager
+     */
+    protected $repoManager;
+
+    /**
      * UserController constructor.
      * @param RendererInterface $renderer
      * @param UserService $questionInstanceService
+     * @param RepositoryManager $repoManager
      */
-    public function __construct(RendererInterface $renderer, UserService $questionInstanceService)
+    public function __construct(RendererInterface $renderer, UserService $questionInstanceService, RepositoryManager $repoManager)
     {
         parent::__construct($renderer);
         $this->userService = $questionInstanceService;
+        $this->repoManager = $repoManager;
     }
 
     /**
@@ -67,8 +75,8 @@ class UserController extends AbstractController
         //TODO remove casts and fix methods
         $currentPage = (int)$this->userService->getFromParameter('page', $request, 1);
         $totalResults = (int)$this->userService->getEntityNumberOfPagesByField(User::class, $filters);
-        $filtersForEntity = new FiltersForEntity($filters, $resultsPerPage, ($currentPage - 1) * $resultsPerPage, $orderBy, $sortType);
-        $users = $this->userService->getEntitiesByField(User::class, $filtersForEntity);
+        $filtersForEntity = new Filter($filters, $resultsPerPage, ($currentPage - 1) * $resultsPerPage, $orderBy, $sortType);
+        $users = $this->repoManager->getRepository(User::class)->getEntitiesByField($filtersForEntity);
 
         $paginator = new Paginator($totalResults, $currentPage, $resultsPerPage);
         $paginator->setTotalPages($totalResults, $resultsPerPage);
@@ -80,8 +88,8 @@ class UserController extends AbstractController
             'dropdownRole' => $role,
             'paginator' => $paginator,
             'users' => $users,
-            'orderBy'=>$orderBy,
-            'sortType'=>$sortType,
+            'orderBy' => $orderBy,
+            'sortType' => $sortType,
         ]);
     }
 
