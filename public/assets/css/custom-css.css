@@ -38,7 +38,6 @@ body{
     background-color: transparent;
 }
 .sorting-header {
-    display: block;
     cursor: pointer;
     position: relative;
 }
@@ -55,4 +54,15 @@ body{
     position: absolute;
     right: 5px;
     top: 8px;
+}
+
+.sorting-header a:link, .sorting-header a:visited {
+    color: black;
+    width: 100%;
+    text-decoration: none;
+    display: inline-block;
+}
+
+a.btn.btn-danger.py-1{
+    color: white;
 }

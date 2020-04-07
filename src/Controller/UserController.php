@@ -10,8 +10,11 @@ use Framework\Http\Response;
 use Framework\Http\Stream;
 use Psr\Http\Message\MessageInterface;
 use QuizApp\Entity\User;
+use QuizApp\Repository\UserRepository;
 use QuizApp\Service\UserService;
 use QuizApp\Util\Paginator;
+use ReallyOrm\Filter;
+use ReallyOrm\Test\Repository\RepositoryManager;
 
 /**
  * Class UserController
@@ -25,14 +28,21 @@ class UserController extends AbstractController
     private $userService;
 
     /**
+     * @var UserRepository
+     */
+    protected $userRepo;
+
+    /**
      * UserController constructor.
      * @param RendererInterface $renderer
      * @param UserService $questionInstanceService
+     * @param UserRepository $userRepo
      */
-    public function __construct(RendererInterface $renderer, UserService $questionInstanceService)
+    public function __construct(RendererInterface $renderer, UserService $questionInstanceService, UserRepository $userRepo)
     {
         parent::__construct($renderer);
         $this->userService = $questionInstanceService;
+        $this->userRepo = $userRepo;
     }
 
     /**
@@ -60,10 +70,14 @@ class UserController extends AbstractController
         $resultsPerPage = 5;
         $email = $this->userService->getFromParameter('email', $request, "");
         $role = $this->userService->getFromParameter('role', $request, "");
+        $filters = ['email' => $email, 'role' => $role];
+        $orderBy = $this->userService->getFromParameter('orderBy', $request, "");
+        $sortType = $this->userService->getFromParameter('sort', $request, "");
         //TODO remove casts and fix methods
         $currentPage = (int)$this->userService->getFromParameter('page', $request, 1);
-        $totalResults = (int)$this->userService->getEntityNumberOfPagesByField(User::class, ['email' => $email, 'role' => $role]);
-        $users = $this->userService->getEntitiesByField(User::class, ['email' => $email, 'role' => $role], $currentPage, $resultsPerPage);
+        $totalResults = (int)$this->userService->getEntityNumberOfPagesByField(User::class, $filters);
+        $filtersForEntity = new Filter($filters, $resultsPerPage, ($currentPage - 1) * $resultsPerPage, $orderBy, $sortType);
+        $users = $this->userRepo->getFilteredEntities($filtersForEntity);
 
         $paginator = new Paginator($totalResults, $currentPage, $resultsPerPage);
         $paginator->setTotalPages($totalResults, $resultsPerPage);
@@ -75,6 +89,8 @@ class UserController extends AbstractController
             'dropdownRole' => $role,
             'paginator' => $paginator,
             'users' => $users,
+            'orderBy' => $orderBy,
+            'sortType' => $sortType,
         ]);
     }
 
