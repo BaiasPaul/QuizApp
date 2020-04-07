@@ -4,8 +4,6 @@ namespace QuizApp\Service;
 
 use Framework\Contracts\SessionInterface;
 use Framework\Http\Request;
-use QuizApp\Entity\FiltersForEntity;
-use ReallyOrm\Entity\EntityInterface;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
 /**

@@ -10,9 +10,10 @@ use Framework\Http\Response;
 use Framework\Http\Stream;
 use Psr\Http\Message\MessageInterface;
 use QuizApp\Entity\User;
+use QuizApp\Repository\UserRepository;
 use QuizApp\Service\UserService;
 use QuizApp\Util\Paginator;
-use ReallyOrm\Entity\Filter;
+use ReallyOrm\Filter;
 use ReallyOrm\Test\Repository\RepositoryManager;
 
 /**
@@ -27,21 +28,21 @@ class UserController extends AbstractController
     private $userService;
 
     /**
-     * @var RepositoryManager
+     * @var UserRepository
      */
-    protected $repoManager;
+    protected $userRepo;
 
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
      * @param UserService $questionInstanceService
-     * @param RepositoryManager $repoManager
+     * @param UserRepository $userRepo
      */
-    public function __construct(RendererInterface $renderer, UserService $questionInstanceService, RepositoryManager $repoManager)
+    public function __construct(RendererInterface $renderer, UserService $questionInstanceService, UserRepository $userRepo)
     {
         parent::__construct($renderer);
         $this->userService = $questionInstanceService;
-        $this->repoManager = $repoManager;
+        $this->userRepo = $userRepo;
     }
 
     /**
@@ -76,7 +77,7 @@ class UserController extends AbstractController
         $currentPage = (int)$this->userService->getFromParameter('page', $request, 1);
         $totalResults = (int)$this->userService->getEntityNumberOfPagesByField(User::class, $filters);
         $filtersForEntity = new Filter($filters, $resultsPerPage, ($currentPage - 1) * $resultsPerPage, $orderBy, $sortType);
-        $users = $this->repoManager->getRepository(User::class)->getEntitiesByField($filtersForEntity);
+        $users = $this->userRepo->getFilteredEntities($filtersForEntity);
 
         $paginator = new Paginator($totalResults, $currentPage, $resultsPerPage);
         $paginator->setTotalPages($totalResults, $resultsPerPage);
