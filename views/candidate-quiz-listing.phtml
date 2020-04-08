@@ -52,7 +52,7 @@
         <table class="table table-hover my-4">
             <thead>
             <tr>
-                <th scope="col">Quiz name</th>
+                <th scope="col" class="sorting-header <?php echo ($orderBy == "name") ? (($sortType == "asc") ? "asc" : "dsc") : "asc dsc"; ?>"><a href="?orderBy=name&sort=<?php echo $sortType === "asc" ? "desc" : "asc"; ?>">Quiz name</a></th>
                 <th scope="col" class="text-center">Actions</th>
             </tr>
             </thead>
@@ -73,15 +73,15 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <li class="page-item <?php if ($paginator->getCurrentPage() === 1) echo 'disabled'; ?>">
-                <a class="page-link" href="?page=<?php echo $paginator->getPreviousPage();?>" >Previous</a>
+                <a class="page-link" href="?page=<?php echo $paginator->getPreviousPage();?>&orderBy=<?php echo $orderBy;?>&sort=<?php echo $sortType; ?>" >Previous</a>
             </li>
             <?php for ($pageNumber = 1; $pageNumber <= $paginator->getTotalPages(); $pageNumber++): ?>
                 <li class="page-item <?php if ($paginator->getCurrentPage() === $pageNumber) echo 'active'; ?>">
-                    <a class="page-link" href="?page=<?php echo $pageNumber; ?>"><?php echo $pageNumber; ?></a>
+                    <a class="page-link" href="?page=<?php echo $pageNumber; ?>&orderBy=<?php echo $orderBy;?>&sort=<?php echo $sortType; ?>"><?php echo $pageNumber; ?></a>
                 </li>
             <?php endfor; ?>
             <li class="page-item <?php if ($paginator->getCurrentPage() ==  $paginator->getTotalPages()) echo 'disabled'; ?>">
-                <a class="page-link" href="?page=<?php echo $paginator->getNextPage();?>">Next</a>
+                <a class="page-link" href="?page=<?php echo $paginator->getNextPage();?>&orderBy=<?php echo $orderBy;?>&sort=<?php echo $sortType; ?>">Next</a>
             </li>
         </ul>
     </nav>

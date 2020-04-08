@@ -183,6 +183,7 @@ $container->register(QuizTemplateController::class, QuizTemplateController::clas
 $container->register(QuizInstanceController::class, QuizInstanceController::class)
     ->addArgument(new Reference(RendererInterface::class))
     ->addArgument(new Reference(QuizInstanceService::class))
+    ->addArgument(new Reference(RepositoryManagerInterface::class))
     ->addTag('controller');
 
 $container->register(QuestionTemplateController::class, QuestionTemplateController::class)
