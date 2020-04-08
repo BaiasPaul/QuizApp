@@ -84,6 +84,7 @@ class QuizTemplateController extends AbstractController
      */
     public function showQuizzes(Request $request, array $requestAttributes): Response
     {
+        //TODO move to separate method (maybe in abstractController)
         $quizName = $this->quizTemplateService->getFromParameter('quizName', $request, "");
         $userId = $this->quizTemplateService->getFromParameter('userId', $request, "");
         $currentPage = (int)$this->quizTemplateService->getFromParameter('page', $request, 1);
