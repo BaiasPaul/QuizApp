@@ -13,6 +13,8 @@ use Psr\Http\Message\MessageInterface;
 use QuizApp\Entity\QuizInstance;
 use QuizApp\Service\ResultService;
 use QuizApp\Util\Paginator;
+use ReallyOrm\Filter;
+use ReallyOrm\Test\Repository\RepositoryManager;
 
 /**
  * Class ResultController
@@ -24,17 +26,24 @@ class ResultController extends AbstractController
      * @var ResultService
      */
     private $resultService;
+
+    /**
+     * @var RepositoryManager
+     */
+    private $repoManager;
     const RESULTS_PER_PAGE = 5;
 
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
      * @param ResultService $resultService
+     * @param RepositoryManager $repoManager
      */
-    public function __construct(RendererInterface $renderer, ResultService $resultService)
+    public function __construct(RendererInterface $renderer, ResultService $resultService, RepositoryManager $repoManager)
     {
         parent::__construct($renderer);
         $this->resultService = $resultService;
+        $this->repoManager = $repoManager;
     }
 
     /**
@@ -51,15 +60,21 @@ class ResultController extends AbstractController
         if ($redirectToLogin) {
             return $redirectToLogin;
         }
+        $orderBy = $this->resultService->getFromParameter('orderBy', $request, "");
+        $sortType = $this->resultService->getFromParameter('sort', $request, "");
         $currentPage = (int)$this->resultService->getFromParameter('page', $request, 1);
         $totalResults = (int)$this->resultService->getEntityNumberOfPagesByField(QuizInstance::class, []);
-        $quizzes = $this->resultService->getEntitiesByField(QuizInstance::class, [], $currentPage, self::RESULTS_PER_PAGE);
+        $quizzes = $this->repoManager->getRepository(QuizInstance::class)->getFilteredEntities(
+            new Filter([], self::RESULTS_PER_PAGE, ($currentPage - 1) * self::RESULTS_PER_PAGE, $orderBy, $sortType)
+        );
         $paginator = new Paginator($totalResults, $currentPage, self::RESULTS_PER_PAGE);
 
         return $this->renderer->renderView("admin-results-listing.phtml", [
             'username' => $this->resultService->getName(),
             'paginator' => $paginator,
             'quizzes' => $quizzes,
+            'orderBy' => $orderBy,
+            'sortType' => $sortType,
         ]);
     }
 
