@@ -28,7 +28,8 @@ class UrlBuilder
     }
 
     /**
-     * The search bar uses hidden inputs
+     * Build hidden inputs for the query parameters except the one used to search
+     * The search bar uses hidden inputs to place parameters in the url
      *
      * @param array $queryParameters
      * @param $skipParameter
