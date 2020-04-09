@@ -81,7 +81,13 @@
         </div>
         <div class="col-12 col-md-6">
             <form method="GET" action="/admin-users-listing" >
-                <?php echo $url->getSearchUrl(['role'=>$dropdownRole,'orderBy'=>$orderBy,'sort'=>$sortType],$email);?>
+                <?php foreach (['role'=>$dropdownRole,'orderBy'=>$orderBy,'sort'=>$sortType] as $name => $value): ?>
+                    <?php if ($value !== ''): ?>
+                        <?php  echo '<input type="hidden" name="' . $name . '" value="' . $value . '" />'; ?>
+                    <?php endif;?>
+                <?php endforeach; ?>
+
+
                 <label for="textSearch">Email search</label>
                 <div class="input-group">
                     <input name="email" type="text" id="textSearch" class="form-control" placeholder="" value="<?php echo $email;?>">

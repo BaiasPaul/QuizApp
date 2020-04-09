@@ -8,16 +8,13 @@ use Framework\Http\Message;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
+use Framework\Service\UrlBuilder;
 use Psr\Http\Message\MessageInterface;
 use QuizApp\Entity\User;
 use QuizApp\Repository\UserRepository;
 use QuizApp\Service\UserService;
 use QuizApp\Util\Paginator;
-use QuizApp\Util\ParameterBag;
-use QuizApp\Util\UrlBuilder;
 use ReallyOrm\Filter;
-use ReallyOrm\Test\Repository\RepositoryManager;
-use UrlHelper;
 
 /**
  * Class UserController

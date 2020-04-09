@@ -1,6 +1,7 @@
 <?php
 
 use Framework\Contracts\SessionInterface;
+use Framework\Service\UrlBuilder;
 use Framework\Session\Session;
 use QuizApp\Controller\QuestionInstanceController;
 use QuizApp\Controller\QuestionTemplateController;
@@ -38,7 +39,6 @@ use QuizApp\Service\QuizInstanceService;
 use QuizApp\Service\QuizTemplateService;
 use QuizApp\Service\ResultService;
 use QuizApp\Service\UserService;
-use QuizApp\Util\UrlBuilder;
 use ReallyOrm\Hydrator\HydratorInterface;
 use ReallyOrm\Repository\RepositoryManagerInterface;
 use ReallyOrm\Test\Hydrator\Hydrator;
