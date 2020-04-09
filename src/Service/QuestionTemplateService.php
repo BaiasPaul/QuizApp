@@ -10,7 +10,7 @@ use ReallyOrm\Entity\EntityInterface;
 
 /**
  * Class QuestionTemplateService
- * @package QuizApp\Services
+ * @package QuizApp\Service
  */
 class QuestionTemplateService extends AbstractService
 {

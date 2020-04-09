@@ -8,13 +8,13 @@ use Framework\Http\Message;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
+use Framework\Service\UrlBuilder;
 use Psr\Http\Message\MessageInterface;
 use QuizApp\Entity\User;
 use QuizApp\Repository\UserRepository;
 use QuizApp\Service\UserService;
 use QuizApp\Util\Paginator;
 use ReallyOrm\Filter;
-use ReallyOrm\Test\Repository\RepositoryManager;
 
 /**
  * Class UserController
@@ -33,16 +33,28 @@ class UserController extends AbstractController
     protected $userRepo;
 
     /**
+     * @var UrlBuilder
+     */
+    private $urlBuilder;
+
+    /**
      * UserController constructor.
      * @param RendererInterface $renderer
      * @param UserService $questionInstanceService
      * @param UserRepository $userRepo
+     * @param UrlBuilder $urlBuilder
      */
-    public function __construct(RendererInterface $renderer, UserService $questionInstanceService, UserRepository $userRepo)
-    {
+    public function __construct
+    (
+        RendererInterface $renderer,
+        UserService $questionInstanceService,
+        UserRepository $userRepo,
+        UrlBuilder $urlBuilder
+    ) {
         parent::__construct($renderer);
         $this->userService = $questionInstanceService;
         $this->userRepo = $userRepo;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -80,9 +92,11 @@ class UserController extends AbstractController
         $users = $this->userRepo->getFilteredEntities($filtersForEntity);
 
         $paginator = new Paginator($totalResults, $currentPage, $resultsPerPage);
+        //TODO remove (unnecessary)
         $paginator->setTotalPages($totalResults, $resultsPerPage);
 
         //TODO modify after injecting the Session class in Controller
+        //TODO remove unnecessary parameters and use only the parameterBag
         return $this->renderer->renderView("admin-users-listing.phtml", [
             'email' => $email,
             'username' => $this->userService->getName(),
@@ -91,6 +105,7 @@ class UserController extends AbstractController
             'users' => $users,
             'orderBy' => $orderBy,
             'sortType' => $sortType,
+            'url' => $this->urlBuilder,
         ]);
     }
 

@@ -1,6 +1,7 @@
 <?php
 
 use Framework\Contracts\SessionInterface;
+use Framework\Service\UrlBuilder;
 use Framework\Session\Session;
 use QuizApp\Controller\QuestionInstanceController;
 use QuizApp\Controller\QuestionTemplateController;
@@ -69,6 +70,7 @@ $container->register(PDO::class, PDO::class)
 
 $container->register(RepositoryManagerInterface::class, RepositoryManager::class);
 $container->register(SessionInterface::class, Session::class);
+$container->register(UrlBuilder::class,UrlBuilder::class);
 
 $container->register(HydratorInterface::class, Hydrator::class)
     ->addArgument(new Reference(RepositoryManagerInterface::class));
@@ -205,6 +207,7 @@ $container->register(UserController::class, UserController::class)
     ->addArgument(new Reference(RendererInterface::class))
     ->addArgument(new Reference(UserService::class))
     ->addArgument(new Reference(UserRepository::class))
+    ->addArgument(new Reference(UrlBuilder::class))
     ->addTag('controller');
 
 $controllerNamespace = $config['dispatcher']['controllers_namespace'];
