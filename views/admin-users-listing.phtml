@@ -71,9 +71,9 @@
                             <?php if (isset($dropdownRole) && $dropdownRole === '') echo 'All'; else if(isset($dropdownRole)) echo ucfirst($dropdownRole); ?>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                            <a class="dropdown-item" href="/admin-users-listing?role=candidate&email=<?php echo $email;?>&orderBy=<?php echo $orderBy;?>&sort=<?php echo $sortType; ?>">Candidate</a>
-                            <a class="dropdown-item" href="/admin-users-listing?role=admin&email=<?php echo $email;?>&orderBy=<?php echo $orderBy;?>&sort=<?php echo $sortType; ?>">Admin</a>
-                            <a class="dropdown-item" href="/admin-users-listing?role=&email=<?php echo $email;?>&orderBy=<?php echo $orderBy;?>&sort=<?php echo $sortType; ?>">All</a>
+                            <a class="dropdown-item" href="/admin-users-listing<?php echo $url->getUrl(['role'=>'candidate','orderBy'=>$orderBy,'sort'=>$sortType,'email'=>$email]);?>">Candidate</a>
+                            <a class="dropdown-item" href="/admin-users-listing<?php echo $url->getUrl(['role'=>'admin','orderBy'=>$orderBy,'sort'=>$sortType,'email'=>$email]);?>">Admin</a>
+                            <a class="dropdown-item" href="/admin-users-listing<?php echo $url->getUrl(['role'=>'','orderBy'=>$orderBy,'sort'=>$sortType,'email'=>$email]);?>">All</a>
                         </div>
                     </div>
                 </div>
@@ -81,9 +81,7 @@
         </div>
         <div class="col-12 col-md-6">
             <form method="GET" action="/admin-users-listing" >
-                <input type="hidden" name="role" value="<?php echo $dropdownRole;?>" />
-                <input type="hidden" name="orderBy" value="<?php echo $orderBy;?>" />
-                <input type="hidden" name="sort" value="<?php echo $sortType;?>" />
+                <?php echo $url->getSearchUrl(['role'=>$dropdownRole,'orderBy'=>$orderBy,'sort'=>$sortType],$email);?>
                 <label for="textSearch">Email search</label>
                 <div class="input-group">
                     <input name="email" type="text" id="textSearch" class="form-control" placeholder="" value="<?php echo $email;?>">
@@ -126,8 +124,8 @@
             <thead>
             <tr>
                 <!--Sorting arrow are displayed using the 'asc','dsc' classes-->
-                <th scope="col" class="sorting-header <?php echo ($orderBy == "id") ? (($sortType == "asc") ? "asc" : "dsc") : "asc dsc"; ?>"><a href="?orderBy=id&sort=<?php echo $sortType === "asc" ? "desc" : "asc"; ?>&email=<?php echo $email;?>&role=<?php echo $dropdownRole;?>">ID</a></th>
-                <th scope="col" class="sorting-header <?php echo ($orderBy == "email") ? (($sortType == "asc") ? "asc" : "dsc") : "asc dsc"; ?>"><a href="?orderBy=email&sort=<?php echo $sortType === "asc" ? "desc" : "asc"; ?>&email=<?php echo $email;?>&role=<?php echo $dropdownRole;?>">Email</a></th>
+                <th scope="col" class="sorting-header <?php echo ($orderBy == "id") ? (($sortType == "asc") ? "asc" : "dsc") : "asc dsc"; ?>"><a href="<?php echo $url->getUrl(['role'=>$dropdownRole,'email'=>$email,'orderBy'=>'id','sort'=>($sortType === "asc" ? "desc" : "asc")]);?>">ID</a></th>
+                <th scope="col" class="sorting-header <?php echo ($orderBy == "email") ? (($sortType == "asc") ? "asc" : "dsc") : "asc dsc"; ?>"><a href="<?php echo $url->getUrl(['role'=>$dropdownRole,'email'=>$email,'orderBy'=>'email','sort'=>($sortType === "asc" ? "desc" : "asc")]);?>">Email</a></th>
                 <th scope="col">Name</th>
                 <th scope="col">Role</th>
                 <th scope="col">Actions</th>
@@ -154,15 +152,15 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <li class="page-item <?php if ($paginator->getCurrentPage() === 1) echo 'disabled'; ?>">
-                <a class="page-link" href="?page=<?php echo $paginator->getPreviousPage();?>&email=<?php echo $email;?>&role=<?php echo $dropdownRole;?>&orderBy=<?php echo $orderBy;?>&sort=<?php echo $sortType; ?>" >Previous</a>
+                <a class="page-link" href="<?php echo $url->getUrl(['role'=>$dropdownRole,'orderBy'=>$orderBy,'sort'=>$sortType,'email'=>$email]); echo $url->getUrl(['role'=>$dropdownRole,'orderBy'=>$orderBy,'sort'=>$sortType,'email'=>$email]) !== '' ? '&' : '?'; ?>page=<?php echo $paginator->getPreviousPage();?>" >Previous</a>
             </li>
             <?php for ($pageNumber = 1; $pageNumber <= $paginator->getTotalPages(); $pageNumber++): ?>
                 <li class="page-item <?php if ($paginator->getCurrentPage() === $pageNumber) echo 'active'; ?>">
-                    <a class="page-link" href="?page=<?php echo $pageNumber; ?>&email=<?php echo $email;?>&role=<?php echo $dropdownRole;?>&orderBy=<?php echo $orderBy;?>&sort=<?php echo $sortType; ?>"><?php echo $pageNumber; ?></a>
+                    <a class="page-link" href="<?php echo $url->getUrl(['role'=>$dropdownRole,'orderBy'=>$orderBy,'sort'=>$sortType,'email'=>$email]); echo $url->getUrl(['role'=>$dropdownRole,'orderBy'=>$orderBy,'sort'=>$sortType,'email'=>$email]) !== '' ? '&' : '?'; ?>page=<?php echo $pageNumber;?>"><?php echo $pageNumber; ?></a>
                 </li>
             <?php endfor; ?>
-            <li class="page-item <?php if ($paginator->getCurrentPage() ==  $paginator->getTotalPages()) echo 'disabled'; ?>">
-                <a class="page-link" href="?page=<?php echo $paginator->getNextPage();?>&email=<?php echo $email;?>&role=<?php echo $dropdownRole;?>&orderBy=<?php echo $orderBy;?>&sort=<?php echo $sortType; ?>">Next</a>
+            <li class="page-item <?php if ($paginator->getCurrentPage() ===  $paginator->getTotalPages()) echo 'disabled'; ?>">
+                <a class="page-link" href="<?php echo $url->getUrl(['role'=>$dropdownRole,'orderBy'=>$orderBy,'sort'=>$sortType,'email'=>$email]); echo $url->getUrl(['role'=>$dropdownRole,'orderBy'=>$orderBy,'sort'=>$sortType,'email'=>$email]) !== '' ? '&' : '?'; ?>page=<?php echo $paginator->getNextPage();?>">Next</a>
             </li>
         </ul>
     </nav>
