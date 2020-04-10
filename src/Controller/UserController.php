@@ -51,8 +51,7 @@ class UserController extends AbstractController
         UserService $questionInstanceService,
         UserRepository $userRepo,
         UrlBuilder $urlBuilder
-    )
-    {
+    ) {
         parent::__construct($renderer);
         $this->userService = $questionInstanceService;
         $this->userRepo = $userRepo;
@@ -83,15 +82,15 @@ class UserController extends AbstractController
         }
 
         $parameterBag = new ParameterBag([
-            'email' => $request->getParameter('email',''),
-            'role' =>  $request->getParameter('role',''),
-            'orderBy' =>  $request->getParameter('orderBy',''),
-            'sort' =>  $request->getParameter('sort',''),
+            'email' => $request->getParameter('email', ''),
+            'role' => $request->getParameter('role', ''),
+            'orderBy' => $request->getParameter('orderBy', ''),
+            'sort' => $request->getParameter('sort', ''),
         ]);
 
-        $filters =[
-            'email'=>$parameterBag->get('email'),
-            'role'=> $parameterBag->get('role')
+        $filters = [
+            'email' => $parameterBag->get('email'),
+            'role' => $parameterBag->get('role')
         ];
 
         $resultsPerPage = 5;
