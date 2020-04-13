@@ -8,6 +8,8 @@ use Framework\Http\Message;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
+use Framework\Service\ParameterBag;
+use Framework\Service\UrlBuilder;
 use Psr\Http\Message\MessageInterface;
 use QuizApp\Entity\QuestionTemplate;
 use QuizApp\Service\QuestionTemplateService;
@@ -34,16 +36,27 @@ class QuestionTemplateController extends AbstractController
     private $repoManager;
 
     /**
+     * @var UrlBuilder
+     */
+    private $urlBuilder;
+
+    /**
      * UserController constructor.
      * @param RendererInterface $renderer
      * @param QuestionTemplateService $questionInstanceService
      * @param RepositoryManager $repoManager
+     * @param UrlBuilder $urlBuilder
      */
-    public function __construct(RendererInterface $renderer, QuestionTemplateService $questionInstanceService, RepositoryManager $repoManager)
-    {
+    public function __construct(
+        RendererInterface $renderer,
+        QuestionTemplateService $questionInstanceService,
+        RepositoryManager $repoManager,
+        UrlBuilder $urlBuilder
+    ) {
         parent::__construct($renderer);
         $this->questionTemplateService = $questionInstanceService;
         $this->repoManager = $repoManager;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -73,30 +86,43 @@ class QuestionTemplateController extends AbstractController
      */
     public function showQuestions(Request $request, array $requestAttributes): Response
     {
+        $parameterBag = new ParameterBag([
+            'orderBy' => $request->getParameter('orderBy', ''),
+            'sort' => $request->getParameter('sort', ''),
+            'type' => $request->getParameter('type', ''),
+            'text' => $request->getParameter('text', ''),
+        ]);
+
+        $filters = [
+            'text' => $parameterBag->get('text'),
+            'type' => $parameterBag->get('type')
+        ];
+
         $resultsPerPage = 5;
-        $text = $this->questionTemplateService->getFromParameter('text', $request, "");
-        $type = $this->questionTemplateService->getFromParameter('type', $request, "");
-        $filters = ['type' => $type, 'text' => $text];
-        $orderBy = $this->questionTemplateService->getFromParameter('orderBy', $request, "");
-        $sortType = $this->questionTemplateService->getFromParameter('sort', $request, "");
+        //TODO remove casts
         $currentPage = (int)$this->questionTemplateService->getFromParameter('page', $request, 1);
+        //TODO modify this method
         $totalResults = (int)$this->questionTemplateService->getEntityNumberOfPagesByField(QuestionTemplate::class, $filters);
-        $questions = $this->repoManager->getRepository(QuestionTemplate::class)->getFilteredEntities(
-            new Filter($filters, $resultsPerPage, ($currentPage - 1) * $resultsPerPage, $orderBy, $sortType)
+        $filtersForEntity = new Filter(
+            $filters,
+            $resultsPerPage,
+            ($currentPage - 1) * $resultsPerPage,
+            $parameterBag->get('orderBy'),
+            $parameterBag->get('sort')
         );
+        $questions = $this->repoManager->getRepository(QuestionTemplate::class)->getFilteredEntities($filtersForEntity);
+
         $paginator = new Paginator($totalResults, $currentPage, $resultsPerPage);
         //TODO to be removed
         $paginator->setTotalPages($totalResults, $resultsPerPage);
 
         //TODO username modify after injecting the Session class in Controller
         return $this->renderer->renderView("admin-questions-listing.phtml", [
-            'text' => $text,
             'username' => $this->questionTemplateService->getName(),
-            'dropdownType' => $type,
             'paginator' => $paginator,
             'questions' => $questions,
-            'orderBy' => $orderBy,
-            'sortType' => $sortType,
+            'url' => $this->urlBuilder,
+            'parameterBag' => $parameterBag,
         ]);
     }
 
