@@ -9,6 +9,8 @@ use Framework\Controller\AbstractController;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
+use Framework\Service\ParameterBag;
+use Framework\Service\UrlBuilder;
 use Psr\Http\Message\MessageInterface;
 use QuizApp\Entity\QuizInstance;
 use QuizApp\Entity\QuizTemplate;
@@ -40,16 +42,27 @@ class QuizInstanceController extends AbstractController
     private $repoManager;
 
     /**
+     * @var UrlBuilder
+     */
+    private $urlBuilder;
+
+    /**
      * UserController constructor.
      * @param RendererInterface $renderer
      * @param QuizInstanceService $questionInstanceService
      * @param RepositoryManager $repoManager
+     * @param UrlBuilder $urlBuilder
      */
-    public function __construct(RendererInterface $renderer, QuizInstanceService $questionInstanceService, RepositoryManager $repoManager)
-    {
+    public function __construct(
+        RendererInterface $renderer,
+        QuizInstanceService $questionInstanceService,
+        RepositoryManager $repoManager,
+        UrlBuilder $urlBuilder
+    ) {
         parent::__construct($renderer);
         $this->quizInstanceService = $questionInstanceService;
         $this->repoManager = $repoManager;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -66,22 +79,33 @@ class QuizInstanceController extends AbstractController
         if ($redirectToLogin) {
             return $redirectToLogin;
         }
-        $orderBy = $this->quizInstanceService->getFromParameter('orderBy', $request, "");
-        $sortType = $this->quizInstanceService->getFromParameter('sort', $request, "");
+
+        $parameterBag = new ParameterBag([
+            'orderBy' => $request->getParameter('orderBy', ''),
+            'sort' => $request->getParameter('sort', ''),
+        ]);
+
         //TODO remove cast and modify methods to return the expected type
         $currentPage = (int)$this->quizInstanceService->getFromParameter('page', $request, 1);
         $totalResults = (int)$this->quizInstanceService->getEntityNumberOfPagesByField(QuizTemplate::class, []);
-        $quizzes = $this->repoManager->getRepository(QuizTemplate::class)->getFilteredEntities(
-            new Filter([], self::RESULTS_PER_PAGE, ($currentPage - 1) * self::RESULTS_PER_PAGE, $orderBy, $sortType)
+
+        $filtersForEntity = new Filter(
+            [],
+            self::RESULTS_PER_PAGE,
+            ($currentPage - 1) * self::RESULTS_PER_PAGE,
+            $parameterBag->get('orderBy'),
+            $parameterBag->get('sort')
         );
+
+        $quizzes = $this->repoManager->getRepository(QuizTemplate::class)->getFilteredEntities($filtersForEntity);
         $paginator = new Paginator($totalResults, $currentPage, self::RESULTS_PER_PAGE);
 
         return $this->renderer->renderView("candidate-quiz-listing.phtml", [
             'username' => $this->quizInstanceService->getName(),
             'paginator' => $paginator,
             'quizzes' => $quizzes,
-            'orderBy' => $orderBy,
-            'sortType' => $sortType,
+            'url' => $this->urlBuilder,
+            'parameterBag' => $parameterBag,
         ]);
     }
 
