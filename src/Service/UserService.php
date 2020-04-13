@@ -57,12 +57,9 @@ class UserService extends AbstractService
             $user->setPassword($password);
         }
         $user->setRole($role);
-        $filters = ['email' => $email];
-        $result = $this->repoManager->getRepository(User::class)->findOneBy($filters);
-        if ($result) {
-            $this->repoManager->register($user);
-            $user->save();
-        }
+        //TODO validations
+        $this->repoManager->register($user);
+        $user->save();
     }
 
     /**
