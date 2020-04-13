@@ -58,7 +58,6 @@ class UserService extends AbstractService
         }
         $user->setRole($role);
         //TODO add validations
-        $this->repoManager->register($user);
         $user->save();
 
     }
