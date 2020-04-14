@@ -13,6 +13,7 @@ use Framework\Service\UrlBuilder;
 use Psr\Http\Message\MessageInterface;
 use QuizApp\Entity\User;
 use QuizApp\Repository\UserRepository;
+use QuizApp\Service\AppMessageManager;
 use QuizApp\Service\UserService;
 use QuizApp\Util\Paginator;
 use ReallyOrm\Filter;
@@ -33,10 +34,17 @@ class UserController extends AbstractController
      */
     protected $userRepo;
 
+
+    //TODO remove UlrBuilder
     /**
      * @var UrlBuilder
      */
     private $urlBuilder;
+
+    /**
+     * @var AppMessageManager
+     */
+    private $messageManager;
 
     /**
      * UserController constructor.
@@ -44,18 +52,21 @@ class UserController extends AbstractController
      * @param UserService $questionInstanceService
      * @param UserRepository $userRepo
      * @param UrlBuilder $urlBuilder
+     * @param AppMessageManager $messageManager
      */
     public function __construct
     (
         RendererInterface $renderer,
         UserService $questionInstanceService,
         UserRepository $userRepo,
-        UrlBuilder $urlBuilder
+        UrlBuilder $urlBuilder,
+        AppMessageManager $messageManager
     ) {
         parent::__construct($renderer);
         $this->userService = $questionInstanceService;
         $this->userRepo = $userRepo;
         $this->urlBuilder = $urlBuilder;
+        $this->messageManager = $messageManager;
     }
 
     /**
@@ -119,6 +130,7 @@ class UserController extends AbstractController
             'users' => $users,
             'url' => $this->urlBuilder,
             'parameterBag' => $parameterBag,
+            'messageManager' => $this->messageManager,
         ]);
     }
 
@@ -205,7 +217,9 @@ class UserController extends AbstractController
      */
     public function deleteUser(Request $request, array $requestAttributes): MessageInterface
     {
-        $this->userService->deleteUser($requestAttributes['id']);
+        if (!$this->userService->deleteUser($requestAttributes['id'])){
+            $this->messageManager->addErrorMessage("You can't delete yourself!");
+        }
         $body = Stream::createFromString("");
         $response = new Response($body, '1.1', 301);
 

@@ -102,6 +102,7 @@
         </div>
     </div>
 
+
     <!-- Modal -->
     <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -151,6 +152,13 @@
             </tbody>
         </table>
     </div>
+
+    <!--Not sure if this is the best place for error messages-->
+    <?php if ($messageManager->getErrorMessagesCount()): ?>
+        <div class="alert alert-danger" role="alert">
+            <?php echo implode('<br>',$messageManager->getErrorMessages());?>
+        </div>
+    <?php endif; ?>
 
     <!--Pagination block-->
     <nav aria-label="Page navigation example">
