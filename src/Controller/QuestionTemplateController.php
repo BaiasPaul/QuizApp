@@ -9,7 +9,6 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
 use Framework\Service\ParameterBag;
-use Framework\Service\UrlBuilder;
 use Psr\Http\Message\MessageInterface;
 use QuizApp\Entity\QuestionTemplate;
 use QuizApp\Service\QuestionTemplateService;
@@ -36,27 +35,19 @@ class QuestionTemplateController extends AbstractController
     private $repoManager;
 
     /**
-     * @var UrlBuilder
-     */
-    private $urlBuilder;
-
-    /**
      * UserController constructor.
      * @param RendererInterface $renderer
      * @param QuestionTemplateService $questionInstanceService
      * @param RepositoryManager $repoManager
-     * @param UrlBuilder $urlBuilder
      */
     public function __construct(
         RendererInterface $renderer,
         QuestionTemplateService $questionInstanceService,
-        RepositoryManager $repoManager,
-        UrlBuilder $urlBuilder
+        RepositoryManager $repoManager
     ) {
         parent::__construct($renderer);
         $this->questionTemplateService = $questionInstanceService;
         $this->repoManager = $repoManager;
-        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -121,7 +112,6 @@ class QuestionTemplateController extends AbstractController
             'username' => $this->questionTemplateService->getName(),
             'paginator' => $paginator,
             'questions' => $questions,
-            'url' => $this->urlBuilder,
             'parameterBag' => $parameterBag,
         ]);
     }
