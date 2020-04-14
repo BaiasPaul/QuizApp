@@ -38,28 +38,20 @@ class QuizTemplateController extends AbstractController
     const RESULTS_PER_PAGE = 5;
 
     /**
-     * @var UrlBuilder
-     */
-    private $urlBuilder;
-
-    /**
      * UserController constructor.
      * @param RendererInterface $renderer
      * @param QuizTemplateService $questionInstanceService
      * @param RepositoryManager $repositoryManager
-     * @param UrlBuilder $urlBuilder
      */
     public function __construct
     (
         RendererInterface $renderer,
         QuizTemplateService $questionInstanceService,
-        RepositoryManager $repositoryManager,
-        UrlBuilder $urlBuilder
+        RepositoryManager $repositoryManager
     ) {
         parent::__construct($renderer);
         $this->quizTemplateService = $questionInstanceService;
         $this->repositoryManager = $repositoryManager;
-        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -130,7 +122,6 @@ class QuizTemplateController extends AbstractController
             'users' => $users,
             'quizzes' => $quizzes,
             'paginator' => $paginator,
-            'url' => $this->urlBuilder,
             'parameterBag' => $parameterBag,
         ]);
     }
