@@ -170,13 +170,13 @@ $container->register(RouterInterface::class, Router::class)
 $baseViewPath = $config['renderer'][Renderer::CONFIG_KEY_BASE_VIEW_PATH];
 $container->setParameter('baseViewPath', $baseViewPath);
 $container->register(RendererInterface::class, Renderer::class)
-    ->addArgument('%baseViewPath%');
+    ->addArgument('%baseViewPath%')
+    ->addArgument(new Reference(UrlBuilder::class));
 
 $container->register(ResultController::class, ResultController::class)
     ->addArgument(new Reference(RendererInterface::class))
     ->addArgument(new Reference(ResultService::class))
     ->addArgument(new Reference(RepositoryManagerInterface::class))
-    ->addArgument(new Reference(UrlBuilder::class))
     ->addTag('controller');
 
 $container->register(QuizTemplateController::class, QuizTemplateController::class)
