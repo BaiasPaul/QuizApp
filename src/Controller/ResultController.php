@@ -32,7 +32,6 @@ class ResultController extends AbstractController
      * @var RepositoryManager
      */
     private $repoManager;
-    const RESULTS_PER_PAGE = 5;
 
     /**
      * UserController constructor.
@@ -68,8 +67,12 @@ class ResultController extends AbstractController
         $parameterBag = new ParameterBag([
             'orderBy' => $request->getParameter('orderBy', ''),
             'sort' => $request->getParameter('sort', ''),
+
+            'results' => $request->getParameter('results', 5),
         ]);
 
+
+        $resultsPerPage = $parameterBag->get('results');
         //TODO remove casts
         $currentPage = (int)$this->resultService->getFromParameter('page', $request, 1);
         //TODO modify this method
@@ -77,14 +80,14 @@ class ResultController extends AbstractController
 
         $filtersForEntity = new Filter(
             [],
-            self::RESULTS_PER_PAGE,
-            ($currentPage - 1) * self::RESULTS_PER_PAGE,
+            $resultsPerPage,
+            ($currentPage - 1) * $resultsPerPage,
             $parameterBag->get('orderBy'),
             $parameterBag->get('sort')
         );
         $quizzes = $this->repoManager->getRepository(QuizInstance::class)->getFilteredEntities($filtersForEntity);
 
-        $paginator = new Paginator($totalResults, $currentPage, self::RESULTS_PER_PAGE);
+        $paginator = new Paginator($totalResults, $currentPage, $resultsPerPage);
 
         return $this->renderer->renderView("admin-results-listing.phtml", [
             'username' => $this->resultService->getName(),

@@ -49,6 +49,25 @@
             <h1>Results listing</h1>
         </div>
 
+        <div class="form-group col-12 col-md-2 d-flex align-items-end justify-content-end">
+            <form method="GET" action="/admin-results-listing" >
+                <?php foreach ($parameterBag->all() as $name => $value): ?>
+                    <?php if ($value !== '' && $name !== 'results'): ?>
+                        <input type="hidden" name="<?php echo $name;?>" value="<?php echo $value;?>" />
+                    <?php endif;?>
+                <?php endforeach; ?>
+                <label for="results">Results Per. Page</label>
+                <div class="input-group">
+                    <input name="results" type="number" class="form-control" id="results" value="<?php echo $parameterBag->get('results');?>">
+                    <div class="input-group-append">
+                        <button class="btn btn-secondary" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
         <!--Quiz listing table-->
         <div class="table-responsive my-4">
             <table class="table table-bordered">
