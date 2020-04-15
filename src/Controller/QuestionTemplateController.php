@@ -82,6 +82,7 @@ class QuestionTemplateController extends AbstractController
             'sort' => $request->getParameter('sort', ''),
             'type' => $request->getParameter('type', ''),
             'text' => $request->getParameter('text', ''),
+            'results' => $request->getParameter('results', 5),
         ]);
 
         $filters = [
@@ -89,7 +90,7 @@ class QuestionTemplateController extends AbstractController
             'type' => $parameterBag->get('type')
         ];
 
-        $resultsPerPage = 5;
+        $resultsPerPage = $parameterBag->get('results');
         //TODO remove casts
         $currentPage = (int)$this->questionTemplateService->getFromParameter('page', $request, 1);
         //TODO modify this method
