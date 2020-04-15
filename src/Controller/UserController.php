@@ -8,13 +8,14 @@ use Framework\Http\Message;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
+use Framework\Service\ParameterBag;
+use Framework\Service\UrlBuilder;
 use Psr\Http\Message\MessageInterface;
 use QuizApp\Entity\User;
 use QuizApp\Repository\UserRepository;
 use QuizApp\Service\UserService;
 use QuizApp\Util\Paginator;
 use ReallyOrm\Filter;
-use ReallyOrm\Test\Repository\RepositoryManager;
 
 /**
  * Class UserController
@@ -33,16 +34,28 @@ class UserController extends AbstractController
     protected $userRepo;
 
     /**
+     * @var UrlBuilder
+     */
+    private $urlBuilder;
+
+    /**
      * UserController constructor.
      * @param RendererInterface $renderer
      * @param UserService $questionInstanceService
      * @param UserRepository $userRepo
+     * @param UrlBuilder $urlBuilder
      */
-    public function __construct(RendererInterface $renderer, UserService $questionInstanceService, UserRepository $userRepo)
-    {
+    public function __construct
+    (
+        RendererInterface $renderer,
+        UserService $questionInstanceService,
+        UserRepository $userRepo,
+        UrlBuilder $urlBuilder
+    ) {
         parent::__construct($renderer);
         $this->userService = $questionInstanceService;
         $this->userRepo = $userRepo;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -67,31 +80,45 @@ class UserController extends AbstractController
         if ($redirectToLogin) {
             return $redirectToLogin;
         }
+
+        $parameterBag = new ParameterBag([
+            'email' => $request->getParameter('email', ''),
+            'role' => $request->getParameter('role', ''),
+            'orderBy' => $request->getParameter('orderBy', ''),
+            'sort' => $request->getParameter('sort', ''),
+        ]);
+
+        $filters = [
+            'email' => $parameterBag->get('email'),
+            'role' => $parameterBag->get('role')
+        ];
+
         $resultsPerPage = 5;
-        $email = $this->userService->getFromParameter('email', $request, "");
-        $role = $this->userService->getFromParameter('role', $request, "");
-        $filters = ['email' => $email, 'role' => $role];
-        $orderBy = $this->userService->getFromParameter('orderBy', $request, "");
-        $sortType = $this->userService->getFromParameter('sort', $request, "");
-        //TODO remove casts and fix methods
-        $currentPage = (int)$this->userService->getFromParameter('page', $request, 1);
+        //TODO remove casts
+        $currentPage = (int)$request->getParameter('page', 1);
+        //TODO modify this method
         $totalResults = (int)$this->userService->getEntityNumberOfPagesByField(User::class, $filters);
-        $filtersForEntity = new Filter($filters, $resultsPerPage, ($currentPage - 1) * $resultsPerPage, $orderBy, $sortType);
+        $filtersForEntity = new Filter(
+            $filters,
+            $resultsPerPage,
+            ($currentPage - 1) * $resultsPerPage,
+            $parameterBag->get('orderBy'),
+            $parameterBag->get('sort')
+        );
         $users = $this->userRepo->getFilteredEntities($filtersForEntity);
 
         $paginator = new Paginator($totalResults, $currentPage, $resultsPerPage);
         //TODO to be removed
         $paginator->setTotalPages($totalResults, $resultsPerPage);
 
+
         //TODO modify after injecting the Session class in Controller
         return $this->renderer->renderView("admin-users-listing.phtml", [
-            'email' => $email,
             'username' => $this->userService->getName(),
-            'dropdownRole' => $role,
             'paginator' => $paginator,
             'users' => $users,
-            'orderBy' => $orderBy,
-            'sortType' => $sortType,
+            'url' => $this->urlBuilder,
+            'parameterBag' => $parameterBag,
         ]);
     }
 
