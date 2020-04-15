@@ -67,19 +67,22 @@ class ResultController extends AbstractController
         $parameterBag = new ParameterBag([
             'orderBy' => $request->getParameter('orderBy', ''),
             'sort' => $request->getParameter('sort', ''),
-
+            'name' => $request->getParameter('name',''),
             'results' => $request->getParameter('results', 5),
         ]);
 
+        $filters = [
+            'name' => $parameterBag->get('name'),
+        ];
 
         $resultsPerPage = $parameterBag->get('results');
         //TODO remove casts
         $currentPage = (int)$this->resultService->getFromParameter('page', $request, 1);
         //TODO modify this method
-        $totalResults = (int)$this->resultService->getEntityNumberOfPagesByField(QuizInstance::class, []);
+        $totalResults = (int)$this->resultService->getEntityNumberOfPagesByField(QuizInstance::class, $filters);
 
         $filtersForEntity = new Filter(
-            [],
+            $filters,
             $resultsPerPage,
             ($currentPage - 1) * $resultsPerPage,
             $parameterBag->get('orderBy'),
