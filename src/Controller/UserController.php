@@ -9,7 +9,6 @@ use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
 use Framework\Service\ParameterBag;
-use Framework\Service\UrlBuilder;
 use Psr\Http\Message\MessageInterface;
 use QuizApp\Entity\User;
 use QuizApp\Repository\UserRepository;
@@ -34,28 +33,20 @@ class UserController extends AbstractController
     protected $userRepo;
 
     /**
-     * @var UrlBuilder
-     */
-    private $urlBuilder;
-
-    /**
      * UserController constructor.
      * @param RendererInterface $renderer
      * @param UserService $questionInstanceService
      * @param UserRepository $userRepo
-     * @param UrlBuilder $urlBuilder
      */
     public function __construct
     (
         RendererInterface $renderer,
         UserService $questionInstanceService,
-        UserRepository $userRepo,
-        UrlBuilder $urlBuilder
+        UserRepository $userRepo
     ) {
         parent::__construct($renderer);
         $this->userService = $questionInstanceService;
         $this->userRepo = $userRepo;
-        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -117,7 +108,6 @@ class UserController extends AbstractController
             'username' => $this->userService->getName(),
             'paginator' => $paginator,
             'users' => $users,
-            'url' => $this->urlBuilder,
             'parameterBag' => $parameterBag,
         ]);
     }

@@ -212,7 +212,6 @@ $container->register(UserController::class, UserController::class)
     ->addArgument(new Reference(RendererInterface::class))
     ->addArgument(new Reference(UserService::class))
     ->addArgument(new Reference(UserRepository::class))
-    ->addArgument(new Reference(UrlBuilder::class))
     ->addTag('controller');
 
 $controllerNamespace = $config['dispatcher']['controllers_namespace'];
