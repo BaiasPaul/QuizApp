@@ -106,7 +106,7 @@
                 <?php endforeach; ?>
                 <label for="results">Results Per. Page</label>
                 <div class="input-group">
-                    <input name="results" type="number" class="form-control" id="results" value="<?php echo $parameterBag->get('results')!==null ? $parameterBag->get('results') : 5;?>">
+                    <input name="results" type="number" class="form-control" id="results" value="<?php echo $parameterBag->get('results');?>">
                     <div class="input-group-append">
                         <button class="btn btn-secondary" type="submit">
                             <i class="fa fa-search"></i>
