@@ -76,7 +76,7 @@
                 <form method="GET" action="/admin-quizzes-listing" >
                     <?php foreach ($parameterBag->all() as $name => $value): ?>
                         <?php if ($value !== '' && $name !== 'name'): ?>
-                            <?php  echo '<input type="hidden" name="' . $name . '" value="' . $value . '" />'; ?>
+                            <input type="hidden" name="<?php echo $name;?>" value="<?php echo $value;?>" />
                         <?php endif;?>
                     <?php endforeach; ?>
                     <label for="quizSearch">Quiz name search</label>

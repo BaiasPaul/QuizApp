@@ -83,7 +83,7 @@
             <form method="GET" action="/admin-questions-listing">
                 <?php foreach ($parameterBag->all() as $name => $value): ?>
                     <?php if ($value !== '' && $name !== 'text'): ?>
-                        <?php  echo '<input type="hidden" name="' . $name . '" value="' . $value . '" />'; ?>
+                        <input type="hidden" name="<?php echo $name;?>" value="<?php echo $value;?>" />
                     <?php endif;?>
                 <?php endforeach; ?>
                 <label for="textSearch">Text search</label>
