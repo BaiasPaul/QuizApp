@@ -151,6 +151,12 @@
             </tbody>
         </table>
     </div>
+    <!--Not sure if this is the best place for error messages-->
+    <?php if ($messageManager->getErrorMessagesCount()): ?>
+        <div class="alert alert-danger" role="alert">
+            <?php echo implode('<br>',$messageManager->getErrorMessages());?>
+        </div>
+    <?php endif; ?>
 
     <!--Pagination block-->
     <nav aria-label="Page navigation example">
