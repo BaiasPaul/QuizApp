@@ -62,7 +62,7 @@
 
     <!--Table actions block-->
     <div class="row">
-        <div class="col-12 col-md-3">
+        <div class="col-12 col-md-2 d-flex align-items-center">
             <form action="">
                 <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                     <div class="btn-group" role="group">
@@ -97,7 +97,25 @@
                 </div>
             </form>
         </div>
-        <div class="col-12 col-md-3 d-flex align-items-end justify-content-end">
+        <div class="form-group col-12 col-md-2 d-flex align-items-end justify-content-end">
+            <form method="GET" action="/admin-users-listing" >
+                <?php foreach ($parameterBag->all() as $name => $value): ?>
+                    <?php if ($value !== '' && $name !== 'results'): ?>
+                        <?php  echo '<input type="hidden" name="' . $name . '" value="' . $value . '" />'; ?>
+                    <?php endif;?>
+                <?php endforeach; ?>
+                <label for="results">Results Per. Page</label>
+                <div class="input-group">
+                    <input name="results" type="number" class="form-control" id="results" value="<?php echo $parameterBag->get('results')!==null ? $parameterBag->get('results') : 5;?>">
+                    <div class="input-group-append">
+                        <button class="btn btn-secondary" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-12 col-md-2 d-flex align-items-end justify-content-end">
             <a class="btn btn-primary py-1 mb-3" href="/admin-user-details/create">Add new user</a>
         </div>
     </div>
@@ -166,8 +184,10 @@
             <li class="page-item <?php if ($paginator->getCurrentPage() ===  $paginator->getTotalPages()) echo 'disabled'; ?>">
                 <a class="page-link" href="<?php echo $url->getUrl($parameterBag->all()); echo $url->getUrl($parameterBag->all()) !== '' ? '&' : '?'; ?>page=<?php echo $paginator->getNextPage();?>">Next</a>
             </li>
+
         </ul>
     </nav>
+
 </div>
 </body>
 </html>
