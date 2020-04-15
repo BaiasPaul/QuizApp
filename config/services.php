@@ -70,7 +70,7 @@ $container->register(PDO::class, PDO::class)
 
 $container->register(RepositoryManagerInterface::class, RepositoryManager::class);
 $container->register(SessionInterface::class, Session::class);
-$container->register(UrlBuilder::class,UrlBuilder::class);
+$container->register(UrlBuilder::class, UrlBuilder::class);
 
 $container->register(HydratorInterface::class, Hydrator::class)
     ->addArgument(new Reference(RepositoryManagerInterface::class));
@@ -192,6 +192,7 @@ $container->register(QuizInstanceController::class, QuizInstanceController::clas
 $container->register(QuestionTemplateController::class, QuestionTemplateController::class)
     ->addArgument(new Reference(RendererInterface::class))
     ->addArgument(new Reference(QuestionTemplateService::class))
+    ->addArgument(new Reference(RepositoryManagerInterface::class))
     ->addTag('controller');
 
 $container->register(QuestionInstanceController::class, QuestionInstanceController::class)

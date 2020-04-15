@@ -68,12 +68,12 @@
                     <div class="btn-group" role="group">
                         <button name="type" id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <?php if (isset($dropdownType) && $dropdownType === '') echo 'All'; else if(isset($dropdownType)) echo ucfirst($dropdownType); ?>
+                            <?php echo ($parameterBag->get('type') === '') ? 'All' : ucfirst($parameterBag->get('type')); ?>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                            <a class="dropdown-item" href="/admin-questions-listing?type=text&text=<?php echo $text;?>">Text</a>
-                            <a class="dropdown-item" href="/admin-questions-listing?type=code&text=<?php echo $text;?>">Code</a>
-                            <a class="dropdown-item" href="/admin-questions-listing?type=&text=<?php echo $text;?>">All</a>
+                            <a class="dropdown-item" href="/admin-questions-listing<?php echo $url->getUrl($parameterBag->all(),['type'=>'text']); ?>">Text</a>
+                            <a class="dropdown-item" href="/admin-questions-listing<?php echo $url->getUrl($parameterBag->all(),['type'=>'code']); ?>">Code</a>
+                            <a class="dropdown-item" href="/admin-questions-listing<?php echo $url->getUrl($parameterBag->all(),['type'=>'']); ?>">All</a>
                         </div>
                     </div>
                 </div>
@@ -81,10 +81,14 @@
         </div>
         <div class="col-12 col-md-6">
             <form method="GET" action="/admin-questions-listing">
-                <input type="hidden" name="type" value="<?php echo $dropdownType;?>" />
+                <?php foreach ($parameterBag->all() as $name => $value): ?>
+                    <?php if ($value !== '' && $name !== 'text'): ?>
+                        <?php  echo '<input type="hidden" name="' . $name . '" value="' . $value . '" />'; ?>
+                    <?php endif;?>
+                <?php endforeach; ?>
                 <label for="textSearch">Text search</label>
                 <div class="input-group">
-                    <input name="text" type="text" id="textSearch" class="form-control" placeholder="" value="<?php echo $text;?>">
+                    <input name="text" type="text" id="textSearch" class="form-control" placeholder="" value="<?php echo $parameterBag->get('text');?>">
                     <div class="input-group-append">
                         <button class="btn btn-secondary" type="submit" >
                             <i class="fa fa-search"></i>
@@ -124,8 +128,8 @@
             <thead>
             <tr>
                 <!--Sorting arrow are displayed using the 'asc','dsc' classes-->
-                <th scope="col" class="sorting-header asc dsc">ID</th>
-                <th scope="col">Text</th>
+                <th scope="col" class="sorting-header <?php echo ($parameterBag->get('orderBy') == "id") ? (($parameterBag->get('sort') == "asc") ? "asc" : "dsc") : "asc dsc"; ?>"><a href="<?php echo $url->getUrl($parameterBag->all(),['orderBy'=>'id','sort'=>($parameterBag->get('sort') === "asc" ? "desc" : "asc")]);?>">ID</a></th>
+                <th scope="col" class="sorting-header <?php echo ($parameterBag->get('orderBy') == "text") ? (($parameterBag->get('sort') == "asc") ? "asc" : "dsc") : "asc dsc"; ?>"><a href="<?php echo $url->getUrl($parameterBag->all(),['orderBy'=>'text','sort'=>($parameterBag->get('sort') === "asc" ? "desc" : "asc")]);?>">Text</a></th>
                 <th scope="col">Type</th>
                 <th scope="col">Actions</th>
             </tr>
@@ -152,15 +156,15 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <li class="page-item <?php if ($paginator->getCurrentPage() === 1) echo 'disabled'; ?>">
-                <a class="page-link" href="?page=<?php echo $paginator->getPreviousPage();?>&text=<?php echo $text;?>&type=<?php echo $dropdownType;?>" >Previous</a>
+                <a class="page-link" href="<?php echo $url->getUrl($parameterBag->all()); echo $url->getUrl($parameterBag->all()) !== '' ? '&' : '?'; ?>page=<?php echo $paginator->getPreviousPage();?>" >Previous</a>
             </li>
             <?php for ($pageNumber = 1; $pageNumber <= $paginator->getTotalPages(); $pageNumber++): ?>
                 <li class="page-item <?php if ($paginator->getCurrentPage() === $pageNumber) echo 'active'; ?>">
-                    <a class="page-link" href="?page=<?php echo $pageNumber; ?>&text=<?php echo $text;?>&type=<?php echo $dropdownType;?>"><?php echo $pageNumber; ?></a>
+                    <a class="page-link" href="<?php echo $url->getUrl($parameterBag->all()); echo $url->getUrl($parameterBag->all()) !== '' ? '&' : '?'; ?>page=<?php echo $pageNumber;?>"><?php echo $pageNumber; ?></a>
                 </li>
             <?php endfor; ?>
-            <li class="page-item <?php if ($paginator->getCurrentPage() ==  $paginator->getTotalPages()) echo 'disabled'; ?>">
-                <a class="page-link" href="?page=<?php echo $paginator->getNextPage();?>&text=<?php echo $text;?>&type=<?php echo $dropdownType;?>">Next</a>
+            <li class="page-item <?php if ($paginator->getCurrentPage() ===  $paginator->getTotalPages()) echo 'disabled'; ?>">
+                <a class="page-link" href="<?php echo $url->getUrl($parameterBag->all()); echo $url->getUrl($parameterBag->all()) !== '' ? '&' : '?'; ?>page=<?php echo $paginator->getNextPage();?>">Next</a>
             </li>
         </ul>
     </nav>
