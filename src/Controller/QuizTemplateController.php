@@ -35,8 +35,6 @@ class QuizTemplateController extends AbstractController
      */
     private $repositoryManager;
 
-    const RESULTS_PER_PAGE = 5;
-
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
@@ -89,6 +87,7 @@ class QuizTemplateController extends AbstractController
             'sort' => $request->getParameter('sort', ''),
             'userId' => $request->getParameter('userId', ''),
             'name' => $request->getParameter('name', ''),
+            'results' => $request->getParameter('results', 5),
         ]);
 
         $filters = [
@@ -96,6 +95,7 @@ class QuizTemplateController extends AbstractController
             'user_id' => $parameterBag->get('userId')
         ];
 
+        $resultsPerPage = $parameterBag->get('results');
         //TODO remove casts
         $currentPage = (int)$this->quizTemplateService->getFromParameter('page', $request, 1);
         //TODO modify this method
@@ -103,8 +103,8 @@ class QuizTemplateController extends AbstractController
 
         $filtersForEntity = new Filter(
             $filters,
-            self::RESULTS_PER_PAGE,
-            ($currentPage - 1) * self::RESULTS_PER_PAGE,
+            $resultsPerPage,
+            ($currentPage - 1) * $resultsPerPage,
             $parameterBag->get('orderBy'),
             $parameterBag->get('sort')
         );
@@ -114,7 +114,7 @@ class QuizTemplateController extends AbstractController
             new Filter(['role' => 'Admin'])
         );
 
-        $paginator = new Paginator($totalResults, $currentPage, self::RESULTS_PER_PAGE);
+        $paginator = new Paginator($totalResults, $currentPage, $resultsPerPage);
 
         //TODO modify after injecting the Session class in Controller
         return $this->renderer->renderView("admin-quizzes-listing.phtml", [

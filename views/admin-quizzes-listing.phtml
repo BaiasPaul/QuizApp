@@ -54,11 +54,11 @@
 
         <!--Table actions block-->
         <div class="row">
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-md-2 d-flex align-items-center">
                 <form action="">
                     <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                         <div class="btn-group" role="group">
-                            <button name="userId" id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle"
+                            <button name="userId" id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle mt-3"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <?php echo ($parameterBag->get('userId') === '') ? 'All' : ucfirst($parameterBag->get('userId')); ?>
                             </button>
@@ -90,8 +90,26 @@
                     </div>
                 </form>
             </div>
-            <div class="col-12 col-md-3 d-flex align-items-end justify-content-end">
-                <a class="btn btn-primary py-1" href="/admin-quiz-details/create">Add new quiz</a>
+            <div class="form-group col-12 col-md-2 d-flex align-items-end justify-content-end">
+                <form method="GET" action="/admin-quizzes-listing" >
+                    <?php foreach ($parameterBag->all() as $name => $value): ?>
+                        <?php if ($value !== '' && $name !== 'results'): ?>
+                            <input type="hidden" name="<?php echo $name;?>" value="<?php echo $value;?>" />
+                        <?php endif;?>
+                    <?php endforeach; ?>
+                    <label for="results">Results Per. Page</label>
+                    <div class="input-group">
+                        <input name="results" type="number" class="form-control" id="results" value="<?php echo $parameterBag->get('results');?>">
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-12 col-md-2 d-flex align-items-end justify-content-end">
+                <a class="btn btn-primary py-1 mb-3" href="/admin-quiz-details/create">Add new quiz</a>
             </div>
         </div>
 
