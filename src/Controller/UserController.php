@@ -108,7 +108,7 @@ class UserController extends AbstractController
         $users = $this->userRepo->getFilteredEntities($filtersForEntity);
 
         $paginator = new Paginator($totalResults, $currentPage, $resultsPerPage);
-        //TODO remove (unnecessary)
+        //TODO to be removed
         $paginator->setTotalPages($totalResults, $resultsPerPage);
 
 
