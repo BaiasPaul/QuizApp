@@ -72,16 +72,20 @@ class QuizInstanceController extends AbstractController
         $parameterBag = new ParameterBag([
             'orderBy' => $request->getParameter('orderBy', ''),
             'sort' => $request->getParameter('sort', ''),
+            'name' => $request->getParameter('name',''),
             'results' => $request->getParameter('results', 5),
         ]);
 
+        $filters = [
+            'name' => $parameterBag->get('name'),
+        ];
         $resultsPerPage = $parameterBag->get('results');
         //TODO remove cast and modify methods to return the expected type
         $currentPage = (int)$this->quizInstanceService->getFromParameter('page', $request, 1);
-        $totalResults = (int)$this->quizInstanceService->getEntityNumberOfPagesByField(QuizTemplate::class, []);
+        $totalResults = (int)$this->quizInstanceService->getEntityNumberOfPagesByField(QuizTemplate::class, $filters);
 
         $filtersForEntity = new Filter(
-            [],
+            $filters,
             $resultsPerPage,
             ($currentPage - 1) * $resultsPerPage,
             $parameterBag->get('orderBy'),
