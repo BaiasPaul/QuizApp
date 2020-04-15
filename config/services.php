@@ -176,6 +176,7 @@ $container->register(RendererInterface::class, Renderer::class)
 $container->register(ResultController::class, ResultController::class)
     ->addArgument(new Reference(RendererInterface::class))
     ->addArgument(new Reference(ResultService::class))
+    ->addArgument(new Reference(RepositoryManagerInterface::class))
     ->addTag('controller');
 
 $container->register(QuizTemplateController::class, QuizTemplateController::class)

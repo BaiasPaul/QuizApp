@@ -9,10 +9,13 @@ use Framework\Http\Message;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
+use Framework\Service\ParameterBag;
 use Psr\Http\Message\MessageInterface;
 use QuizApp\Entity\QuizInstance;
 use QuizApp\Service\ResultService;
 use QuizApp\Util\Paginator;
+use ReallyOrm\Filter;
+use ReallyOrm\Test\Repository\RepositoryManager;
 
 /**
  * Class ResultController
@@ -24,17 +27,27 @@ class ResultController extends AbstractController
      * @var ResultService
      */
     private $resultService;
+
+    /**
+     * @var RepositoryManager
+     */
+    private $repoManager;
     const RESULTS_PER_PAGE = 5;
 
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
      * @param ResultService $resultService
+     * @param RepositoryManager $repoManager
      */
-    public function __construct(RendererInterface $renderer, ResultService $resultService)
-    {
+    public function __construct(
+        RendererInterface $renderer,
+        ResultService $resultService,
+        RepositoryManager $repoManager
+    ) {
         parent::__construct($renderer);
         $this->resultService = $resultService;
+        $this->repoManager = $repoManager;
     }
 
     /**
@@ -51,15 +64,33 @@ class ResultController extends AbstractController
         if ($redirectToLogin) {
             return $redirectToLogin;
         }
+
+        $parameterBag = new ParameterBag([
+            'orderBy' => $request->getParameter('orderBy', ''),
+            'sort' => $request->getParameter('sort', ''),
+        ]);
+
+        //TODO remove casts
         $currentPage = (int)$this->resultService->getFromParameter('page', $request, 1);
+        //TODO modify this method
         $totalResults = (int)$this->resultService->getEntityNumberOfPagesByField(QuizInstance::class, []);
-        $quizzes = $this->resultService->getEntitiesByField(QuizInstance::class, [], $currentPage, self::RESULTS_PER_PAGE);
+
+        $filtersForEntity = new Filter(
+            [],
+            self::RESULTS_PER_PAGE,
+            ($currentPage - 1) * self::RESULTS_PER_PAGE,
+            $parameterBag->get('orderBy'),
+            $parameterBag->get('sort')
+        );
+        $quizzes = $this->repoManager->getRepository(QuizInstance::class)->getFilteredEntities($filtersForEntity);
+
         $paginator = new Paginator($totalResults, $currentPage, self::RESULTS_PER_PAGE);
 
         return $this->renderer->renderView("admin-results-listing.phtml", [
             'username' => $this->resultService->getName(),
             'paginator' => $paginator,
             'quizzes' => $quizzes,
+            'parameterBag' => $parameterBag,
         ]);
     }
 
