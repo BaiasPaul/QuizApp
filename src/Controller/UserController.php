@@ -86,6 +86,7 @@ class UserController extends AbstractController
             'role' => $request->getParameter('role', ''),
             'orderBy' => $request->getParameter('orderBy', ''),
             'sort' => $request->getParameter('sort', ''),
+            'results' => $request->getParameter('results', 5),
         ]);
 
         $filters = [
@@ -93,7 +94,7 @@ class UserController extends AbstractController
             'role' => $parameterBag->get('role')
         ];
 
-        $resultsPerPage = 5;
+        $resultsPerPage = $parameterBag->get('results');
         //TODO remove casts
         $currentPage = (int)$request->getParameter('page', 1);
         //TODO modify this method
