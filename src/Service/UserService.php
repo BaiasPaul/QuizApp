@@ -89,6 +89,9 @@ class UserService extends AbstractService
     public function deleteUser($id): bool
     {
         $user = $this->repoManager->getRepository(User::class)->find($id);
+        if ($user->getId() === $this->session->get('id')){
+            return false;
+        }
 
         return $this->repoManager->getRepository(User::class)->delete($user);
     }

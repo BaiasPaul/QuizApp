@@ -171,7 +171,7 @@ $baseViewPath = $config['renderer'][Renderer::CONFIG_KEY_BASE_VIEW_PATH];
 $container->setParameter('baseViewPath', $baseViewPath);
 $container->register(RendererInterface::class, Renderer::class)
     ->addArgument('%baseViewPath%')
-    ->addArgument(new Reference(UrlBuilder::class));
+    ->addArgument(new Reference(UrlBuilder::class));;
 
 $container->register(ResultController::class, ResultController::class)
     ->addArgument(new Reference(RendererInterface::class))
@@ -212,6 +212,7 @@ $container->register(UserController::class, UserController::class)
     ->addArgument(new Reference(RendererInterface::class))
     ->addArgument(new Reference(UserService::class))
     ->addArgument(new Reference(UserRepository::class))
+    ->addArgument(new Reference(AppMessageManager::class))
     ->addTag('controller');
 
 $controllerNamespace = $config['dispatcher']['controllers_namespace'];
