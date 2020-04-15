@@ -4,7 +4,7 @@ namespace QuizApp\Util;
 
 /**
  * Class Paginator
- * @package QuizApp\Services
+ * @package QuizApp\Service
  */
 class Paginator
 {

@@ -8,12 +8,16 @@ use Framework\Http\Message;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Http\Stream;
+use Framework\Service\ParameterBag;
+use Framework\Service\UrlBuilder;
 use Psr\Http\Message\MessageInterface;
 use QuizApp\Entity\QuestionTemplate;
 use QuizApp\Entity\QuizTemplate;
 use QuizApp\Entity\User;
 use QuizApp\Service\QuizTemplateService;
 use QuizApp\Util\Paginator;
+use ReallyOrm\Filter;
+use ReallyOrm\Test\Repository\RepositoryManager;
 
 /**
  * Class QuizTemplateController
@@ -25,20 +29,29 @@ class QuizTemplateController extends AbstractController
      * @var QuizTemplateService
      */
     private $quizTemplateService;
+
     /**
-     *
+     * @var RepositoryManager
      */
+    private $repositoryManager;
+
     const RESULTS_PER_PAGE = 5;
 
     /**
      * UserController constructor.
      * @param RendererInterface $renderer
      * @param QuizTemplateService $questionInstanceService
+     * @param RepositoryManager $repositoryManager
      */
-    public function __construct(RendererInterface $renderer, QuizTemplateService $questionInstanceService)
-    {
+    public function __construct
+    (
+        RendererInterface $renderer,
+        QuizTemplateService $questionInstanceService,
+        RepositoryManager $repositoryManager
+    ) {
         parent::__construct($renderer);
         $this->quizTemplateService = $questionInstanceService;
+        $this->repositoryManager = $repositoryManager;
     }
 
     /**
@@ -70,22 +83,46 @@ class QuizTemplateController extends AbstractController
      */
     public function showQuizzes(Request $request, array $requestAttributes): Response
     {
-        $quizName = $this->quizTemplateService->getFromParameter('quizName', $request, "");
-        $userId = $this->quizTemplateService->getFromParameter('userId', $request, "");
+
+        $parameterBag = new ParameterBag([
+            'orderBy' => $request->getParameter('orderBy', ''),
+            'sort' => $request->getParameter('sort', ''),
+            'userId' => $request->getParameter('userId', ''),
+            'name' => $request->getParameter('name', ''),
+        ]);
+
+        $filters = [
+            'name' => $parameterBag->get('name'),
+            'user_id' => $parameterBag->get('userId')
+        ];
+
+        //TODO remove casts
         $currentPage = (int)$this->quizTemplateService->getFromParameter('page', $request, 1);
-        $totalResults = (int)$this->quizTemplateService->getEntityNumberOfPagesByField(QuizTemplate::class, ['name' => $quizName, 'user_id' => $userId]);
-        $quizzes = $this->quizTemplateService->getEntitiesByField(QuizTemplate::class, ['name' => $quizName, 'user_id' => $userId], $currentPage, self::RESULTS_PER_PAGE);
-        $users = $this->quizTemplateService->getEntitiesByField(User::class, ['role' => 'Admin'], 1, 99999999);
+        //TODO modify this method
+        $totalResults = (int)$this->quizTemplateService->getEntityNumberOfPagesByField(QuizTemplate::class, $filters);
+
+        $filtersForEntity = new Filter(
+            $filters,
+            self::RESULTS_PER_PAGE,
+            ($currentPage - 1) * self::RESULTS_PER_PAGE,
+            $parameterBag->get('orderBy'),
+            $parameterBag->get('sort')
+        );
+
+        $quizzes = $this->repositoryManager->getRepository(QuizTemplate::class)->getFilteredEntities($filtersForEntity);
+        $users = $this->repositoryManager->getRepository(User::class)->getFilteredEntities(
+            new Filter(['role' => 'Admin'])
+        );
+
         $paginator = new Paginator($totalResults, $currentPage, self::RESULTS_PER_PAGE);
 
         //TODO modify after injecting the Session class in Controller
         return $this->renderer->renderView("admin-quizzes-listing.phtml", [
-            'quizName' => $quizName,
             'username' => $this->quizTemplateService->getName(),
             'users' => $users,
-            'dropdownUserId' => $userId,
-            'paginator' => $paginator,
             'quizzes' => $quizzes,
+            'paginator' => $paginator,
+            'parameterBag' => $parameterBag,
         ]);
     }
 
@@ -141,7 +178,7 @@ class QuizTemplateController extends AbstractController
             'name' => $params['name'],
             'description' => $params['description'],
             //TODO create class for these parameters
-            'questions' => $quizzes = $this->quizTemplateService->getEntitiesByField(QuestionTemplate::class, [], 1, 99999999999),
+            'questions' => $quizzes = $this->repositoryManager->getRepository(QuestionTemplate::class)->getFilteredEntities(new Filter()),
             'selectedQuestions' => $this->quizTemplateService->getSelectedQuestions($requestAttributes['id']),
             'username' => $this->quizTemplateService->getName(),
             'path' => 'edit/' . $params['id'],
@@ -157,7 +194,7 @@ class QuizTemplateController extends AbstractController
     {
         //TODO modify after injecting the Session class in Controller
         return $this->renderer->renderView("admin-quiz-details.phtml", [
-            'questions' => $quizzes = $this->quizTemplateService->getEntitiesByField(QuestionTemplate::class, [], 1, 99999999999),
+            'questions' => $quizzes = $this->repositoryManager->getRepository(QuestionTemplate::class)->getFilteredEntities(new Filter()),
             'username' => $this->quizTemplateService->getName(),
             'path' => 'create',
         ]);
