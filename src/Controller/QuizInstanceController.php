@@ -28,8 +28,6 @@ use ReallyOrm\Test\Repository\RepositoryManager;
 class QuizInstanceController extends AbstractController
 {
 
-    const RESULTS_PER_PAGE = 5;
-
     /**
      * @var QuizInstanceService
      */
@@ -74,22 +72,24 @@ class QuizInstanceController extends AbstractController
         $parameterBag = new ParameterBag([
             'orderBy' => $request->getParameter('orderBy', ''),
             'sort' => $request->getParameter('sort', ''),
+            'results' => $request->getParameter('results', 5),
         ]);
 
+        $resultsPerPage = $parameterBag->get('results');
         //TODO remove cast and modify methods to return the expected type
         $currentPage = (int)$this->quizInstanceService->getFromParameter('page', $request, 1);
         $totalResults = (int)$this->quizInstanceService->getEntityNumberOfPagesByField(QuizTemplate::class, []);
 
         $filtersForEntity = new Filter(
             [],
-            self::RESULTS_PER_PAGE,
-            ($currentPage - 1) * self::RESULTS_PER_PAGE,
+            $resultsPerPage,
+            ($currentPage - 1) * $resultsPerPage,
             $parameterBag->get('orderBy'),
             $parameterBag->get('sort')
         );
 
         $quizzes = $this->repoManager->getRepository(QuizTemplate::class)->getFilteredEntities($filtersForEntity);
-        $paginator = new Paginator($totalResults, $currentPage, self::RESULTS_PER_PAGE);
+        $paginator = new Paginator($totalResults, $currentPage, $resultsPerPage);
 
         return $this->renderer->renderView("candidate-quiz-listing.phtml", [
             'username' => $this->quizInstanceService->getName(),
