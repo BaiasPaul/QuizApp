@@ -49,25 +49,44 @@
             <h1>Results listing</h1>
         </div>
 
-        <div class="form-group col-12 col-md-2 d-flex align-items-end justify-content-end">
-            <form method="GET" action="/admin-results-listing" >
-                <?php foreach ($parameterBag->all() as $name => $value): ?>
-                    <?php if ($value !== '' && $name !== 'results'): ?>
-                        <input type="hidden" name="<?php echo $name;?>" value="<?php echo $value;?>" />
-                    <?php endif;?>
-                <?php endforeach; ?>
-                <label for="results">Results Per. Page</label>
-                <div class="input-group">
-                    <input name="results" type="number" class="form-control" id="results" value="<?php echo $parameterBag->get('results');?>">
-                    <div class="input-group-append">
-                        <button class="btn btn-secondary" type="submit">
-                            <i class="fa fa-search"></i>
-                        </button>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form method="GET" action="/admin-results-listing">
+                    <?php foreach ($parameterBag->all() as $name => $value): ?>
+                        <?php if ($value !== '' && $name !== 'text'): ?>
+                            <input type="hidden" name="<?php echo $name;?>" value="<?php echo $value;?>" />
+                        <?php endif;?>
+                    <?php endforeach; ?>
+                    <label for="textSearch">Name search</label>
+                    <div class="input-group">
+                        <input name="name" type="text" id="nameSearch" class="form-control" placeholder="" value="<?php echo $parameterBag->get('name');?>">
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="submit" >
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
+            <div class="form-group col-12 col-md-2 d-flex align-items-end justify-content-end">
+                <form method="GET" action="/admin-results-listing" >
+                    <?php foreach ($parameterBag->all() as $name => $value): ?>
+                        <?php if ($value !== '' && $name !== 'results'): ?>
+                            <input type="hidden" name="<?php echo $name;?>" value="<?php echo $value;?>" />
+                        <?php endif;?>
+                    <?php endforeach; ?>
+                    <label for="results">Results Per. Page</label>
+                    <div class="input-group">
+                        <input name="results" type="number" class="form-control" id="results" value="<?php echo $parameterBag->get('results');?>">
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-
         <!--Quiz listing table-->
         <div class="table-responsive my-4">
             <table class="table table-bordered">
@@ -75,7 +94,7 @@
                 <tr>
                     <!--Sorting arrow are displayed using the 'asc','dsc' classes-->
                     <th scope="col">User ID</th>
-                    <th scope="col">Name</th>
+                    <th scope="col">Quiz Name</th>
                     <th scope="col" class="sorting-header <?php echo ($parameterBag->get('orderBy') == "id") ? (($parameterBag->get('sort') == "asc") ? "asc" : "dsc") : "asc dsc"; ?>"><a href="<?php echo $url->getUrl($parameterBag->all(),['orderBy'=>'id','sort'=>($parameterBag->get('sort') === "asc" ? "desc" : "asc")]);?>">Quiz ID</a></th>
                     <!--Sorting arrow are displayed using the 'asc','dsc' classes-->
                     <th scope="col" class="sorting-header <?php echo ($parameterBag->get('orderBy') == "score") ? (($parameterBag->get('sort') == "asc") ? "asc" : "dsc") : "asc dsc"; ?>"><a href="<?php echo $url->getUrl($parameterBag->all(),['orderBy'=>'score','sort'=>($parameterBag->get('sort') === "asc" ? "desc" : "asc")]); ?>">Score</a></th>
